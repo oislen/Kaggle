@@ -25,6 +25,7 @@ Feature Reduction
 Dummy Encode Categorical Variables
 Derive Polynomial and Interaction Terms
 Feature Selection
+Principle Components Analysis
 Standardise Data
 Split the Data
 Oversample Target
@@ -432,6 +433,9 @@ data.OrdinalAge = data.OrdinalAge.map({'(0.169, 19.0]':1,
 ###############################################################################
 ## Feature Reduction ##########################################################
 ###############################################################################
+
+Feature reductions allows for the removal of irrelavent variables.
+
 """
 
 # get the column names
@@ -455,6 +459,10 @@ data = data.drop(labels = ['PassengerId', 'Name', 'Ticket', 'Embarked', 'Sex',
 ###############################################################################
 ## Dummy Encode Categorical Variables #########################################
 ###############################################################################
+
+Dummy encoding categorical variables allows the for the modelling of categorical 
+variables.
+
 """
 
 print('dummy encode categorical variables')
@@ -466,6 +474,10 @@ data = pd.get_dummies(data)
 ###############################################################################
 ## Derive Interaction and Polynomial Terms ####################################
 ###############################################################################
+
+The derivation of higher dimenionsal and interaction terms allows for the 
+modelling of non-linear trends in the data.
+
 """
 
 print('generate interaction and polynomial terms')
@@ -498,9 +510,12 @@ del derive_data, col_names, poly_data
 ###############################################################################
 ## Feature Selection ##########################################################
 ###############################################################################
+
+Feature selection determines the top K predictive variables in the dataset.
+
 """
 
-#-- select best 100 terms --###################################################
+#-- select the top 10% attributes --###########################################
 
 # Not these univariate selection techniques only work on complete datasets
 
@@ -508,9 +523,12 @@ del derive_data, col_names, poly_data
 select_data = data[data.Survived.notnull()]
 select_Survived = data.Survived[data.Survived.notnull()].astype('category')
 
+# drop Survived from the select data
+select_data = select_data.drop(labels = 'Survived', axis = 1)
+
 # intiate select top 100 attributes
 selector = feature_selection.SelectKBest(score_func = feature_selection.chi2, 
-                                         k = 50)
+                                         k = int(np.round(select_data.shape[1] * 0.1)))
 
 # select the attributes
 s_data = selector.fit_transform(select_data, select_Survived)
@@ -537,6 +555,10 @@ del select_Survived, select_data, s_data
 ###############################################################################
 ## Priciple Components Analysis ###############################################
 ###############################################################################
+
+Principle components analysis reduces the dimension by removing dimensions which
+explain little variance in the data.
+
 """
 
 # drop the survived variable as it has nan values
@@ -548,14 +570,11 @@ principle = pca.PCA(data = pca_data, standardize = True)
 # return the rsq from each of the principle components
 principle.rsquare
 
-# plot the rsq for each of the princile components
-principle.plot_rsquare(ncomp = 50)
-
 # the principle components
 pca_data = pd.DataFrame(principle.scores)
 
-# subset the first 26 dimensions
-pca_data = pca_data.iloc[:, 0:26]
+# select the dimension
+pca_data = pca_data.iloc[:, 0:int(len(principle.rsquare[principle.rsquare <= 0.9]))]
 
 # reconstruct the dataset
 data = pd.concat(objs = [data.Survived, pca_data], axis = 1)
@@ -567,6 +586,9 @@ del pca_data
 ###############################################################################
 ## Standardise Data ###########################################################
 ###############################################################################
+
+Standardising data allows for scales the dimensions to a common magnitude.
+
 """
 
 # extract the data to be standardised
@@ -594,6 +616,9 @@ del scalar_data, stand_data
 ###############################################################################
 ## Split the Dataset ##########################################################
 ###############################################################################
+
+Splitting the dataset stores a hold out test set 
+
 """
 
 # split the data between training and test sets
