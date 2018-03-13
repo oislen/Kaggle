@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Mar  1 18:26:42 2018
-
 @author: oisin_000
 """
 
@@ -9,7 +8,6 @@ Created on Thu Mar  1 18:26:42 2018
 ###############################################################################
 ## Preliminaries ##############################################################
 ###############################################################################
-
 Table of Contents
 Embarked
 Title
@@ -30,7 +28,6 @@ Standardise Data
 Split the Data
 Oversample Target
 Output Data
-
 """
 
 #-- load libraries --#
@@ -49,6 +46,8 @@ import numpy as np
 # sklearn will be used for the modelling and classification
 from sklearn import feature_selection
 from sklearn import preprocessing
+from sklearn import cluster
+from sklearn import tree
 
 # statsmodels will be used for principle components analysis
 from statsmodels.multivariate import pca
@@ -61,7 +60,8 @@ print('setting working directory')
 os.getcwd()
 
 # set working directory
-os.chdir('C:\\Users\\oisin_000\\Documents\\Kaggle\\Titanic Competition\\python')
+#os.chdir('C:\\Users\\oisin_000\\Documents\\Kaggle\\Titanic Competition\\python')
+os.chdir('C:\\Users\\LeonOi01\\Downloads')
 
 #-- import data --#############################################################
 
@@ -69,9 +69,11 @@ print('loading data')
 
 # load training set
 train = pd.read_csv('./data/train.csv')
+train = pd.read_csv('train.csv')
 
 # load testing set
 test = pd.read_csv('./data/test.csv')
+test = pd.read_csv('test.csv')
 
 #--combine the datasets --#####################################################
 
@@ -382,7 +384,7 @@ there are a couple of options for processing the missing values in age
 """
 
 # output the dataset for processing_age script
-data.to_csv('./data/data_pII.csv')
+# data.to_csv('./data/data_pII.csv')
 
 # build a seperate model to predict age using similar methods
 # either call the script at this point 
@@ -433,9 +435,7 @@ data.OrdinalAge = data.OrdinalAge.map({'(0.169, 19.0]':1,
 ###############################################################################
 ## Feature Reduction ##########################################################
 ###############################################################################
-
 Feature reductions allows for the removal of irrelavent variables.
-
 """
 
 # get the column names
@@ -446,10 +446,8 @@ data = data.drop(labels = ['PassengerId', 'Name', 'Ticket', 'Sex'], axis = 1)
 
 """
 #-- drop categorical variables --##############################################
-
 # get the data types
 data.dtypes
-
 # drop passenger id from the dataset
 data = data.drop(labels = ['PassengerId', 'Name', 'Ticket', 'Embarked', 'Sex',
                            'Title', 'Floor', 'TicketPrefix'], axis = 1)
@@ -459,10 +457,8 @@ data = data.drop(labels = ['PassengerId', 'Name', 'Ticket', 'Embarked', 'Sex',
 ###############################################################################
 ## Dummy Encode Categorical Variables #########################################
 ###############################################################################
-
 Dummy encoding categorical variables allows the for the modelling of categorical 
 variables.
-
 """
 
 print('dummy encode categorical variables')
@@ -474,10 +470,8 @@ data = pd.get_dummies(data)
 ###############################################################################
 ## Derive Interaction and Polynomial Terms ####################################
 ###############################################################################
-
 The derivation of higher dimenionsal and interaction terms allows for the 
 modelling of non-linear trends in the data.
-
 """
 
 print('generate interaction and polynomial terms')
@@ -510,9 +504,7 @@ del derive_data, col_names, poly_data
 ###############################################################################
 ## Feature Selection ##########################################################
 ###############################################################################
-
 Feature selection determines the top K predictive variables in the dataset.
-
 """
 
 #-- select the top 10% attributes --###########################################
@@ -555,10 +547,8 @@ del select_Survived, select_data, s_data
 ###############################################################################
 ## Priciple Components Analysis ###############################################
 ###############################################################################
-
 Principle components analysis reduces the dimension by removing dimensions which
 explain little variance in the data.
-
 """
 
 # drop the survived variable as it has nan values
@@ -586,9 +576,7 @@ del pca_data
 ###############################################################################
 ## Standardise Data ###########################################################
 ###############################################################################
-
 Standardising data allows for scales the dimensions to a common magnitude.
-
 """
 
 # extract the data to be standardised
@@ -614,11 +602,73 @@ del scalar_data, stand_data
 
 """
 ###############################################################################
+## Clustering #################################################################
+###############################################################################
+"""
+
+# extract the cluster data
+clust_data = data.drop(labels = ['Survived'], axis = 1)
+
+# initiate the agglomerative clustering
+agglom = cluster.AgglomerativeClustering(n_clusters = 2, 
+                                         affinity = 'euclidean')
+
+# fit the agglomerative clustering to the dataset
+mod = agglom.fit(clust_data)
+
+# extract the labels from the cluster data
+data['cluster'] = mod.labels_
+
+# delete the excess data
+del clust_data
+
+"""
+###############################################################################
+## Feature Selection ##########################################################
+###############################################################################
+"""
+
+#-- select attributes based on importance within decision tree --##############
+
+# Not these univariate selection techniques only work on complete datasets
+
+# extract the selection data
+select_data = data[data.Survived.notnull()]
+select_Survived = data.Survived[data.Survived.notnull()].astype('category')
+
+# extract the selection data
+select_data = select_data.drop(labels = 'Survived', axis = 1)
+
+# intiate select top 100 attributes
+selector = feature_selection.SelectFromModel(estimator = tree.DecisionTreeClassifier(), 
+                                             threshold = "mean")
+
+# select the attributes
+s_data = selector.fit_transform(X = select_data, y = select_Survived)
+
+# get colnames for the selection data
+col_names = select_data.columns[selector.get_support(indices = True)]
+
+# save the selected features as a dataset
+select_data = pd.DataFrame(select_data, columns = col_names)
+
+# save the column names 
+col_names = select_data.columns
+
+# extract the best columns from the incomplete data
+select_data = data.loc[:, col_names]
+
+# reconstruct the dataset
+data = pd.concat(objs = [data.Survived, select_data], axis = 1)
+
+# delete the excess data
+del select_Survived, select_data, s_data
+
+"""
+###############################################################################
 ## Split the Dataset ##########################################################
 ###############################################################################
-
 Splitting the dataset stores a hold out test set 
-
 """
 
 # split the data between training and test sets
