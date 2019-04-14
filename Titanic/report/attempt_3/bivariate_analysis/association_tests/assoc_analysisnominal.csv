@@ -1,0 +1,16 @@
+Xi|Xj|Statistic|df|P-value
+Survived|Pclass|102.89|2|0.0
+Survived|Sex|263.05|1|0.0
+Survived|SibSp|35.03|6|0.0
+Survived|Parch|26.46|6|0.0
+Survived|Embarked|26.49|2|0.0
+Pclass|Sex|20.38|2|0.0
+Pclass|SibSp|66.24|12|0.0
+Pclass|Parch|12.81|14|0.54
+Pclass|Embarked|205.79|4|0.0
+Sex|SibSp|51.75|6|0.0
+Sex|Parch|79.83|7|0.0
+Sex|Embarked|19.58|2|0.0
+SibSp|Parch|452.22|42|0.0
+SibSp|Embarked|39.89|12|0.0
+Parch|Embarked|31.75|14|0.0

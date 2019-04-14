@@ -1,0 +1,11 @@
+Xi|Xj|Correlation|P-value
+Pclass|Age|-0.313|0.0
+Pclass|SibSp|-0.062|0.016
+Pclass|Parch|-0.026|0.299
+Pclass|Fare|-0.592|0.0
+Age|SibSp|-0.1|0.0
+Age|Parch|-0.172|0.0
+Age|Fare|0.132|0.0
+SibSp|Parch|0.415|0.0
+SibSp|Fare|0.357|0.0
+Parch|Fare|0.323|0.0
