@@ -1,5 +1,5 @@
-Digit_Recognzer/data
-HousPrices/data
-HousPrices/report
-Titanic/data
-Titanic/report
+Digit_Recognzer/data/*
+HousPrices/data/*
+HousPrices/report/*
+Titanic/data/*
+Titanic/report/*
