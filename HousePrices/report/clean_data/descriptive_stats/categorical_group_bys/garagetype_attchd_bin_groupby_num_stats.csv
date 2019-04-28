@@ -1,3 +1,0 @@
-GarageType_Attchd_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|1011|481|5685.34|11.82|11.82|11.81||530|52.42|0.1|0.31|0|0.0|0|0.0|481|47.58|530|52.42|284|10.47|12.61|2.14|11.64|12.0|0.37|-0.11|1.11
-1|logSalePrice|1787|858|10324.42|12.03|12.03|12.07||929|51.99|0.1|0.32|0|0.0|0|0.0|858|48.01|929|51.99|436|10.54|12.6|2.06|11.85|12.26|0.41|-0.79|1.3

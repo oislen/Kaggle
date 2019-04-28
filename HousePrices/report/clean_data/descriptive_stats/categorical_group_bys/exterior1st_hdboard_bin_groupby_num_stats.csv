@@ -1,3 +1,0 @@
-Exterior1st_HdBoard_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2360|1121|13408.63|11.96|11.96|11.97||1239|52.5|0.12|0.35|0|0.0|0|0.0|1121|47.5|1239|52.5|531|10.47|12.61|2.14|11.76|12.21|0.45|-0.53|0.56
-1|logSalePrice|438|218|2601.13|11.93|11.93|11.91||220|50.23|0.06|0.25|0|0.0|0|0.0|218|49.77|220|50.23|153|11.33|12.56|1.23|11.77|12.09|0.32|0.14|-0.05

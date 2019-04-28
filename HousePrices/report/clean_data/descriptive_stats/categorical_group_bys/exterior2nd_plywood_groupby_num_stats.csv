@@ -1,3 +1,0 @@
-Exterior2nd_Plywood|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2649|1312|6853.14|5.22|5.22|5.21||1337|50.47|0.03|0.18|0|0.0|0|0.0|1312|49.53|1337|50.47|634|4.55|5.88|1.33|5.11|5.33|0.22|0.15|0.62
-1|logSalePrice|270|141|734.43|5.21|5.21|5.2||129|47.78|0.01|0.12|0|0.0|0|0.0|141|52.22|129|47.78|114|4.88|5.51|0.62|5.13|5.29|0.16|-0.05|0.18

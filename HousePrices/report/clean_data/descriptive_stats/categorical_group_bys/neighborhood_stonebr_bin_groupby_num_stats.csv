@@ -1,3 +1,0 @@
-Neighborhood_StoneBr_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2758|1325|15837.27|11.95|11.95|11.95||1433|51.96|0.11|0.33|0|0.0|0|0.0|1325|48.04|1433|51.96|562|10.47|12.61|2.14|11.76|12.18|0.42|-0.47|0.64
-1|logSalePrice|40|14|172.5|12.32|12.32|12.32||26|65.0|0.03|0.17|0|0.0|0|0.0|14|35.0|26|65.0|14|12.04|12.56|0.52|12.17|12.46|0.29|-0.1|-1.29

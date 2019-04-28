@@ -1,3 +1,0 @@
-BsmtFinType1_ALQ|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2490|1233|6445.5|5.23|5.22|5.22||1257|50.48|0.03|0.18|0|0.0|0|0.0|1233|49.52|1257|50.48|623|4.55|5.88|1.33|5.11|5.35|0.23|0.08|0.54
-1|logSalePrice|429|220|1142.08|5.19|5.19|5.17||209|48.72|0.01|0.12|0|0.0|0|0.0|220|51.28|209|48.72|152|4.91|5.73|0.82|5.11|5.26|0.14|0.64|1.79

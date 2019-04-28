@@ -1,4 +1,0 @@
-HalfBath|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|1785|864|10263.5|11.88|11.87|11.85||921|51.6|0.11|0.34|0|0.0|0|0.0|864|48.4|921|51.6|424|10.47|12.6|2.13|11.68|12.1|0.42|-0.31|0.67
-1|logSalePrice|989|464|5614.68|12.1|12.1|12.1||525|53.08|0.07|0.27|0|0.0|0|0.0|464|46.92|525|53.08|284|11.02|12.61|1.59|11.95|12.3|0.35|-0.59|0.78
-2|logSalePrice|24|11|131.59|11.96|11.96|11.94||13|54.17|0.04|0.19|0|0.0|0|0.0|11|45.83|13|54.17|11|11.6|12.22|0.62|11.83|12.12|0.29|-0.21|-0.81

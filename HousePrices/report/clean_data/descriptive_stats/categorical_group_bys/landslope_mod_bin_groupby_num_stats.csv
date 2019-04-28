@@ -1,3 +1,0 @@
-LandSlope_Mod_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2682|1283|15339.63|11.96|11.95|11.96||1399|52.16|0.11|0.33|0|0.0|0|0.0|1283|47.84|1399|52.16|550|10.47|12.61|2.14|11.76|12.18|0.42|-0.43|0.51
-1|logSalePrice|116|56|670.13|11.97|11.96|12.03||60|51.72|0.19|0.44|0|0.0|0|0.0|56|48.28|60|51.72|50|10.58|12.54|1.96|11.7|12.31|0.61|-0.93|0.89

@@ -1,3 +1,0 @@
-BldgType_Duplex_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2690|1288|15409.31|11.96|11.96|11.97||1402|52.12|0.11|0.33|0|0.0|0|0.0|1288|47.88|1402|52.12|549|10.47|12.61|2.14|11.76|12.2|0.43|-0.52|0.67
-1|logSalePrice|108|51|600.45|11.77|11.77|11.82||57|52.78|0.04|0.2|0|0.0|0|0.0|51|47.22|57|52.78|45|11.31|12.24|0.92|11.68|11.88|0.2|-0.16|0.05

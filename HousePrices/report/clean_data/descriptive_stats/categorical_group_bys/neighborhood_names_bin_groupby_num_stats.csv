@@ -1,3 +1,0 @@
-Neighborhood_NAmes_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2358|1117|13376.53|11.98|11.97|12.01||1241|52.63|0.12|0.35|0|0.0|0|0.0|1117|47.37|1241|52.63|518|10.47|12.61|2.14|11.76|12.23|0.47|-0.61|0.55
-1|logSalePrice|440|222|2633.24|11.86|11.86|11.85||218|49.55|0.04|0.2|0|0.0|0|0.0|222|50.45|218|49.55|146|11.38|12.5|1.12|11.75|11.97|0.22|0.34|0.77

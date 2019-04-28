@@ -1,3 +1,0 @@
-MSZoning_RH_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2772|1323|15821.77|11.96|11.95|11.96||1449|52.27|0.11|0.33|0|0.0|0|0.0|1323|47.73|1449|52.27|561|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.65
-1|logSalePrice|26|16|188.0|11.75|11.75|11.82||10|38.46|0.08|0.29|0|0.0|0|0.0|16|61.54|10|38.46|15|11.24|12.21|0.97|11.57|11.91|0.34|-0.46|-0.73

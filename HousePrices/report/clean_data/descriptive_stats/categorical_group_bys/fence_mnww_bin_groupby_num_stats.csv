@@ -1,3 +1,0 @@
-Fence_MnWw_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2786|1328|15880.0|11.96|11.95|11.96||1458|52.33|0.11|0.33|0|0.0|0|0.0|1328|47.67|1458|52.33|563|10.47|12.61|2.14|11.76|12.19|0.43|-0.49|0.63
-1|logSalePrice|12|11|129.76|11.8|11.8|11.78|11.78|1|8.33|0.02|0.15|0|0.0|0|0.0|11|91.67|1|8.33|11|11.61|12.14|0.53|11.71|11.87|0.16|0.86|0.39

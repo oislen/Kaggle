@@ -1,3 +1,0 @@
-RoofStyle_Mansard_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2787|1332|15925.36|11.96|11.95|11.96||1455|52.21|0.11|0.33|0|0.0|0|0.0|1332|47.79|1455|52.21|562|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.63
-1|logSalePrice|11|7|84.4|12.06|12.05|12.07||4|36.36|0.11|0.33|0|0.0|0|0.0|7|63.64|4|36.36|7|11.51|12.49|0.98|11.89|12.28|0.39|-0.25|-0.84

@@ -1,3 +1,0 @@
-Heating_OthW_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2796|1337|15986.28|11.96|11.95|11.96||1459|52.18|0.11|0.33|0|0.0|0|0.0|1337|47.82|1459|52.18|564|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.63
-1|logSalePrice|2|2|23.48|11.74|11.74|11.74|11.77|1|50.0|0.0|0.04|0|0.0|0|0.0|2|100.0|0|0.0|2|11.71|11.77|0.06|11.73|11.76|0.03|-0.0|-2.0

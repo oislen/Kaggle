@@ -1,3 +1,0 @@
-Functional_Mod_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2765|1326|15857.53|11.96|11.95|11.96||1439|52.04|0.11|0.33|0|0.0|0|0.0|1326|47.96|1439|52.04|561|10.47|12.61|2.14|11.76|12.19|0.43|-0.46|0.62
-1|logSalePrice|33|13|152.23|11.71|11.7|11.73||20|60.61|0.21|0.46|0|0.0|0|0.0|13|39.39|20|60.61|12|10.92|12.39|1.48|11.49|11.98|0.49|-0.36|-0.84

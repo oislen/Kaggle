@@ -1,3 +1,0 @@
-BsmtFinType1_Rec|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2631|1321|6907.49|5.23|5.23|5.23||1310|49.79|0.03|0.18|0|0.0|0|0.0|1321|50.21|1310|49.79|636|4.55|5.88|1.33|5.11|5.34|0.23|0.11|0.65
-1|logSalePrice|288|132|680.09|5.15|5.15|5.15||156|54.17|0.01|0.12|0|0.0|0|0.0|132|45.83|156|54.17|105|4.77|5.58|0.81|5.09|5.21|0.12|-0.03|2.05

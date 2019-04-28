@@ -1,3 +1,0 @@
-Exterior2nd_BrkFace_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2755|1318|15759.27|11.96|11.95|11.96||1437|52.16|0.11|0.33|0|0.0|0|0.0|1318|47.84|1437|52.16|558|10.47|12.61|2.14|11.76|12.19|0.43|-0.45|0.52
-1|logSalePrice|43|21|250.5|11.93|11.92|11.96||22|51.16|0.2|0.44|0|0.0|0|0.0|21|48.84|22|51.16|21|10.6|12.54|1.94|11.73|12.13|0.4|-1.09|2.02

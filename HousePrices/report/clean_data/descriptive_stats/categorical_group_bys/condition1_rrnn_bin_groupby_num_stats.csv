@@ -1,3 +1,0 @@
-Condition1_RRNn_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2790|1335|15961.54|11.96|11.95|11.96||1455|52.15|0.11|0.33|0|0.0|0|0.0|1335|47.85|1455|52.15|564|10.47|12.61|2.14|11.76|12.18|0.42|-0.48|0.64
-1|logSalePrice|8|4|48.22|12.05|12.05|12.02||4|50.0|0.2|0.45|0|0.0|0|0.0|4|50.0|4|50.0|4|11.61|12.58|0.97|11.72|12.35|0.63|0.16|-1.65

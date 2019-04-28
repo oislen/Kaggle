@@ -1,3 +1,0 @@
-Condition2_PosN|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2915|1451|7576.73|5.22|5.22|5.21||1464|50.22|0.03|0.17|0|0.0|0|0.0|1451|49.78|1464|50.22|660|4.55|5.88|1.33|5.11|5.33|0.22|0.16|0.73
-1|logSalePrice|4|2|10.85|5.43|5.42|5.43||2|50.0|0.05|0.23|0|0.0|0|0.0|2|50.0|2|50.0|2|5.27|5.59|0.32|5.35|5.51|0.16|0.0|-2.0

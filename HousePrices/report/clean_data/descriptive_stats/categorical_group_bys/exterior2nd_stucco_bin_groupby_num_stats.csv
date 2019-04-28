@@ -1,3 +1,0 @@
-Exterior2nd_Stucco_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2753|1315|15726.42|11.96|11.95|11.96||1438|52.23|0.11|0.33|0|0.0|0|0.0|1315|47.77|1438|52.23|556|10.47|12.61|2.14|11.76|12.19|0.43|-0.47|0.68
-1|logSalePrice|45|24|283.35|11.81|11.8|11.83||21|46.67|0.19|0.43|0|0.0|0|0.0|24|53.33|21|46.67|22|10.98|12.49|1.51|11.41|12.16|0.75|-0.09|-1.04

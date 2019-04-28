@@ -1,3 +1,0 @@
-Exterior1st_Wd Sdng|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2508|1250|6543.89|5.24|5.23|5.23||1258|50.16|0.03|0.17|0|0.0|0|0.0|1250|49.84|1258|50.16|612|4.55|5.88|1.33|5.12|5.34|0.22|0.1|0.71
-1|logSalePrice|411|203|1043.69|5.14|5.14|5.14||208|50.61|0.03|0.16|0|0.0|0|0.0|203|49.39|208|50.61|149|4.72|5.87|1.15|5.05|5.22|0.16|0.56|2.24

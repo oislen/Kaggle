@@ -1,3 +1,0 @@
-Condition1_Artery|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2827|1406|7348.32|5.23|5.22|5.22||1421|50.27|0.03|0.17|0|0.0|0|0.0|1406|49.73|1421|50.27|649|4.55|5.88|1.33|5.12|5.33|0.21|0.13|0.77
-1|logSalePrice|92|47|239.26|5.09|5.09|5.08||45|48.91|0.02|0.14|0|0.0|0|0.0|47|51.09|45|48.91|41|4.82|5.68|0.85|5.02|5.15|0.13|1.5|5.0

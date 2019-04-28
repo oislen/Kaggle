@@ -1,3 +1,0 @@
-Exterior1st_BrkComm_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2792|1337|15987.45|11.96|11.95|11.96||1455|52.11|0.11|0.33|0|0.0|0|0.0|1337|47.89|1455|52.11|564|10.47|12.61|2.14|11.76|12.19|0.43|-0.47|0.63
-1|logSalePrice|6|2|22.32|11.16|11.16|11.16||4|66.67|0.05|0.22|0|0.0|0|0.0|2|33.33|4|66.67|2|11.0|11.31|0.31|11.08|11.24|0.16|0.0|-2.0

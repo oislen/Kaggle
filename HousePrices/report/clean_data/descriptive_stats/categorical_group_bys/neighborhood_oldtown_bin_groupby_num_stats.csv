@@ -1,3 +1,0 @@
-Neighborhood_OldTown_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2562|1229|14725.44|11.98|11.98|11.99||1333|52.03|0.11|0.32|0|0.0|0|0.0|1229|47.97|1333|52.03|541|10.47|12.61|2.14|11.79|12.21|0.42|-0.54|0.73
-1|logSalePrice|236|110|1284.32|11.68|11.67|11.67||126|53.39|0.08|0.28|0|0.0|0|0.0|110|46.61|126|53.39|89|10.54|12.59|2.05|11.56|11.83|0.26|-0.4|3.23

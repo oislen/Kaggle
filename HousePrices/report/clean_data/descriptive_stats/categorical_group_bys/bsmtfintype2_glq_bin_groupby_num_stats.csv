@@ -1,3 +1,0 @@
-BsmtFinType2_GLQ_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2764|1325|15841.29|11.96|11.95|11.96||1439|52.06|0.11|0.33|0|0.0|0|0.0|1325|47.94|1439|52.06|561|10.47|12.61|2.14|11.76|12.18|0.42|-0.47|0.66
-1|logSalePrice|34|14|168.47|12.03|12.03|12.22||20|58.82|0.17|0.42|0|0.0|0|0.0|14|41.18|20|58.82|14|11.23|12.51|1.27|11.78|12.35|0.58|-0.71|-0.84

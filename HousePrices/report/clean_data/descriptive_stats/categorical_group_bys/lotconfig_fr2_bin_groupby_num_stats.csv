@@ -1,3 +1,0 @@
-LotConfig_FR2_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2716|1295|15482.44|11.96|11.95|11.96||1421|52.32|0.11|0.33|0|0.0|0|0.0|1295|47.68|1421|52.32|552|10.47|12.61|2.14|11.76|12.19|0.43|-0.47|0.62
-1|logSalePrice|82|44|527.32|11.98|11.98|12.0||38|46.34|0.08|0.27|0|0.0|0|0.0|44|53.66|38|46.34|41|11.3|12.43|1.13|11.84|12.15|0.32|-0.42|-0.31

@@ -1,3 +1,0 @@
-SaleType_bin_ConLw|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2911|2911|1104016686580.18|379256848.7|379256848.7|379256848.7|379256848.7|2911|100.0|0.0|0.0|0|0.0|0|0.0|2911|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0
-1|logSalePrice|8|8|3034054789.64|379256848.7|379256848.7|379256848.7|379256848.7|8|100.0|0.0|0.0|0|0.0|0|0.0|8|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|0.0|-3.0

@@ -1,3 +1,0 @@
-GarageType_bin_AttchdxBsmtFinType1_bin_GLQ|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2250|2250|853327909586.19|379256848.7|379256848.7|379256848.7|379256848.7|2250|100.0|0.0|0.0|0|0.0|0|0.0|2250|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|0.0|-3.0
-1|logSalePrice|669|669|253722831783.63|379256848.7|379256848.7|379256848.7|379256848.7|669|100.0|0.0|0.0|0|0.0|0|0.0|669|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0

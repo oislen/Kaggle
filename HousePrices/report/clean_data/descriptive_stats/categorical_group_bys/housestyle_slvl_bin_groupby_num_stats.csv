@@ -1,3 +1,0 @@
-HouseStyle_SLvl_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2671|1275|15242.37|11.95|11.95|11.95||1396|52.27|0.11|0.34|0|0.0|0|0.0|1275|47.73|1396|52.27|556|10.47|12.61|2.14|11.75|12.2|0.45|-0.46|0.53
-1|logSalePrice|127|64|767.39|11.99|11.99|12.01||63|49.61|0.03|0.18|0|0.0|0|0.0|64|50.39|63|49.61|51|11.42|12.52|1.11|11.88|12.09|0.2|0.19|2.12

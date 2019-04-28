@@ -1,3 +1,0 @@
-Exterior2nd_Wd Shng_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2720|1304|15596.67|11.96|11.96|11.96||1416|52.06|0.11|0.33|0|0.0|0|0.0|1304|47.94|1416|52.06|558|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.63
-1|logSalePrice|78|35|413.1|11.8|11.8|11.8||43|55.13|0.08|0.29|0|0.0|0|0.0|35|44.87|43|55.13|31|10.92|12.4|1.49|11.66|12.02|0.36|-0.65|1.14

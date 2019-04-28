@@ -1,3 +1,0 @@
-Neighborhood_Somerst_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2626|1263|15079.45|11.94|11.93|11.94||1363|51.9|0.11|0.33|0|0.0|0|0.0|1263|48.1|1363|51.9|529|10.47|12.61|2.14|11.74|12.16|0.42|-0.44|0.66
-1|logSalePrice|172|76|930.32|12.24|12.24|12.26||96|55.81|0.04|0.19|0|0.0|0|0.0|76|44.19|96|55.81|69|11.88|12.58|0.7|12.08|12.41|0.33|-0.22|-1.1

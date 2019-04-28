@@ -1,3 +1,0 @@
-MasVnrType_Stone|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2670|1326|6902.07|5.21|5.2|5.2||1344|50.34|0.03|0.16|0|0.0|0|0.0|1326|49.66|1344|50.34|593|4.55|5.88|1.33|5.11|5.3|0.2|0.11|0.95
-1|logSalePrice|249|127|685.51|5.4|5.4|5.4||122|49.0|0.02|0.15|0|0.0|0|0.0|127|51.0|122|49.0|121|5.08|5.79|0.71|5.29|5.5|0.21|0.17|-0.34

@@ -1,3 +1,0 @@
-Condition1_RRAe|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2891|1442|7531.1|5.22|5.22|5.21||1449|50.12|0.03|0.17|0|0.0|0|0.0|1442|49.88|1449|50.12|660|4.55|5.88|1.33|5.11|5.33|0.22|0.15|0.71
-1|logSalePrice|28|11|56.48|5.13|5.13|5.15||17|60.71|0.01|0.08|0|0.0|0|0.0|11|39.29|17|60.71|11|4.94|5.23|0.29|5.11|5.19|0.09|-1.15|0.74

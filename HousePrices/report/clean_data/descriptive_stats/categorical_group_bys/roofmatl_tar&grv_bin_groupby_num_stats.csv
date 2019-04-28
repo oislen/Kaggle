@@ -1,3 +1,0 @@
-RoofMatl_Tar&Grv_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2776|1329|15889.41|11.96|11.95|11.96||1447|52.13|0.11|0.33|0|0.0|0|0.0|1329|47.87|1447|52.13|562|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.64
-1|logSalePrice|22|10|120.35|12.04|12.03|12.02||12|54.55|0.15|0.39|0|0.0|0|0.0|10|45.45|12|54.55|10|11.31|12.52|1.21|11.79|12.37|0.58|-0.27|-0.66

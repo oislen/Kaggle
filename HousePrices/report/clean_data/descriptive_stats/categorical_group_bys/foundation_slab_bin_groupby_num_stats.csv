@@ -1,3 +1,0 @@
-Foundation_Slab_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2749|1315|15732.97|11.96|11.96|11.97||1434|52.16|0.11|0.33|0|0.0|0|0.0|1315|47.84|1434|52.16|553|10.47|12.61|2.14|11.77|12.19|0.42|-0.45|0.57
-1|logSalePrice|49|24|276.79|11.53|11.53|11.55||25|51.02|0.11|0.34|0|0.0|0|0.0|24|48.98|25|51.02|23|10.58|12.2|1.62|11.4|11.69|0.29|-0.7|1.49

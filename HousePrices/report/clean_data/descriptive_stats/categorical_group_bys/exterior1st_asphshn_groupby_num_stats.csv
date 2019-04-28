@@ -1,3 +1,0 @@
-Exterior1st_AsphShn|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2917|1452|7582.58|5.22|5.22|5.21||1465|50.22|0.03|0.17|0|0.0|0|0.0|1452|49.78|1465|50.22|661|4.55|5.88|1.33|5.11|5.33|0.22|0.16|0.72
-1|logSalePrice|2|1|5.0|5.0|5.0|5.0||1|50.0|||0|0.0|0|0.0|1|50.0|1|50.0|1|5.0|5.0|0.0|5.0|5.0|0.0|0.0|-3.0

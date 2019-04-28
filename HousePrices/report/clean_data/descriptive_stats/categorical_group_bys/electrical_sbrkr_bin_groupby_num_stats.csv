@@ -1,3 +1,0 @@
-Electrical_SBrkr_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|246|124|1442.63|11.63|11.63|11.68||122|49.59|0.11|0.33|0|0.0|0|0.0|124|50.41|122|49.59|101|10.47|12.38|1.91|11.44|11.85|0.41|-0.8|1.09
-1|logSalePrice|2552|1215|14567.13|11.99|11.99|12.0||1337|52.39|0.1|0.31|0|0.0|0|0.0|1215|47.61|1337|52.39|529|10.54|12.61|2.07|11.78|12.21|0.43|-0.38|0.36

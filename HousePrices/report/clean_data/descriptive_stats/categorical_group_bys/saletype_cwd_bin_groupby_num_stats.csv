@@ -1,3 +1,0 @@
-SaleType_CWD_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2787|1336|15973.67|11.96|11.95|11.96||1451|52.06|0.11|0.33|0|0.0|0|0.0|1336|47.94|1451|52.06|564|10.47|12.61|2.14|11.76|12.19|0.43|-0.47|0.62
-1|logSalePrice|11|3|36.09|12.03|12.03|11.97||8|72.73|0.06|0.24|0|0.0|0|0.0|3|27.27|8|72.73|3|11.82|12.3|0.48|11.9|12.13|0.24|0.42|-1.5

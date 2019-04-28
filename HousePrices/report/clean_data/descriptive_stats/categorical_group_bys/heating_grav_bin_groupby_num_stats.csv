@@ -1,3 +1,0 @@
-Heating_Grav_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2789|1332|15931.6|11.96|11.96|11.96||1457|52.24|0.11|0.33|0|0.0|0|0.0|1332|47.76|1457|52.24|561|10.47|12.61|2.14|11.76|12.19|0.43|-0.42|0.46
-1|logSalePrice|9|7|78.16|11.17|11.16|11.28||2|22.22|0.15|0.39|0|0.0|0|0.0|7|77.78|2|22.22|7|10.54|11.7|1.16|10.94|11.38|0.45|-0.25|-0.9

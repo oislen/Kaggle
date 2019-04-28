@@ -1,3 +1,0 @@
-Condition2_Feedr_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2785|1333|15939.74|11.96|11.95|11.96||1452|52.14|0.11|0.33|0|0.0|0|0.0|1333|47.86|1452|52.14|563|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.64
-1|logSalePrice|13|6|70.02|11.67|11.67|11.76||7|53.85|0.09|0.29|0|0.0|0|0.0|6|46.15|7|53.85|6|11.28|12.03|0.75|11.45|11.83|0.38|-0.33|-1.34

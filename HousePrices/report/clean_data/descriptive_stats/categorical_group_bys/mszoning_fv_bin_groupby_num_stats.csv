@@ -1,3 +1,0 @@
-MSZoning_FV_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2665|1280|15290.0|11.95|11.94|11.94||1385|51.97|0.11|0.33|0|0.0|0|0.0|1280|48.03|1385|51.97|538|10.47|12.61|2.14|11.75|12.17|0.42|-0.44|0.61
-1|logSalePrice|133|59|719.76|12.2|12.2|12.19||74|55.64|0.03|0.18|0|0.0|0|0.0|59|44.36|74|55.64|53|11.88|12.51|0.63|12.06|12.35|0.29|0.04|-1.16

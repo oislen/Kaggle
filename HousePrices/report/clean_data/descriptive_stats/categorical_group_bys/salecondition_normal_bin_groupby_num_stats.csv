@@ -1,3 +1,0 @@
-SaleCondition_Normal_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|469|214|2558.34|11.95|11.95|12.0||255|54.37|0.15|0.39|0|0.0|0|0.0|214|45.63|255|54.37|183|10.47|12.59|2.12|11.69|12.25|0.56|-0.68|0.63
-1|logSalePrice|2329|1125|13451.43|11.96|11.95|11.95||1204|51.7|0.1|0.32|0|0.0|0|0.0|1125|48.3|1204|51.7|475|10.58|12.61|2.03|11.76|12.17|0.41|-0.4|0.48

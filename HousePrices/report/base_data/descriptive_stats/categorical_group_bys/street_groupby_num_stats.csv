@@ -1,3 +1,0 @@
-Street|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-Grvl|SalePrice|12|6|781143.0|130190.5|116708.49|114250.0||6|50.0|4283212161.5|65446.25|0|0.0|0|0.0|6|50.0|6|50.0|6|55993.0|228950.0|172957.0|88250.0|169650.0|81400.0|0.47|-1.15
-Pave|SalePrice|2907|1454|263363803.0|181130.54|166962.16|163000.0||1453|49.98|6311761825.32|79446.6|0|0.0|0|0.0|1454|50.02|1453|49.98|660|34900.0|755000.0|720100.0|130000.0|214000.0|84000.0|1.89|6.52

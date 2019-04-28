@@ -1,3 +1,0 @@
-RoofStyle_Gambrel|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2897|1442|7531.22|5.22|5.22|5.21||1455|50.22|0.03|0.17|0|0.0|0|0.0|1442|49.78|1455|50.22|657|4.55|5.88|1.33|5.11|5.33|0.22|0.19|0.67
-1|logSalePrice|22|11|56.36|5.12|5.12|5.14||11|50.0|0.05|0.23|0|0.0|0|0.0|11|50.0|11|50.0|11|4.6|5.41|0.81|5.02|5.29|0.26|-0.86|0.28

@@ -1,3 +1,0 @@
-BldgType_TwnhsE_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2577|1231|14711.42|11.95|11.95|11.95||1346|52.23|0.11|0.33|0|0.0|0|0.0|1231|47.77|1346|52.23|534|10.47|12.61|2.14|11.75|12.18|0.43|-0.47|0.62
-1|logSalePrice|221|108|1298.35|12.02|12.02|12.04||113|51.13|0.08|0.29|0|0.0|0|0.0|108|48.87|113|51.13|100|11.23|12.56|1.33|11.87|12.21|0.34|-0.38|0.18

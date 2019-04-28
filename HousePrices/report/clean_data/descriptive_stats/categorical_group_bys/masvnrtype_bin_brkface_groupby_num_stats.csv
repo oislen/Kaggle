@@ -1,3 +1,0 @@
-MasVnrType_bin_BrkFace|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2040|2040|773683971358.15|379256848.7|379256848.7|379256848.7|379256848.7|2040|100.0|0.0|0.0|0|0.0|0|0.0|2040|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|0.0|-3.0
-1|logSalePrice|879|879|333366770011.67|379256848.7|379256848.7|379256848.7|379256848.7|879|100.0|0.0|0.0|0|0.0|0|0.0|879|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0

@@ -1,4 +1,0 @@
-GarageFinish_ord|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-1|logSalePrice|1378|675|7943.75|11.77|11.76|11.79||703|51.02|0.09|0.3|0|0.0|0|0.0|675|48.98|703|51.02|325|10.47|12.59|2.12|11.61|11.93|0.32|-0.46|1.69
-2|logSalePrice|780|391|4742.21|12.13|12.13|12.14||389|49.87|0.06|0.25|0|0.0|0|0.0|391|50.13|389|49.87|249|11.13|12.6|1.47|11.96|12.32|0.36|-0.43|0.42
-3|logSalePrice|640|273|3323.81|12.18|12.17|12.15||367|57.34|0.06|0.24|0|0.0|0|0.0|273|42.66|367|57.34|188|11.32|12.61|1.29|12.03|12.36|0.33|-0.36|-0.03

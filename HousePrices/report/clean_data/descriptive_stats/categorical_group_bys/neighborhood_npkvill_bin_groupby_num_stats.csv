@@ -1,3 +1,0 @@
-Neighborhood_NPkVill_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2775|1330|15902.97|11.96|11.95|11.96||1445|52.07|0.11|0.33|0|0.0|0|0.0|1330|47.93|1445|52.07|563|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.61
-1|logSalePrice|23|9|106.8|11.87|11.87|11.89||14|60.87|0.0|0.07|0|0.0|0|0.0|9|39.13|14|60.87|8|11.76|11.95|0.2|11.85|11.91|0.06|-0.77|-0.69

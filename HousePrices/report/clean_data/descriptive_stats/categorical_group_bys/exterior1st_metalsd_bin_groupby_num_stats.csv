@@ -1,3 +1,0 @@
-Exterior1st_MetalSd_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2357|1128|13514.42|11.98|11.98|12.0||1229|52.14|0.11|0.34|0|0.0|0|0.0|1128|47.86|1229|52.14|515|10.47|12.61|2.14|11.78|12.22|0.44|-0.61|0.85
-1|logSalePrice|441|211|2495.35|11.83|11.82|11.83||230|52.15|0.08|0.28|0|0.0|0|0.0|211|47.85|230|52.15|161|11.04|12.54|1.5|11.66|11.98|0.33|0.04|0.46

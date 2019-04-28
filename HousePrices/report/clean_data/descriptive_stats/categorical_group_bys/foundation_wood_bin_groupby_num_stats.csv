@@ -1,3 +1,0 @@
-Foundation_Wood_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2793|1336|15973.46|11.96|11.95|11.96||1457|52.17|0.11|0.33|0|0.0|0|0.0|1336|47.83|1457|52.17|564|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.62
-1|logSalePrice|5|3|36.31|12.1|12.1|12.01||2|40.0|0.08|0.29|0|0.0|0|0.0|3|60.0|2|40.0|3|11.87|12.43|0.56|11.94|12.22|0.28|0.54|-1.5

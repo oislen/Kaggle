@@ -1,3 +1,0 @@
-Neighborhood_Sawyer_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2648|1266|15147.87|11.97|11.96|11.98||1382|52.19|0.11|0.34|0|0.0|0|0.0|1266|47.81|1382|52.19|555|10.47|12.61|2.14|11.76|12.21|0.45|-0.52|0.6
-1|logSalePrice|150|73|861.89|11.81|11.81|11.81||77|51.33|0.03|0.18|0|0.0|0|0.0|73|48.67|77|51.33|57|11.04|12.1|1.06|11.75|11.91|0.16|-1.5|4.38

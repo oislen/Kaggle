@@ -1,3 +1,0 @@
-Fence_None_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|564|274|3250.31|11.86|11.86|11.85||290|51.42|0.08|0.29|0|0.0|0|0.0|274|48.58|290|51.42|183|10.54|12.59|2.05|11.72|12.01|0.29|-0.51|2.97
-1|logSalePrice|2234|1065|12759.46|11.98|11.98|12.01||1169|52.33|0.11|0.34|0|0.0|0|0.0|1065|47.67|1169|52.33|510|10.47|12.61|2.14|11.77|12.23|0.45|-0.54|0.38

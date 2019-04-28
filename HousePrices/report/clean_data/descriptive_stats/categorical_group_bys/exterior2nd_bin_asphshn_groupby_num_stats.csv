@@ -1,3 +1,0 @@
-Exterior2nd_bin_AsphShn|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2915|2915|1105533713975.0|379256848.7|379256848.7|379256848.7|379256848.7|2915|100.0|0.0|0.0|0|0.0|0|0.0|2915|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0
-1|logSalePrice|4|4|1517027394.82|379256848.7|379256848.7|379256848.7|379256848.7|4|100.0|0.0|0.0|0|0.0|0|0.0|4|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|0.0|-3.0

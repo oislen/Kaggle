@@ -1,3 +1,0 @@
-Electrical_FuseP_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2790|1336|15975.42|11.96|11.95|11.96||1454|52.11|0.11|0.33|0|0.0|0|0.0|1336|47.89|1454|52.11|563|10.47|12.61|2.14|11.76|12.19|0.43|-0.48|0.64
-1|logSalePrice|8|3|34.34|11.45|11.44|11.31||5|62.5|0.11|0.33|0|0.0|0|0.0|3|37.5|5|62.5|3|11.2|11.83|0.63|11.26|11.57|0.31|0.61|-1.5

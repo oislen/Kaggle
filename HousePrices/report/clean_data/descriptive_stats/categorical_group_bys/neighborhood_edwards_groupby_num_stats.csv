@@ -1,3 +1,0 @@
-Neighborhood_Edwards|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2725|1354|7084.12|5.23|5.23|5.22||1371|50.31|0.03|0.17|0|0.0|0|0.0|1354|49.69|1371|50.31|642|4.55|5.88|1.33|5.12|5.34|0.21|0.14|0.83
-1|logSalePrice|194|99|503.46|5.09|5.08|5.08||95|48.97|0.02|0.13|0|0.0|0|0.0|99|51.03|95|48.97|77|4.77|5.51|0.74|5.0|5.16|0.16|0.28|0.71

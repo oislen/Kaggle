@@ -1,3 +1,0 @@
-RoofMatl_WdShake_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|2789|1334|15947.84|11.95|11.95|11.96||1455|52.17|0.11|0.33|0|0.0|0|0.0|1334|47.83|1455|52.17|563|10.47|12.61|2.14|11.76|12.18|0.42|-0.48|0.64
-1|logSalePrice|9|5|61.92|12.38|12.38|12.4||4|44.44|0.02|0.15|0|0.0|0|0.0|5|55.56|4|44.44|5|12.15|12.57|0.41|12.34|12.47|0.13|-0.43|-0.83

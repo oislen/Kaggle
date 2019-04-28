@@ -1,3 +1,0 @@
-Exterior2nd_VinylSd_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
-0|logSalePrice|1847|899|10676.49|11.88|11.87|11.87||948|51.33|0.1|0.32|0|0.0|0|0.0|899|48.67|948|51.33|407|10.47|12.59|2.12|11.69|12.07|0.38|-0.28|0.67
-1|logSalePrice|951|440|5333.28|12.12|12.12|12.16||511|53.73|0.09|0.3|0|0.0|0|0.0|440|46.27|511|53.73|302|10.54|12.61|2.07|11.95|12.33|0.38|-1.21|3.28
