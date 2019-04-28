@@ -1,0 +1,3 @@
+Alley|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+Grvl|SalePrice|120|50|6110954.0|122219.08|117401.34|119500.0||70|58.33|1209702708.44|34780.78|0|0.0|0|0.0|50|41.67|70|58.33|45|52500.0|256000.0|203500.0|105312.5|136750.0|31437.5|0.88|3.0
+Pave|SalePrice|78|41|6888024.0|168000.59|162236.77|172500.0||37|47.44|1472285696.3|38370.38|0|0.0|0|0.0|41|52.56|37|47.44|37|40000.0|265979.0|225979.0|151000.0|185000.0|34000.0|-0.61|2.41

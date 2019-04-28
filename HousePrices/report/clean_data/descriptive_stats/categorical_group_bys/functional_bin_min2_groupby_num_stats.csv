@@ -1,0 +1,3 @@
+Functional_bin_Min2|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2849|2849|1080502761960.47|379256848.7|379256848.7|379256848.7|379256848.7|2849|100.0|0.0|0.0|0|0.0|0|0.0|2849|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0
+1|logSalePrice|70|70|26547979409.35|379256848.7|379256848.7|379256848.7|379256848.7|70|100.0|0.0|0.0|0|0.0|0|0.0|70|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|-1.0|-2.0

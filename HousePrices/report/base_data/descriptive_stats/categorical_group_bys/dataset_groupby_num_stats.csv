@@ -1,0 +1,3 @@
+Dataset|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+test|SalePrice|1459|0|0.0|||||1459|100.0|||0|0.0|0|0.0|0|0.0|1459|100.0|0|||||||0.0|0.0
+train|SalePrice|1460|1460|264144946.0|180921.2|166716.64|163000.0|140000.0|20|1.37|6311111264.3|79442.5|0|0.0|0|0.0|1460|100.0|0|0.0|663|34900.0|755000.0|720100.0|129975.0|214000.0|84025.0|1.88|6.51

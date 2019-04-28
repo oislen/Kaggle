@@ -1,0 +1,61 @@
+Response
+Sale Price is right skewed
+
+parametric models
+log-normal, gamma
+
+non-parametric
+GAM
+
+Advance
+MARS, LASSO
+
+log and model as normal
+
+NA columns
+
+Possible Columns to Drop????
+
+LotFrontage     16.649538
+Alley           93.216855
+FireplaceQu     48.646797
+PoolQC          99.657417
+Fence           80.438506
+MiscFeature     96.402878
+
+Possible Columns to fill???
+
+Numeric Columns
+MasVnrArea       0.787941
+BsmtFinSF1       0.034258
+BsmtFinSF2       0.034258
+BsmtUnfSF        0.034258
+TotalBsmtSF      0.034258
+BsmtFullBath     0.068517
+BsmtHalfBath     0.068517
+GarageYrBlt      5.447071
+GarageCars       0.034258
+GarageArea       0.034258
+
+String Columns
+MSZoning         0.137033
+Utilities        0.068517
+Exterior1st      0.034258
+Exterior2nd      0.034258
+MasVnrType       0.822199
+BsmtQual         2.774923
+BsmtCond         2.809181
+BsmtExposure     2.809181
+BsmtFinType1     2.706406
+BsmtFinType2     2.740665
+Electrical       0.034258
+KitchenQual      0.034258
+Functional       0.068517
+GarageType       5.378554
+GarageFinish     5.447071
+GarageQual       5.447071
+GarageCond       5.447071
+SaleType         0.034258
+
+Feature Enginnering
+map condition and quality attributes to ordinal variables

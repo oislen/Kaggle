@@ -1,0 +1,3 @@
+BsmtFinType2_bin_Rec|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2814|2814|1067228772255.8|379256848.7|379256848.7|379256848.7|379256848.7|2814|100.0|0.0|0.0|0|0.0|0|0.0|2814|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0
+1|logSalePrice|105|105|39821969114.02|379256848.7|379256848.7|379256848.7|379256848.7|105|100.0|0.0|0.0|0|0.0|0|0.0|105|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0

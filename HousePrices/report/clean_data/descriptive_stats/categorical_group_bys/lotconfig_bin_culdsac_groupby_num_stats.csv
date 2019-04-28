@@ -1,0 +1,3 @@
+LotConfig_bin_CulDSac|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2743|2743|1040301535997.74|379256848.7|379256848.7|379256848.7|379256848.7|2743|100.0|0.0|0.0|0|0.0|0|0.0|2743|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0
+1|logSalePrice|176|176|66749205372.08|379256848.7|379256848.7|379256848.7|379256848.7|176|100.0|0.0|0.0|0|0.0|0|0.0|176|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0

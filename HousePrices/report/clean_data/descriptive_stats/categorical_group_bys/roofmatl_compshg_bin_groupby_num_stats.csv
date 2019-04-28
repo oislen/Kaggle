@@ -1,0 +1,3 @@
+RoofMatl_CompShg_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|38|21|255.71|12.18|12.17|12.15||17|44.74|0.12|0.34|0|0.0|0|0.0|21|55.26|17|44.74|21|11.31|12.57|1.25|12.01|12.47|0.45|-0.74|-0.08
+1|logSalePrice|2760|1318|15754.05|11.95|11.95|11.95||1442|52.25|0.11|0.33|0|0.0|0|0.0|1318|47.75|1442|52.25|561|10.47|12.61|2.14|11.76|12.18|0.42|-0.48|0.65

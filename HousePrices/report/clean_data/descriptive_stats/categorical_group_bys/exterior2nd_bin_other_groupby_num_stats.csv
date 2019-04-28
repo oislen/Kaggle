@@ -1,0 +1,3 @@
+Exterior2nd_bin_Other|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2918|2918|1106671484521.11|379256848.7|379256848.7|379256848.7|379256848.7|2918|100.0|0.0|0.0|0|0.0|0|0.0|2918|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|1.0|-2.0
+1|logSalePrice|1|1|379256848.7|379256848.7|379256848.7|379256848.7|379256848.7|1|100.0|||0|0.0|0|0.0|1|100.0|0|0.0|1|379256848.7|379256848.7|0.0|379256848.7|379256848.7|0.0|0.0|-3.0

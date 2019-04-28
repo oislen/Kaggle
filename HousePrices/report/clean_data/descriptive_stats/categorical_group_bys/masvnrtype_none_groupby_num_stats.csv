@@ -1,0 +1,3 @@
+MasVnrType_None|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|1177|595|3156.3|5.3|5.3|5.29||582|49.45|0.03|0.16|0|0.0|0|0.0|595|50.55|582|49.45|379|4.88|5.88|1.0|5.19|5.41|0.22|0.35|0.1
+1|logSalePrice|1742|858|4431.28|5.16|5.16|5.15||884|50.75|0.02|0.16|0|0.0|0|0.0|858|49.25|884|50.75|437|4.55|5.87|1.32|5.08|5.26|0.18|-0.04|1.2

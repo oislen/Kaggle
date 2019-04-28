@@ -1,0 +1,3 @@
+Exterior2nd_CmentBd_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2688|1295|15482.84|11.96|11.95|11.96||1393|51.82|0.11|0.33|0|0.0|0|0.0|1295|48.18|1393|51.82|545|10.47|12.61|2.14|11.76|12.18|0.42|-0.5|0.81
+1|logSalePrice|110|44|526.92|11.98|11.97|12.1||66|60.0|0.23|0.48|0|0.0|0|0.0|44|40.0|66|60.0|43|11.23|12.59|1.37|11.43|12.44|1.01|-0.23|-1.55

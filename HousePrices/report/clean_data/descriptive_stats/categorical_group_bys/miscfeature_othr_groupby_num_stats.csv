@@ -1,0 +1,3 @@
+MiscFeature_Othr|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2915|1451|7577.72|5.22|5.22|5.21||1464|50.22|0.03|0.17|0|0.0|0|0.0|1451|49.78|1464|50.22|661|4.55|5.88|1.33|5.11|5.33|0.22|0.17|0.71
+1|logSalePrice|4|2|9.86|4.93|4.93|4.93||2|50.0|0.07|0.27|0|0.0|0|0.0|2|50.0|2|50.0|2|4.74|5.12|0.38|4.84|5.03|0.19|0.0|-2.0

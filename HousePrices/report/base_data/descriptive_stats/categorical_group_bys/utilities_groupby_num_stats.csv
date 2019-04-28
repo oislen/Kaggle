@@ -1,0 +1,3 @@
+Utilities|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+AllPub|SalePrice|2916|1459|264007446.0|180950.96|166738.66|163000.0||1457|49.97|6314145845.06|79461.6|0|0.0|0|0.0|1459|50.03|1457|49.97|663|34900.0|755000.0|720100.0|129950.0|214000.0|84050.0|1.88|6.5
+NoSeWa|SalePrice|1|1|137500.0|137500.0|137500.0|137500.0|137500.0|1|100.0|||0|0.0|0|0.0|1|100.0|0|0.0|1|137500.0|137500.0|0.0|137500.0|137500.0|0.0|0.0|-3.0

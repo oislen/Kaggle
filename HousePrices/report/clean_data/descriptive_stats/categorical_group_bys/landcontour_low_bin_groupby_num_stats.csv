@@ -1,0 +1,3 @@
+LandContour_Low_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2742|1307|15624.42|11.95|11.95|11.96||1435|52.33|0.11|0.33|0|0.0|0|0.0|1307|47.67|1435|52.33|559|10.47|12.61|2.14|11.76|12.18|0.42|-0.44|0.53
+1|logSalePrice|56|32|385.34|12.04|12.03|12.13||24|42.86|0.23|0.48|0|0.0|0|0.0|32|57.14|24|42.86|26|10.58|12.54|1.96|11.86|12.46|0.59|-1.23|1.32

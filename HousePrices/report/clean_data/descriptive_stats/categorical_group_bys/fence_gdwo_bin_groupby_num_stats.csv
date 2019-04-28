@@ -1,0 +1,3 @@
+Fence_GdWo_bin|Attr|size|count|sum|mean|geo_mean|median|mode|mode_cnt|mode_prct|var|sdev|neg_cnt|neg_perc|zero_cnt|zero_perc|pos_cnt|pos_perc|nan_cnt|nan_perc|nunique|minimum|maximum|range|quartile_1|quartile_3|iqr|skew|kurtosis
+0|logSalePrice|2688|1287|15396.73|11.96|11.96|11.97||1401|52.12|0.11|0.33|0|0.0|0|0.0|1287|47.88|1401|52.12|550|10.47|12.61|2.14|11.76|12.2|0.43|-0.46|0.49
+1|logSalePrice|110|52|613.04|11.79|11.78|11.84||58|52.73|0.1|0.31|0|0.0|0|0.0|52|47.27|58|52.73|47|10.54|12.57|2.03|11.69|11.93|0.23|-1.15|4.27
