@@ -5,3 +5,4 @@ Titanic/data
 Titanic/report
 IEEE-CIS_Fraud_Detection/
 Predict_Future_Sales/data
+*.pyc
