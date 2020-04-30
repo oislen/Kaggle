@@ -19,6 +19,7 @@ va_dir = '{}/value_analysis'.format(git_dir)
 raw_data_dir = '{}/raw'.format(data_dir)
 clean_data_dir = '{}/clean'.format(data_dir)
 base_data_dir = '{}/base'.format(data_dir)
+pred_data_dir = '{}/pred'.format(data_dir)
 
 # set raw data file paths
 item_categories_fpath = '{}/item_categories.csv'.format(raw_data_dir)
