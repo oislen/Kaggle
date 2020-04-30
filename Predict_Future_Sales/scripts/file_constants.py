@@ -38,3 +38,4 @@ test_clean_fpath = '{}/test_clean.feather'.format(clean_data_dir)
 
 # set base file path
 base_raw_data_fpath = '{}/base_raw.feather'.format(base_data_dir)
+base_agg_data_fpath = '{}/base_agg.feather'.format(base_data_dir)
