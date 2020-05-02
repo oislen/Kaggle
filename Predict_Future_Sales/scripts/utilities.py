@@ -15,12 +15,12 @@ def load_files(ver):
     """
     
     if ver == 'raw':
-        
-        item_categories = pd.read_csv(cons.item_categories_fpath)
+        encoding = 'latin1'
+        item_categories = pd.read_csv(cons.item_categories_fpath, encoding = encoding)
         items = pd.read_csv(cons.items_fpath)
         sales_train = pd.read_csv(cons.sales_train_fpath)
         sample_submission = pd.read_csv(cons.sample_submission_fpath) 
-        shops = pd.read_csv(cons.shops_fpath)
+        shops = pd.read_csv(cons.shops_fpath, encoding = encoding)
         test = pd.read_csv(cons.test_fpath)
         
     elif ver == 'clean':
