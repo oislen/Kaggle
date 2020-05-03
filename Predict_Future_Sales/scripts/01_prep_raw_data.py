@@ -8,6 +8,7 @@ Created on Mon Apr 27 20:58:03 2020
 import pandas as pd
 import file_constants as cons
 import utilities as utl
+import clean_constants as clean_cons
 
 def prep_raw_data():
     
@@ -27,9 +28,19 @@ def prep_raw_data():
     sales_train['month'] = sales_train['date'].dt.month
     sales_train['year'] = sales_train['date'].dt.year
     
+    # add weekdays and weekends 
+    sales_train['dayofweek'] = sales_train['date'].apply(lambda x: x.dayofweek)
+    sales_train['n_weekends'] = sales_train['dayofweek'].isin([5, 6]).astype(int)
+    
+    # add public holidays
+    public_holidays_list = [hol for key, val in clean_cons.russian_holidays.items() for day, hol in val.items()]
+    public_holidays_ranges = [pd.Series(pd.date_range(hol[0], hol[1])) for hol in public_holidays_list]
+    public_holidays_series = pd.concat(objs = public_holidays_ranges, ignore_index = True)
+    sales_train['n_publicholidays'] = sales_train['date'].isin(public_holidays_series).astype(int)
+    
     # extract out the sales and refunds
     sale_lam = lambda x: 0 if x <= 0 else x
-    ref_lam = lambda x: 0 if x >= 0 else x
+    ref_lam = lambda x: 0 if x >= 0 else -1 * x
     sales_train['n_refund'] = sales_train['item_cnt_day'].apply(ref_lam)
     sales_train['n_sale'] = sales_train['item_cnt_day'].apply(sale_lam)
     

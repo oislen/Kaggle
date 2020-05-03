@@ -52,32 +52,3 @@ test_results = test_results[['ID', 'item_cnt_month']]
 
 # output to csv file
 test_results.to_csv(cons.pred_data_dir + '/avg_monthly_preds.csv', index = False)
-
-#-- Create Lagged Attributes --#
-
-def gen_shift_attr(data):
-    
-    data = agg_base.copy(True)
-    
-    # create pivot table for item sale by date block
-    sales_table = pd.pivot_table(data = data, 
-                                 values = ['item_cnt_day'],
-                                 index = ['date_block_num'],
-                                 columns = ['shop_id', 'item_id'],
-                                 fill_value = 0,
-                                 dropna = False
-                                 )
-    
-    for i in sales_table.index:
-        print('working on {} ...'.format(i))
-        # remove the columns all mising 
-        cols = sales_table.columns
-        non_zero_cols = ~(sales_table == 0).all()
-        sales_table_filt = sales_table[cols[non_zero_cols]]
-        shift_data = sales_table_filt.shift(i)
-        attr_name = 'item_cnt_day_shift_{}'.format(i)
-        unstack_data = shift_data.unstack()
-        attr_shift_data = unstack_data.reset_index().drop(columns = ['level_0']).rename(columns = {0:attr_name})
-        data_join = data.merge(attr_shift_data, on = ['shop_id', 'item_id', 'date_block_num'], how = 'left')
-    
-    return data_join

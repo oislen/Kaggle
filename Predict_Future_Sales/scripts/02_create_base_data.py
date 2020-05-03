@@ -34,7 +34,15 @@ def create_base_data():
     sales_items = sales_train.merge(items, on = 'item_id', how = 'left')
     sales_items_cat = sales_items.merge(item_categories, on = 'item_category_id', how = 'left')
     sales_items_cat_shop = sales_items_cat.merge(shops, on = 'shop_id', how = 'left')
- 
+    
+    print('Add prediction date block ...')
+    
+    sales_items_cat_shop['pred_date_block_num'] = sales_items_cat_shop['date_block_num'] + 1
+    
+    print('Adding data set splits ...')
+    
+    sales_items_cat_shop['data_split'] = sales_items_cat_shop['date_block_num'].apply(lambda x: 'valid' if x == 33 else 'train')
+    
     print('Outputting Base data ...')
     
     # output the base data
