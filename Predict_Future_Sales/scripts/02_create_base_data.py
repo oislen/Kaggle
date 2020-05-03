@@ -35,15 +35,24 @@ def create_base_data():
     sales_items_cat = sales_items.merge(item_categories, on = 'item_category_id', how = 'left')
     sales_items_cat_shop = sales_items_cat.merge(shops, on = 'shop_id', how = 'left')
     
-    print('Add prediction date block ...')
+    print('Create generalised test data ...')
     
-    sales_items_cat_shop['pred_date_block_num'] = sales_items_cat_shop['date_block_num'] + 1
+    # create static columns
+    test['year'] = 2015
+    test['month'] = 11
+    test['date_block_num'] = 34
+    
+    # join on other reference data
+    test_items = test.merge(items, on = 'item_id', how = 'left')
+    test_items_cat = test_items.merge(item_categories, on = 'item_category_id', how = 'left')
+    test_items_cat_shop = test_items_cat.merge(shops, on = 'shop_id', how = 'left')
     
     print('Adding data set splits ...')
     
-    sales_items_cat_shop['data_split'] = sales_items_cat_shop['date_block_num'].apply(lambda x: 'valid' if x == 33 else 'train')
+    sales_items_cat_shop['data_split'] = sales_items_cat_shop['date_block_num'].apply(lambda x: 'train' if x  <= 31 else ('valid' if x == 32 else 'test'))
+    test_items_cat_shop['data_split'] = 'holdout'
     
-    print('Outputting Base data ...')
+    print('Outputting Base and Test data ...')
     
     # output the base data
     sales_items_cat_shop.to_feather(cons.base_raw_data_fpath)

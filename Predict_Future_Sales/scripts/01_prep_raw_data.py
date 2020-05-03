@@ -28,6 +28,8 @@ def prep_raw_data():
     sales_train['month'] = sales_train['date'].dt.month
     sales_train['year'] = sales_train['date'].dt.year
     
+    """
+    ## MOVE TO SEPERATE CALCULATION ##
     # add weekdays and weekends 
     sales_train['dayofweek'] = sales_train['date'].apply(lambda x: x.dayofweek)
     sales_train['n_weekends'] = sales_train['dayofweek'].isin([5, 6]).astype(int)
@@ -37,6 +39,7 @@ def prep_raw_data():
     public_holidays_ranges = [pd.Series(pd.date_range(hol[0], hol[1])) for hol in public_holidays_list]
     public_holidays_series = pd.concat(objs = public_holidays_ranges, ignore_index = True)
     sales_train['n_publicholidays'] = sales_train['date'].isin(public_holidays_series).astype(int)
+    """
     
     # extract out the sales and refunds
     sale_lam = lambda x: 0 if x <= 0 else x
