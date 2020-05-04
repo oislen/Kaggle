@@ -11,8 +11,6 @@ group_cols = ['year', 'month', 'shop_id', 'item_id']
 
 # define aggregation dictionary to group by and aggregate
 agg_dict = {'date_block_num':'first',
-            'n_weekends':'sum',
-            'n_publicholidays':'sum',
             'item_price':'mean',
             'item_cnt_day':'sum',
             'n_refund':'sum',
@@ -27,7 +25,8 @@ agg_dict = {'date_block_num':'first',
             'shop_name':'first',
             'shop_quotes':'first',
             'shop_brackets':'first',
-            'shop_smooth':'first'
+            'shop_smooth':'first',
+            'data_split':'first'
             }
 
 # russian holidays

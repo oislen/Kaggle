@@ -38,5 +38,7 @@ shops_clean_fpath = '{}/shops_clean.feather'.format(clean_data_dir)
 test_clean_fpath = '{}/test_clean.feather'.format(clean_data_dir)
 
 # set base file path
-base_raw_data_fpath = '{}/base_raw.feather'.format(base_data_dir)
-base_agg_data_fpath = '{}/base_agg.feather'.format(base_data_dir)
+base_raw_data_fpath = '{}/base_raw_data.feather'.format(base_data_dir)
+base_raw_test_fpath = '{}/base_raw_test.feather'.format(base_data_dir)
+base_agg_data_fpath = '{}/base_agg_data.feather'.format(base_data_dir)
+base_agg_comp_fpath = '{}/base_comp_data.feather'.format(base_data_dir)

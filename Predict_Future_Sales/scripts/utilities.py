@@ -7,6 +7,7 @@ Created on Sun Apr 26 17:46:31 2020
 
 import pandas as pd
 import file_constants as cons
+import clean_constants as clean_cons
 
 def load_files(ver):
     
@@ -88,3 +89,55 @@ def gen_shift_attr(dataset,
     # incorportate write here
     
     return data_join
+
+def gen_most_recent_item_price(dataset):
+    
+    """
+    
+    Generate Most Recent Item Price
+    
+    """
+    
+    sort_cols = ['year', 'month', 'shop_id', 'item_id']
+    group_cols = ['item_id']
+    agg_base_sort = dataset.sort_values(by = sort_cols)
+    agg_dict = {'item_price':'last', 'price_decimal':'last', 'price_decimal_len':'last'}
+    recent_price = agg_base_sort.groupby(group_cols, as_index = False).agg(agg_dict)
+    
+    return recent_price
+    
+
+def gen_retail_calender():
+    
+    """
+    
+    Generate Retail Calender
+    
+    """
+    
+    calender = pd.date_range(start = '2013-01-01', end = '2015-11-30')
+    calender_df = pd.DataFrame(calender, columns = ['date'])
+    
+    # extract year and month
+    calender_df['year'] = calender_df['date'].dt.year
+    calender_df['month'] = calender_df['date'].dt.month
+
+    # add weekdays and weekends 
+    calender_df['dayofweek'] = calender_df['date'].apply(lambda x: x.dayofweek)
+    calender_df['n_weekenddays'] = calender_df['dayofweek'].isin([5, 6]).astype(int)
+    
+    # add public holidays
+    public_holidays_list = [hol for key, val in clean_cons.russian_holidays.items() for day, hol in val.items()]
+    public_holidays_ranges = [pd.Series(pd.date_range(hol[0], hol[1])) for hol in public_holidays_list]
+    public_holidays_series = pd.concat(objs = public_holidays_ranges, ignore_index = True)
+    calender_df['n_publicholidays'] = calender_df['date'].isin(public_holidays_series).astype(int)
+
+    # aggregate up to year month level
+    group_cols = ['year', 'month']
+    agg_dict = {'n_weekenddays':'sum', 'n_publicholidays':'sum'}
+    agg_df = calender_df.groupby(group_cols, as_index = False).agg(agg_dict)
+    
+    # generate total holiday days
+    agg_df['totalholidays'] = agg_df['n_weekenddays'] + agg_df['n_publicholidays']
+    
+    return agg_df

@@ -7,9 +7,10 @@ Created on Mon Apr 27 20:11:27 2020
 
 import utilities as utl
 import pandas as pd
+import numpy as np
 import file_constants as cons
 
-pd.set_option('display.max_columns', 20)
+pd.set_option('display.max_columns', 30)
 
 def create_base_data():
     
@@ -41,6 +42,9 @@ def create_base_data():
     test['year'] = 2015
     test['month'] = 11
     test['date_block_num'] = 34
+    test['item_cnt_day'] = np.nan
+    test['n_refund'] = np.nan
+    test['n_sale'] = np.nan
     
     # join on other reference data
     test_items = test.merge(items, on = 'item_id', how = 'left')
@@ -56,6 +60,7 @@ def create_base_data():
     
     # output the base data
     sales_items_cat_shop.to_feather(cons.base_raw_data_fpath)
+    test_items_cat_shop.to_feather(cons.base_raw_test_fpath)
     
     return 
     
