@@ -34,10 +34,6 @@ def prep_raw_data():
     sales_train['n_refund'] = sales_train['item_cnt_day'].apply(ref_lam)
     sales_train['n_sale'] = sales_train['item_cnt_day'].apply(sale_lam)
     
-    # extract price information
-    sales_train['price_decimal'] = sales_train['item_price'].astype(str).str.extract('\d+\.(\d*)')[0].astype(float)
-    sales_train['price_decimal_len'] = sales_train['item_price'].astype(str).str.extract('\d+\.(\d*)')[0].str.len()
-    
     #-- Item Categories --#
     
     print('Preparing Item Data ...')

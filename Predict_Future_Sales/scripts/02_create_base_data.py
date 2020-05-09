@@ -23,19 +23,6 @@ def create_base_data():
     # load in the raw data
     item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean')
     
-    # print column names
-    sales_train.columns
-    items.columns
-    item_categories.columns
-    shops.columns
-    
-    print('Joining clean data ...')
-    
-    # join all data sets together
-    sales_items = sales_train.merge(items, on = 'item_id', how = 'left')
-    sales_items_cat = sales_items.merge(item_categories, on = 'item_category_id', how = 'left')
-    sales_items_cat_shop = sales_items_cat.merge(shops, on = 'shop_id', how = 'left')
-    
     print('Create generalised test data ...')
     
     # create static columns
@@ -46,21 +33,11 @@ def create_base_data():
     test['n_refund'] = np.nan
     test['n_sale'] = np.nan
     
-    # join on other reference data
-    test_items = test.merge(items, on = 'item_id', how = 'left')
-    test_items_cat = test_items.merge(item_categories, on = 'item_category_id', how = 'left')
-    test_items_cat_shop = test_items_cat.merge(shops, on = 'shop_id', how = 'left')
-    
-    print('Adding data set splits ...')
-    
-    sales_items_cat_shop['data_split'] = sales_items_cat_shop['date_block_num'].apply(lambda x: 'train' if x  <= 31 else ('valid' if x == 32 else 'test'))
-    test_items_cat_shop['data_split'] = 'holdout'
-    
     print('Outputting Base and Test data ...')
     
     # output the base data
-    sales_items_cat_shop.to_feather(cons.base_raw_data_fpath)
-    test_items_cat_shop.to_feather(cons.base_raw_test_fpath)
+    sales_train.to_feather(cons.base_raw_data_fpath)
+    test.to_feather(cons.base_raw_test_fpath)
     
     return 
     

@@ -101,7 +101,7 @@ def gen_most_recent_item_price(dataset):
     sort_cols = ['year', 'month', 'shop_id', 'item_id']
     group_cols = ['item_id']
     agg_base_sort = dataset.sort_values(by = sort_cols)
-    agg_dict = {'item_price':'last', 'price_decimal':'last', 'price_decimal_len':'last'}
+    agg_dict = {'item_price':'last'}
     recent_price = agg_base_sort.groupby(group_cols, as_index = False).agg(agg_dict)
     
     return recent_price
