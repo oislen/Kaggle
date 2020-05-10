@@ -6,9 +6,9 @@ Created on Thu Apr 30 20:33:00 2020
 """
 
 import pandas as pd
-import file_constants as cons
-import clean_constants as clean_cons
-import utilities as utl
+import reference.file_constants as cons
+import reference.clean_constants as clean_cons
+import reference.utilities as utl
 
 def agg_base_data():
 
@@ -49,5 +49,3 @@ def agg_base_data():
     base_concat.to_feather(cons.base_agg_data_fpath)
     
     return
-
-agg_base_data()

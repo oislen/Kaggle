@@ -5,12 +5,9 @@ Created on Mon Apr 27 20:11:27 2020
 @author: oislen
 """
 
-import utilities as utl
 import pandas as pd
-import numpy as np
-import file_constants as cons
-
-pd.set_option('display.max_columns', 30)
+import reference.utilities as utl
+import reference.file_constants as cons
 
 def create_base_data():
     
@@ -29,9 +26,9 @@ def create_base_data():
     test['year'] = 2015
     test['month'] = 11
     test['date_block_num'] = 34
-    test['item_cnt_day'] = np.nan
-    test['n_refund'] = np.nan
-    test['n_sale'] = np.nan
+    test['item_cnt_day'] = -999
+    test['n_refund'] = -999
+    test['n_sale'] = -999
     
     print('Outputting Base and Test data ...')
     
@@ -41,4 +38,3 @@ def create_base_data():
     
     return 
     
-create_base_data()

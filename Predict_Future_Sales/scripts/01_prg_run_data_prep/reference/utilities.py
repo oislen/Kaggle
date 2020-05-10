@@ -8,7 +8,7 @@ Created on Sun Apr 26 17:46:31 2020
 import pandas as pd
 import file_constants as cons
 import clean_constants as clean_cons
-
+import numpy as np
 def load_files(ver):
     
     """
@@ -141,3 +141,69 @@ def gen_retail_calender():
     agg_df['totalholidays'] = agg_df['n_weekenddays'] + agg_df['n_publicholidays']
     
     return agg_df
+
+
+
+
+
+
+def backfill_attr(dataset, 
+                  pivot_values, 
+                  fillna,
+                  pivot_index = ['year', 'month'], 
+                  pivot_columns = ['shop_id', 'item_id'], 
+                  ffill = False
+                  ):
+    
+    """
+    
+    utl.backfill_attr(dataset = agg_base, 
+                      pivot_values = ['item_price'], 
+                      fillna = -999,
+                      pivot_index = ['year', 'month'], 
+                      pivot_columns = ['shop_id', 'item_id'], 
+                      ffill = True
+                      )
+    
+    """
+        
+    print('Back filling {} ...'.format(pivot_values[0]))
+    
+    # set up for finding price of an item
+    table = pd.pivot_table(data = dataset, 
+                           values = pivot_values,
+                           index = pivot_index,
+                           columns = pivot_columns,
+                           dropna = True
+                           )
+    
+    # if forward fill
+    if ffill:
+            
+        # want to forward fill from given price to next price
+        table = table.ffill(axis = 0)
+        
+    # add in unknown default
+    table = table.fillna(fillna)
+    
+    # double unstack to get data by year, month, item_id and shop_id
+    unstack = table.stack().stack().reset_index()
+    
+    # filter out future dates
+    date_filt = (unstack['year'] == 2015) & (unstack['month'] == 12)
+    unstack = unstack.loc[~date_filt, :]
+    
+    return unstack
+
+def fill_id(dataset, fill_type, split, fillna = -999):
+        """
+        """
+        data = dataset.copy(True)
+        filt_split = data['data_split'] == split
+        nrows = filt_split.sum()
+        if fill_type == 'range':
+            data.loc[filt_split, 'ID'] = np.arange(nrows)
+        elif fill_type == 'value':
+            data.loc[filt_split, 'ID'] = data.loc[filt_split, 'ID'].fillna(fillna)
+        return data
+    
