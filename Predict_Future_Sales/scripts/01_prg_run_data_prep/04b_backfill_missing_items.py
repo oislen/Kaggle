@@ -107,7 +107,14 @@ def back_fill_missing_items():
     print('Create primary key ...')
     
     join_df['primary_key'] = join_df.index
-
+    
+    print('Mapping missing holdout sales info ...')
+    
+    filt_holdout = join_df['data_split'] == 'holdout'
+    join_df.loc[filt_holdout, 'item_cnt_day'] = -999
+    join_df.loc[filt_holdout, 'n_refund'] = -999
+    join_df.loc[filt_holdout, 'n_sale'] = -999
+    
     print('Outputting file ...')
     
     # output aggreated base data as feather file
