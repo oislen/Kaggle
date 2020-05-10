@@ -6,11 +6,10 @@ Created on Thu Apr 30 20:33:00 2020
 """
 
 import pandas as pd
-import reference.file_constants as cons
 import reference.clean_constants as clean_cons
 import reference.utilities as utl
 
-def agg_base_data():
+def agg_base_data(cons):
 
     """
     """
@@ -18,7 +17,7 @@ def agg_base_data():
     print('loading base data ...')
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean')
+    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
     # load in base data
     base_raw = pd.read_feather(cons.base_raw_data_fpath)
@@ -37,6 +36,9 @@ def agg_base_data():
     recent_price = utl.gen_most_recent_item_price(dataset = agg_base)
     join_cols = ['item_id']
     base_test_price = base_test.merge(recent_price, on = join_cols, how = 'left')
+    
+    print('Fill in -999 default for missing prices ...')
+    
     base_test_price['item_price'] = base_test_price['item_price'].fillna(-999)
 
     print('Concatenate Base and Test data ...')

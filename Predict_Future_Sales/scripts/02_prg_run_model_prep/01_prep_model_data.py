@@ -19,7 +19,21 @@ base['n_refund'].value_counts(dropna = False)
 base['n_sale'].value_counts(dropna = False)
 base['data_split'].value_counts(dropna = False)
 base['ID'].value_counts(dropna = False)
-(base.loc[base['data_split'] == 'holdout', 'ID'] != -999).sum()
+base['holdout_subset_ind'].value_counts(dropna = False)
 
+pd.crosstab(index = base['no_sales_hist_ind'], columns = base['item_cnt_day'].isin([0, -999]).astype(int))
+pd.crosstab(index = base['no_sales_hist_ind'], columns = base['holdout_subset_ind'])
 
+# Step 1:
+# TODO: encode categorical variables; alphabetical / order encode
+# TODO: create shift attribues; last month, last three months, last year
+# TODO: create date window attributes; quarters, seasons
+# TODO: create mean encoded attributes; item category, item_id, shop_id
+# TODO: create interaction attributes
 
+# Step 2:
+# TODO: split into train, valid, test and holdout
+# TODO: fit random forest and gradient boosting decision trees; loss optimise on MSE
+# TODO: plot early stopping plot
+# TODO: tune hyperparameters
+# TODO: predict any item with no sales history as 0

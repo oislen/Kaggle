@@ -5,11 +5,9 @@ Created on Mon Apr 27 20:11:27 2020
 @author: oislen
 """
 
-import pandas as pd
 import reference.utilities as utl
-import reference.file_constants as cons
 
-def create_base_data():
+def create_base_data(cons):
     
     """
     Create base data 
@@ -18,7 +16,7 @@ def create_base_data():
     print('Loading clean data ...')
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean')
+    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
     print('Create generalised test data ...')
     

@@ -6,10 +6,9 @@ Created on Sun May 10 18:06:01 2020
 """
 
 import pandas as pd
-import reference.file_constants as cons
 import reference.utilities as utl
 
-def append_supplement_attrs():
+def append_supplement_attrs(cons):
     
     
     """
@@ -23,7 +22,7 @@ def append_supplement_attrs():
     """
 
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean')
+    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
     # output aggreated base data as feather file
     base_agg_comp = pd.read_feather(cons.base_agg_comp_fpath)

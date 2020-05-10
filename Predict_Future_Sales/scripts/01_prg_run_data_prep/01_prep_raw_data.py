@@ -6,10 +6,9 @@ Created on Mon Apr 27 20:58:03 2020
 """
 
 import pandas as pd
-import reference.file_constants as cons
 import reference.utilities as utl
 
-def prep_raw_data():
+def prep_raw_data(cons):
     
     """
     
@@ -37,7 +36,7 @@ def prep_raw_data():
     """
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('raw')
+    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('raw', cons)
     
     #-- Sales Data --#
     

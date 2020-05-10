@@ -6,11 +6,10 @@ Created on Sun Apr 26 17:46:31 2020
 """
 
 import pandas as pd
-import file_constants as cons
 import clean_constants as clean_cons
 import numpy as np
 
-def load_files(ver):
+def load_files(ver, cons):
     
     """
     Loads in all files

@@ -6,10 +6,9 @@ Created on Sat May  9 19:23:38 2020
 """
 
 import pandas as pd
-import reference.file_constants as cons
 import reference.utilities as utl
 
-def back_fill_missing_items():
+def back_fill_missing_items(cons):
     
     """
     
@@ -20,7 +19,7 @@ def back_fill_missing_items():
     """
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean')
+    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
     agg_base = pd.read_feather(cons.base_agg_data_fpath)
     
@@ -108,12 +107,22 @@ def back_fill_missing_items():
     
     join_df['primary_key'] = join_df.index
     
-    print('Mapping missing holdout sales info ...')
+    print('Create holdout subset indicator ...')
     
     filt_holdout = join_df['data_split'] == 'holdout'
+    filt_id = join_df['ID'] != -999
+    join_df['holdout_subset_ind'] = (filt_id & filt_holdout).astype(int)
+    
+    print('Mapping missing holdout sales info ...')
+    
     join_df.loc[filt_holdout, 'item_cnt_day'] = -999
     join_df.loc[filt_holdout, 'n_refund'] = -999
     join_df.loc[filt_holdout, 'n_sale'] = -999
+    
+    print('Create no sales history indicator ...')
+    
+    filt_default_price = join_df['item_price'] == -999
+    join_df['no_sales_hist_ind'] = filt_default_price.astype(int)
     
     print('Outputting file ...')
     
