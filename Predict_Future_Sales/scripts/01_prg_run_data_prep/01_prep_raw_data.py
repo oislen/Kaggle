@@ -65,7 +65,8 @@ def prep_raw_data(cons):
     item_categories['item_category_name'].value_counts()
     item_categories['item_cat'] = item_categories['item_category_name'].str.split(' - ', expand = True)[0]
     item_categories['item_cat_sub'] = item_categories['item_category_name'].str.split(' - ', expand = True)[1]
-   
+    item_categories['item_cat_sub'] = item_categories['item_cat_sub'].fillna('')
+    
     #-- Shop Name --#
     
     print('Preparing Shop Data ...')
