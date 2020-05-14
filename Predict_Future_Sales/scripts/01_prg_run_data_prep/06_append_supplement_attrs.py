@@ -52,22 +52,10 @@ def append_supplement_attrs(cons):
     retail_calander = utl.gen_retail_calender()
     join_cols = ['year', 'month']
     base_agg_comp = base_agg_comp.merge(retail_calander, on = join_cols, how = 'left')
-
-    if False:
-        
-        print('Removing observations not in holdout set ...')
-        
-        # NOTE: this step drops a lot of information
-        # need to filter out excess items not found n holdout set
-        base_agg_comp['shop_item_id'] = base_agg_comp['shop_id'].astype(str) + '_' + base_agg_comp['item_id'].astype(str)
-        holdout = base_agg_comp[base_agg_comp['data_split'] == 'holdout']
-        id_null = holdout['ID'].isnull()
-        null_holdout = holdout[id_null]
-        shop_item_id = null_holdout['shop_item_id'].unique()
-        filt_no_test = ~base_agg_comp['shop_item_id'].isin(shop_item_id)
-        join_df_filt = base_agg_comp.loc[filt_no_test, :].reset_index(drop = True)
-        join_df_filt['data_split'].value_counts()        
     
+    print('Outputting supplementary data ...')
+    
+    # output file as a feather file
     base_agg_comp.to_feather(cons.base_agg_supp_fpath)
     
     return

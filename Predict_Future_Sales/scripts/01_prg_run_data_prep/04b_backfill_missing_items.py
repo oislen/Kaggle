@@ -124,9 +124,31 @@ def back_fill_missing_items(cons):
     filt_default_price = join_df['item_price'] == -999
     join_df['no_sales_hist_ind'] = filt_default_price.astype(int)
     
+    if True:
+        
+        print('Removing observations not in holdout set ...')
+        
+        # NOTE: this step drops a lot of information
+        # need to filter out excess items not found n holdout set
+        # ideally this should save our runtime resources
+        join_df['shop_item_id'] = join_df['shop_id'].astype(str) + '_' + join_df['item_id'].astype(str)
+        holdout = join_df[join_df['data_split'] == 'holdout']
+        id_null = holdout['ID'] == -999
+        null_holdout = holdout[id_null]
+        shop_item_id = null_holdout['shop_item_id'].unique()
+        filt_no_test = ~join_df['shop_item_id'].isin(shop_item_id)
+        join_df_filt = join_df.loc[filt_no_test, :].reset_index(drop = True)
+        join_df_filt['data_split'].value_counts() 
+        join_df['data_split'].value_counts() 
+    
+    else:
+        
+        # else return the entire dataset
+        join_df_filt = join_df
+    
     print('Outputting file ...')
     
     # output aggreated base data as feather file
-    join_df.to_feather(cons.base_agg_comp_fpath)
+    join_df_filt.to_feather(cons.base_agg_comp_fpath)
     
     return 

@@ -68,7 +68,7 @@ def gen_shift_attr(dataset,
                                  index = index,
                                  columns = columns,
                                  fill_value = fill_value,
-                                 dropna = False
+                                 dropna = True
                                  )
 
     # for each required shift
