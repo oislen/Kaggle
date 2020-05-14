@@ -35,6 +35,7 @@ pd.crosstab(index = base['no_sales_hist_ind'], columns = base['holdout_subset_in
 # Step 1:
 # TODO: encode categorical variables; alphabetical / order encode
 # TODO: create shift attribues; last month, last three months, last year
+# TODO: create shop / item sales totals
 # TODO: create date window attributes; quarters, seasons
 # TODO: create mean encoded attributes; item category, item_id, shop_id
 # TODO: create interaction attributes
@@ -56,6 +57,7 @@ base['item_cat_sub_enc'] = item_cat_sub_label_enc.transform(base['item_cat_sub']
 # TODO: fit random forest and gradient boosting decision trees; loss optimise on MSE
 # TODO: plot early stopping plot
 # TODO: tune hyperparameters
+# TODO: apply stacking with linear meta-model
 # TODO: predict any item with no sales history as 0
 
 # define data split filters

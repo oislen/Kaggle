@@ -25,7 +25,7 @@ def append_supplement_attrs(cons):
     item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
     # output aggreated base data as feather file
-    base_agg_comp = pd.read_feather(cons.base_agg_comp_fpath)
+    base_agg_comp = pd.read_feather(cons.base_agg_shft_fpath)
     
     print('Extract the price info ...')
     

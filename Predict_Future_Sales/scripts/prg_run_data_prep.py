@@ -24,7 +24,8 @@ prg_01 = import_module(name = '01_prep_raw_data')
 prg_02 = import_module(name = '02_create_base_data')
 prg_03 = import_module(name = '03_agg_base_data')
 prg_04 = import_module(name = '04b_backfill_missing_items')
-prg_05 = import_module(name = '05_append_supplement_attrs')
+prg_05 = import_module(name = '05_gen_shift_attrs')
+prg_06 = import_module(name = '06_append_supplement_attrs')
 
 # load in file constants
 cons = import_module(name = 'file_constants')
@@ -42,8 +43,11 @@ prg_03.agg_base_data(cons)
 print('~~~~~ Back Filling Base data ....')
 prg_04.back_fill_missing_items(cons)
 
+print('~~~~~ Generate Shift Attributes ...')
+prg_05.gen_shift_attrs(cons)
+
 print('~~~~~ Append supplemenatary data ...')
-prg_05.append_supplement_attrs(cons)
+prg_06.append_supplement_attrs(cons)
 
 print("~~~~~ Done ...")
 

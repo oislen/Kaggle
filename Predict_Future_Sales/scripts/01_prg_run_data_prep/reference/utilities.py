@@ -40,6 +40,7 @@ def gen_shift_attr(dataset,
                    values, 
                    index, 
                    columns, 
+                   n_shifts = 12,
                    fill_value = 0
                    ):
     
@@ -54,40 +55,43 @@ def gen_shift_attr(dataset,
     
     """
     
+    # extract the relevant input info
     feat_name = values[0]
     join_cols = columns + index
     data_join = dataset[join_cols].copy(True)
     
     print('creating pivot table ...')
+    
     # create pivot table for item sale by date block
     sales_table = pd.pivot_table(data = dataset, 
                                  values = values,
                                  index = index,
                                  columns = columns,
-                                 fill_value = 0,
+                                 fill_value = fill_value,
                                  dropna = False
                                  )
-    
-    print('Removing all zero columns ...')
-    # remove the columns all mising 
-    cols = sales_table.columns
-    non_zero_cols = ~(sales_table == 0).all()
-    sales_table_filt = sales_table[cols[non_zero_cols]]
-    nrow = sales_table.shape[0]
-    
-    for i in range(1, nrow + 1):
-        print('~~~~~ working on {} ...'.format(i))
+
+    # for each required shift
+    for i in range(1, n_shifts + 1):
+        
+        print('Working on shift {} of {} ...'.format(i, n_shifts))
         print('create shifts ...')
-        shift_data = sales_table_filt.shift(i)
+        
+        # shift the data by i
+        shift_data = sales_table.shift(i, fill_value = 0)
+        
         print('unstacking data ...')
+        
+        # unstack the shifted attribute
         attr_name = '{}_shift_{}'.format(feat_name, i)
         unstack_data = shift_data.unstack()
         attr_shift_data = unstack_data.reset_index().drop(columns = ['level_0']).rename(columns = {0:attr_name})
+        
         print('joining back results ...')
+        
+        # store the shifted attribute
         data_join = data_join.merge(attr_shift_data, on = join_cols, how = 'left')
-    
-    # incorportate write here
-    
+        
     return data_join
 
 def gen_most_recent_item_price(dataset):
