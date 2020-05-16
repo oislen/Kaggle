@@ -81,7 +81,7 @@ holdout_data = base[filt_holdout]
 # seperate predictors from response
 data_cols = base.columns.tolist()
 index_cols = ['primary_key', 'ID', 'data_split', 'holdout_subset_ind', 'no_sales_hist_ind']
-tar_cols = ['item_cnt_day', 'n_refund', 'n_sale']
+tar_cols = ['item_cnt_day']
 excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub']
 pred_cols = [col for col in data_cols if col not in index_cols + tar_cols + excl_cols]
 
