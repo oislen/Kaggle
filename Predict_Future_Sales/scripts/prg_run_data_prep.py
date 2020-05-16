@@ -26,7 +26,7 @@ prg_03 = import_module(name = '03_backfill_missing_items')
 prg_04 = import_module(name = '04_gen_total_shift_attrs')
 prg_05 = import_module(name = '05_append_supplement_attrs')
 
-start = 1
+start = 4
 end = 7
 run_range = range(start, end + 1)
 

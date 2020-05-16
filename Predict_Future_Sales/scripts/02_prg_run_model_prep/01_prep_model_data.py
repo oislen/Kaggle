@@ -141,7 +141,7 @@ holdout_out = holdout_out.rename(columns = {'y_holdout_pred':'item_cnt_month'})
 holdout_out_sort = holdout_out.sort_values(by = ['ID']).astype(int)
 
 # output predictions as csv file
-output_foath = cons.pred_data_dir + '/randforest20200514.csv'
+output_foath = cons.pred_data_dir + '/randforest20200516.csv'
 holdout_out_sort.to_csv(output_foath,
                         index = False
                         )
