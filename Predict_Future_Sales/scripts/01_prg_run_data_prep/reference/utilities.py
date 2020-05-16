@@ -68,6 +68,7 @@ def gen_shift_attr(dataset,
                                  index = index,
                                  columns = columns,
                                  fill_value = fill_value,
+                                 aggfunc = np.sum,
                                  dropna = True
                                  )
 
@@ -91,8 +92,20 @@ def gen_shift_attr(dataset,
         
         # store the shifted attribute
         data_join = data_join.merge(attr_shift_data, on = join_cols, how = 'left')
-        
-    return data_join
+    
+    print('Consolidating all attributes ...')
+    
+    # set the join columns
+    join_cols = columns + index
+    
+    # join shift attributes back to base data
+    data_out = pd.merge(left = dataset,
+                        right = data_join,
+                        on = join_cols,
+                        how = 'left'
+                        )
+    
+    return data_out
 
 def gen_most_recent_item_price(dataset):
     
@@ -178,6 +191,7 @@ def backfill_attr(dataset,
                            values = pivot_values,
                            index = pivot_index,
                            columns = pivot_columns,
+                           aggfunc = np.sum,
                            dropna = True
                            )
     
@@ -211,3 +225,50 @@ def fill_id(dataset, fill_type, split, fillna = -999):
             data.loc[filt_split, 'ID'] = data.loc[filt_split, 'ID'].fillna(fillna)
         return data
     
+
+def gen_attr_agg_totals(dataset, 
+                        values, 
+                        index, 
+                        columns, 
+                        fill_value = 0
+                        ):
+    
+    """
+    """
+    
+    # extract the relevant input info
+    feat_name = values[0]
+    attr_agg = columns[0]
+    join_cols = columns + index
+    
+    print('creating pivot table ...')
+    
+    # create pivot table for item sale by date block
+    totals_table = pd.pivot_table(data = dataset, 
+                                  values = values,
+                                  index = index,
+                                  columns = columns,
+                                  aggfunc = np.sum,
+                                  fill_value = fill_value,
+                                  dropna = True
+                                  )
+    
+    if index == ['date_block_num']:
+        
+        # overwite date block 34 with -999s
+        totals_table.loc[34, :] = -999
+
+    print('unstacking data ...')
+
+    # unstack the attribute totals
+    attr_name = '{}_total_{}'.format(attr_agg, feat_name)
+    unstack_data = totals_table.unstack()
+    attr_total_data = unstack_data.reset_index().drop(columns = ['level_0']).rename(columns = {0:attr_name})
+    
+    print('joining back results ...')
+     
+    # store the total attribute
+    data_join = dataset.merge(attr_total_data, on = join_cols, how = 'left')
+    
+    return data_join
+

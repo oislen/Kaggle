@@ -36,44 +36,55 @@ def gen_shift_attrs(cons):
     
     """
     
-    # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
-    
     # output aggreated base data as feather file
     base_agg_comp = pd.read_feather(cons.base_agg_comp_fpath)
+    
+    # set function inputs
+    values = ['item_cnt_day']
+    index = ['date_block_num']
+    
+    print('Calculating sold item totals for shop id ...')
+ 
+    # generate the shop sell totals
+    shop_total_data = utl.gen_attr_agg_totals(dataset = base_agg_comp,
+                                              values = values,
+                                              index = index,
+                                              columns = ['shop_id'],
+                                              fill_value = 0
+                                              )
 
+    print('Calculating sold item totals for item id ...')
+    
+ 
+    # generate item sell totals
+    item_total_data = utl.gen_attr_agg_totals(dataset = shop_total_data,
+                                              values = values,
+                                              index = index,
+                                              columns = ['item_id'],
+                                              fill_value = 0
+                                              )
+    
+
+    print('Running shift attributes for item cnt ...')
+    
     # set shift function inputs
     values = ['item_cnt_day']
     index = ['date_block_num']
     columns = ['shop_id', 'item_id']
     n_shifts = 24
     
-    print('Running shift attributes ...')
-    
     # create shift attributes
-    shift_attrs = utl.gen_shift_attr(dataset = base_agg_comp, 
+    shift_attrs = utl.gen_shift_attr(dataset = item_total_data, 
                                      values = values, 
                                      index = index, 
                                      columns = columns,
                                      n_shifts = n_shifts
                                      )
     
-    print('Consolidating all attributes ...')
-    
-    # set the join columns
-    join_cols = columns + index
-    
-    # join shift attributes back to base data
-    data_join = pd.merge(left = base_agg_comp,
-                         right = shift_attrs,
-                         on = join_cols,
-                         how = 'left'
-                         )
-    
     print('Outputting results ...')
     
     # output file to feather file
-    data_join.to_feather(cons.base_agg_shft_fpath)
+    shift_attrs.to_feather(cons.base_agg_shft_fpath)
     
     return
     

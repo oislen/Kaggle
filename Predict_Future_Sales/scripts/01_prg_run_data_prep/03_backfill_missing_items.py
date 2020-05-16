@@ -45,25 +45,25 @@ def back_fill_missing_items(cons):
                                       ffill = False
                                       )
     
-    #-- Refund --#
-    
-    refund_unstack = utl.backfill_attr(dataset = agg_base, 
-                                       pivot_values = ['n_refund'], 
-                                       fillna = 0,
-                                       pivot_index = ['year', 'month'], 
-                                       pivot_columns = ['shop_id', 'item_id'], 
-                                       ffill = False
-                                       )
-
-    #-- Sales --#
-    
-    sales_unstack = utl.backfill_attr(dataset = agg_base, 
-                                      pivot_values = ['n_sale'], 
-                                      fillna = 0,
-                                      pivot_index = ['year', 'month'], 
-                                      pivot_columns = ['shop_id', 'item_id'], 
-                                      ffill = False
-                                      )
+    ##-- Refund --#
+    #
+    #refund_unstack = utl.backfill_attr(dataset = agg_base, 
+    #                                   pivot_values = ['n_refund'], 
+    #                                   fillna = 0,
+    #                                   pivot_index = ['year', 'month'], 
+    #                                   pivot_columns = ['shop_id', 'item_id'], 
+    #                                   ffill = False
+    #                                   )
+    #
+    ##-- Sales --#
+    #
+    #sales_unstack = utl.backfill_attr(dataset = agg_base, 
+    #                                  pivot_values = ['n_sale'], 
+    #                                  fillna = 0,
+    #                                  pivot_index = ['year', 'month'], 
+    #                                  pivot_columns = ['shop_id', 'item_id'], 
+    #                                  ffill = False
+    #                                  )
     
     #-- ID --#
     
@@ -82,11 +82,12 @@ def back_fill_missing_items(cons):
     join_df = price_unstack[['year', 'month', 'shop_id', 'item_id']]
     join_df = join_df.merge(price_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
     join_df = join_df.merge(total_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
-    join_df = join_df.merge(refund_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
-    join_df = join_df.merge(sales_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
+    #join_df = join_df.merge(refund_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
+    #join_df = join_df.merge(sales_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
     join_df = join_df.merge(id_df, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
     
-    del price_unstack, total_unstack, refund_unstack, sales_unstack, id_df
+    #del price_unstack, total_unstack, refund_unstack, sales_unstack, id_df
+    del price_unstack, total_unstack, id_df
     
     print('Fill date block ...')
     
@@ -116,8 +117,8 @@ def back_fill_missing_items(cons):
     print('Mapping missing holdout sales info ...')
     
     join_df.loc[filt_holdout, 'item_cnt_day'] = -999
-    join_df.loc[filt_holdout, 'n_refund'] = -999
-    join_df.loc[filt_holdout, 'n_sale'] = -999
+    #join_df.loc[filt_holdout, 'n_refund'] = -999
+    #join_df.loc[filt_holdout, 'n_sale'] = -999
     
     print('Create no sales history indicator ...')
     

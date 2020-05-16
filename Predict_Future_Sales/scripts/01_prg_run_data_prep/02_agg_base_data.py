@@ -13,32 +13,36 @@ def agg_base_data(cons):
 
     """
     """
-    
-    print('loading base data ...')
+        
+    print('Loading clean data ...')
     
     # load in the raw data
     item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
-    # load in base data
-    base_raw = pd.read_feather(cons.base_raw_data_fpath)
-    base_test = pd.read_feather(cons.base_raw_test_fpath)
-    
     print('aggregating base data ...')
     
     # want to aggregate to year, month, shop and product level
-    agg_base = base_raw.groupby(clean_cons.group_cols, as_index = False).agg(clean_cons.agg_dict)
+    agg_base = sales_train.groupby(clean_cons.group_cols, as_index = False).agg(clean_cons.agg_dict)
     
     # add ID column
     agg_base['ID'] = agg_base.index
     
-    print('Generate most recent item price for test set ...')
+    print('Create generalised test data ...')
+    
+    # create static columns
+    test['year'] = 2015
+    test['month'] = 11
+    test['date_block_num'] = 34
+    test['item_cnt_day'] = -999
+    test['n_refund'] = -999
+    test['n_sale'] = -999
 
+    # Generate most recent item price for test set 
     recent_price = utl.gen_most_recent_item_price(dataset = agg_base)
     join_cols = ['item_id']
-    base_test_price = base_test.merge(recent_price, on = join_cols, how = 'left')
+    base_test_price = test.merge(recent_price, on = join_cols, how = 'left')
     
-    print('Fill in -999 default for missing prices ...')
-    
+    # Fill in -999 default for missing prices 
     base_test_price['item_price'] = base_test_price['item_price'].fillna(-999)
 
     print('Concatenate Base and Test data ...')
