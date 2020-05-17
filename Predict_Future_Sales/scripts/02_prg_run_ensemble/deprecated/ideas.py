@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 10 19:15:38 2020
+Created on Sun May 17 10:56:30 2020
 
 @author: oislen
 """
@@ -24,8 +24,8 @@ base.columns
 
 base['item_price'].value_counts(dropna = False)
 base['item_cnt_day'].value_counts(dropna = False)
-base['n_refund'].value_counts(dropna = False)
-base['n_sale'].value_counts(dropna = False)
+#base['n_refund'].value_counts(dropna = False)
+#base['n_sale'].value_counts(dropna = False)
 base['data_split'].value_counts(dropna = False)
 base['ID'].value_counts(dropna = False)
 base['holdout_subset_ind'].value_counts(dropna = False)

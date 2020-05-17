@@ -95,7 +95,7 @@ def back_fill_missing_items(cons):
     
     print('Adding data set splits ...')
     
-    join_df['data_split'] = join_df['date_block_num'].apply(lambda x: 'train' if x  <= 31 else ('valid' if x == 32 else ('test' if x == 33 else 'holdout')))
+    join_df['data_split'] = join_df['date_block_num'].apply(lambda x: 'train' if x  <= 33 else 'holdout')
     
     print('Filling in ID ...')
     

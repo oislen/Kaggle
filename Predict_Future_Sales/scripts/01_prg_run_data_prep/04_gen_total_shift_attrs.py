@@ -50,8 +50,8 @@ def gen_shift_attrs(cons):
     n_shifts = 24
     
     # set additional function inputs for total shift attributes
-    columns_shift_shop_total = ['shop_id']
-    columns_shift_item_total = ['item_id']
+    #columns_shift_shop_total = ['shop_id']
+    #columns_shift_item_total = ['item_id']
     
     print('Calculating sold item totals for shop id ...')
  
@@ -90,7 +90,7 @@ def gen_shift_attrs(cons):
     base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
                                        values = ['shop_id_total_item_cnt_day'], 
                                        index = index_shift, 
-                                       columns = columns_shift_shop_total,
+                                       columns = columns_shift,
                                        n_shifts = n_shifts,
                                        fill_value = fill_na
                                        )
@@ -99,7 +99,7 @@ def gen_shift_attrs(cons):
     base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
                                        values = ['item_id_total_item_cnt_day'], 
                                        index = index_shift, 
-                                       columns = columns_shift_item_total,
+                                       columns = columns_shift,
                                        n_shifts = n_shifts,
                                        fill_value = fill_na
                                        )
