@@ -34,8 +34,6 @@ def model_preds(data_fpath,
                                                    data_splits_limits = data_splits_limits
                                                    )
     
-
-
     # extract out the data splits
     #X_train = data_splits_dict['X_train']
     #y_train = data_splits_dict['y_train']

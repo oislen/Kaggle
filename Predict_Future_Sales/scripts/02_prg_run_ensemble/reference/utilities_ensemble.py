@@ -159,3 +159,23 @@ def extract_data_splits(dataset,
 
     
     return data_splits_dict
+
+
+def feat_imp_sum(model, pred_cols, feat_imp_fpath):
+           
+    # extract feature importance
+    feat_imp = pd.DataFrame({'attr':pred_cols,
+                             'feat_imp':model.feature_importances_
+                             })
+    
+    # sort by importance
+    feat_imp = feat_imp.sort_values(by = 'feat_imp', ascending = False)
+    
+    # reset the index
+    feat_imp = feat_imp.reset_index(drop = True)
+    
+    # output to .csv file
+    feat_imp.to_csv(feat_imp_fpath, index = False)
+    
+    return feat_imp
+    

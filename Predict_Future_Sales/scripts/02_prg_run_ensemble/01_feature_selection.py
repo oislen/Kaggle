@@ -50,8 +50,12 @@ def gen_feature_selection(cons):
         rfc.fit(train_data_sub[pred_cols], train_data_sub['item_cnt_day'])
         
         # extract feature importance
-        rf_feat_imp = rfc.feature_importances_
-        
-        # output feature importance
         feat_imp_fpath = '{}/randforest{}_feat_imp.csv'.format(cons.feat_imp_dir, year)
-        rf_feat_imp.to_csv(feat_imp_fpath, index = False)
+        rf_feat_imp = utl_ens.feat_imp_sum(model = rfc, pred_cols = pred_cols, feat_imp_fpath = feat_imp_fpath)
+        
+        print(rf_feat_imp.head(10))
+        
+        #-- LASSO Feature Importance --#
+        
+        #-- Gradient Boosting Feature Importance --#
+        
