@@ -18,7 +18,9 @@ def extract_model_cols(dataset):
     data_cols = dataset.columns.tolist()
     index_cols = ['primary_key', 'ID', 'data_split', 'holdout_subset_ind', 'no_sales_hist_ind']
     tar_cols = ['item_cnt_day']
-    excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub']
+    excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub', 
+                 'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day'
+                 ]
     pred_cols = [col for col in data_cols if col not in index_cols + tar_cols + excl_cols]
     
     # create a dictionary of the output columns
@@ -165,7 +167,7 @@ def feat_imp_sum(model, pred_cols, feat_imp_fpath):
            
     # extract feature importance
     feat_imp = pd.DataFrame({'attr':pred_cols,
-                             'feat_imp':model.feature_importances_
+                             'feat_imp':model.feature_importances_ * 100
                              })
     
     # sort by importance
