@@ -10,6 +10,7 @@ import utilities_ensemble as utl_ens
 from sklearn.model_selection import GridSearchCV
 import joblib as jl
 import pickle as pk
+import numpy as np
 
 def cv_model_train(data_fpath,
                    tar_cols,
@@ -35,6 +36,17 @@ def cv_model_train(data_fpath,
                                     cv_split_dict = cv_split_dict
                                     )
     
+    # determine how many model / cv combinations
+    #n_models = np.prod([len(val) for key, val in model_params.items()])
+    #n_cvs = len(cv_list)
+    #n_combs = n_models * n_cvs
+    
+    # set the refit boolean
+    #if n_combs ==1:
+    #    refit_bool = False
+    #elif n_combs > 1:
+    refit_bool = True
+    
     print('creating grid search object ...')
     
     # initiate CV object
@@ -43,7 +55,7 @@ def cv_model_train(data_fpath,
                        scoring = 'neg_root_mean_squared_error',
                        n_jobs = 2,
                        cv = cv_list,
-                       refit = True,
+                       refit = refit_bool,
                        verbose = 2
                        )
     

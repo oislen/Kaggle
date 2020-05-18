@@ -16,7 +16,7 @@ def extract_model_cols(dataset):
     
     # seperate predictors from response
     data_cols = dataset.columns.tolist()
-    index_cols = ['primary_key', 'ID', 'data_split', 'holdout_subset_ind', 'no_sales_hist_ind']
+    index_cols = ['primary_key', 'ID', 'data_split', 'no_sales_hist_ind']
     tar_cols = ['item_cnt_day']
     excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub', 
                  'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day'

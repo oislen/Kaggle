@@ -8,6 +8,7 @@ Created on Sun May 17 12:27:58 2020
 import pandas as pd
 import seaborn as sns
 import numpy as np
+import matplotlib.pyplot as plt
 
 def model_validation(pred_paths):
     
@@ -34,13 +35,17 @@ def model_validation(pred_paths):
     
     # create confusion matrix
     sns.scatterplot(x = 'item_cnt_day', y = 'y_test_pred', data = y_test)
+    plt.show() 
     
     # create a hist of pred distribution
     sns.distplot(a = y_test['item_cnt_day'], bins = 100, kde = False)
+    plt.show() 
     sns.distplot(a = y_test['y_test_pred'], bins = 100, kde = False)
-    
+    plt.show() 
+        
     # create a hist of pred distribution
     sns.distplot(a = y_holdout['y_holdout_pred'], bins = 100, kde = False)
-    
+    plt.show() 
     # calculate RMSE
-    np.sqrt(((y_test['item_cnt_day'] - y_test['y_test_pred']) ** 2).sum() / y_test.shape[0])
+    rmse = np.sqrt(((y_test['item_cnt_day'] - y_test['y_test_pred']) ** 2).sum() / y_test.shape[0])
+    print(rmse)

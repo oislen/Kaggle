@@ -21,8 +21,12 @@ def model_preds(data_fpath,
     """
     """
     
+    print('loading in base data ...')
+    
     # load in model data
     base = pd.read_feather(data_fpath)
+
+    print('loading in model ...')
 
     # load best estimator here
     mod = jl.load(model_input_fpath)
@@ -45,10 +49,14 @@ def model_preds(data_fpath,
     X_holdout = data_splits_dict['X_holdout']
     y_holdout = data_splits_dict['y_holdout']
 
+    print('making predictions ...')
+
     # make predictions for valid, test and holdout
     y_valid['y_valid_pred'] = mod.predict(X_valid[pred_cols])
     y_test['y_test_pred'] = mod.predict(X_test[pred_cols])
     y_holdout['y_holdout_pred'] = mod.predict(X_holdout[pred_cols])
+    
+    print('outputting predctions ..')
     
     # extract out the prediciton paths
     y_valid_preds_path = pred_paths['y_valid_preds_path']
@@ -60,4 +68,4 @@ def model_preds(data_fpath,
     y_test.to_csv(y_test_preds_path, index = False)
     y_holdout.to_csv(y_holdout_preds_path, index = False)
 
-    # ret
+    return

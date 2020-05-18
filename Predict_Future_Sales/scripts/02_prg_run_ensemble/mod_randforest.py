@@ -5,12 +5,14 @@ Created on Sun May 17 12:20:21 2020
 @author: oislen
 """
 
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from importlib import import_module
 import utilities_ensemble as utl_ens
 
 model_train = import_module(name = '02_model_training')
 model_pred = import_module(name = '03_model_predictions')
+model_valid = import_module(name = '04_model_validation')
+kaggl_pred = import_module(name = '05_format_kaggle_preds')
 
 def mod_randfrest(cons):
     
@@ -22,6 +24,7 @@ def mod_randfrest(cons):
     
     # initiate random forest model
     rfc = RandomForestRegressor()
+    #rfc = RandomForestClassifier()
     # TODO need to recreate original estimator
     # TODO make small modification with classifer / regressor & no_sales_hist_ind
     # preds inc:
@@ -37,9 +40,14 @@ def mod_randfrest(cons):
     model_params = {'criterion':['mse'],
                     'max_depth':[7],
                     'random_state':[1234],
-                    'n_estimators':[2],
+                    'n_estimators':[25],
                     'max_features':['auto']
                     }
+    
+    #model_params = {'max_depth':[7],
+    #                'random_state':[0],
+    #                'n_estimators':[25]
+    #                }
     
     # set the input data file path
     data_fpath = cons.model_data_fpath
@@ -91,4 +99,12 @@ def mod_randfrest(cons):
                            data_splits_limits = data_splits_limits,
                            pred_paths = pred_paths
                            )
+    
+    # call model validation
+    model_valid.model_validation(pred_paths = pred_paths)
+    
+    # call the kaggle format predictions
+    kaggl_pred.format_kaggle_preds(pred_paths = pred_paths,
+                                   kaggle_preds = kaggle_preds
+                                   )
 
