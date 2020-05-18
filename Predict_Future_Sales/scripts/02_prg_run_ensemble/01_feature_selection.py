@@ -43,8 +43,11 @@ def gen_feature_selection(cons):
     rfc.fit(train_data[pred_cols], train_data['item_cnt_day'])
     
     # extract feature importance
-    feat_imp_fpath = '{}/randforest_feat_imp.csv'.format(cons.feat_imp_dir)
-    rf_feat_imp = utl_ens.feat_imp_sum(model = rfc, pred_cols = pred_cols, feat_imp_fpath = feat_imp_fpath)
+    feat_imp_fpath = cons.randforest_feat_imp
+    rf_feat_imp = utl_ens.feat_imp_sum(model = rfc, 
+                                       pred_cols = pred_cols, 
+                                       feat_imp_fpath = feat_imp_fpath
+                                       )
     
     print(rf_feat_imp.head(10))
     

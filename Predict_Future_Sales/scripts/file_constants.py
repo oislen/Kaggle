@@ -5,6 +5,8 @@ Created on Sun Apr 26 17:15:06 2020
 @author: oislen
 """
 
+import datetime as dt
+
 # set project directories
 git_dir = 'C:/Users/User/Documents/GitHub'
 comp_dir = '{}/Kaggle/Predict_Future_Sales'.format(git_dir)
@@ -54,3 +56,9 @@ base_agg_supp_fpath = '{}/base_supp_data.feather'.format(base_data_dir)
 # set model data file path
 model_data_fpath = '{}/model_data.feather'.format(model_data_dir)
 
+# set feature importance paths
+randforest_feat_imp = '{}/randforest_feat_imp.csv'.format(feat_imp_dir)
+
+# set predictions
+date = dt.datetime.today().strftime('%Y%m%d')
+randforest_preds = '{}/randforest{}'.format(pred_data_dir, date)

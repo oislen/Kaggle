@@ -181,3 +181,27 @@ def feat_imp_sum(model, pred_cols, feat_imp_fpath):
     
     return feat_imp
     
+def extract_feat_imp(cons, model_type):
+    
+    """
+    """
+    
+    index_cols = ['primary_key', 'ID', 'data_split', 'holdout_subset_ind', 'no_sales_hist_ind']
+    tar_cols = ['item_cnt_day']
+    req_cols = ['year', 'month', 'date_block_num', 'item_id', 'shop_id']
+    
+    if model_type == 'randforest':
+        
+        randforest_feat_imp = pd.read_csv(cons.randforest_feat_imp)
+    
+    feat_imp_cols = randforest_feat_imp['attr'].head(20).tolist()
+    
+    pred_cols = list(set(feat_imp_cols + req_cols))
+    
+    # create a dictionary of the output columns
+    model_cols_dict = {'index_cols':index_cols,
+                       'tar_cols':tar_cols,
+                       'pred_cols':pred_cols
+                       }
+    
+    return model_cols_dict

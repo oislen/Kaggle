@@ -7,24 +7,25 @@ Created on Sun May 17 16:00:32 2020
 
 import pandas as pd
 import utilities_ensemble as utl_ens
-import pickle as pk
+import joblib as jl
 
 def model_preds(data_fpath,
                 model_input_fpath,
                 index_cols,
                 tar_cols,
                 pred_cols,
-                data_splits_limits
+                data_splits_limits,
+                pred_paths
                 ):
     
     """
     """
     
     # load in model data
-    base = pd.read_feather(model_input_fpath)
+    base = pd.read_feather(data_fpath)
 
     # load best estimator here
-    mod = pk.load(model_input_fpath)
+    mod = jl.load(model_input_fpath)
     
     # run the data splits function
     data_splits_dict = utl_ens.extract_data_splits(dataset = base,
@@ -49,4 +50,14 @@ def model_preds(data_fpath,
     y_test['y_test_pred'] = mod.predict(X_test[pred_cols])
     y_holdout['y_holdout_pred'] = mod.predict(X_holdout[pred_cols])
     
+    # extract out the prediciton paths
+    y_valid_preds_path = pred_paths['y_valid_preds_path']
+    y_test_preds_path = pred_paths['y_test_preds_path']
+    y_holdout_preds_path = pred_paths['y_holdout_preds_path']
+    
     # output predictions
+    y_valid.to_csv(y_valid_preds_path, index = False)
+    y_test.to_csv(y_test_preds_path, index = False)
+    y_holdout.to_csv(y_holdout_preds_path, index = False)
+
+    # ret

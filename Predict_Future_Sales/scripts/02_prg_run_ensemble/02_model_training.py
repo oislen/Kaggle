@@ -8,6 +8,7 @@ Created on Sun May 17 15:59:51 2020
 import pandas as pd
 import utilities_ensemble as utl_ens
 from sklearn.model_selection import GridSearchCV
+import joblib as jl
 import pickle as pk
 
 def cv_model_train(data_fpath,
@@ -50,9 +51,9 @@ def cv_model_train(data_fpath,
     
     # Split the predictors from the target
     #cv_list_sub = cv_list[0:3]
-    #sub_index = [val for lst in cv_list[-1] for val in lst]
-    X = base[pred_cols]
-    y = base[tar_cols]
+    sub_index = [val for lst in cv_list[-1] for val in lst]
+    X = base.loc[sub_index, pred_cols]
+    y = base.loc[sub_index, tar_cols[0]]
     
     # fit cv object
     gcv.fit(X, y)
@@ -68,6 +69,6 @@ def cv_model_train(data_fpath,
     
     # pickle best estimator
     bdtr = gcv.best_estimator_
-    pk.dump(bdtr, file = model_output_fpath)
+    jl.dump(bdtr, model_output_fpath)
     
     return
