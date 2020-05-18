@@ -21,12 +21,12 @@ def model_preds(data_fpath,
     """
     """
     
-    print('loading in base data ...')
+    print('loading in base data ...'.format(data_fpath))
     
     # load in model data
     base = pd.read_feather(data_fpath)
 
-    print('loading in model ...')
+    print('loading in model {} ...'.format(model_input_fpath))
 
     # load best estimator here
     mod = jl.load(model_input_fpath)
@@ -40,8 +40,6 @@ def model_preds(data_fpath,
                                                    )
     
     # extract out the data splits
-    #X_train = data_splits_dict['X_train']
-    #y_train = data_splits_dict['y_train']
     X_valid = data_splits_dict['X_valid']
     y_valid = data_splits_dict['y_valid']
     X_test = data_splits_dict['X_test']
@@ -55,6 +53,12 @@ def model_preds(data_fpath,
     y_valid['y_valid_pred'] = mod.predict(X_valid[pred_cols])
     y_test['y_test_pred'] = mod.predict(X_test[pred_cols])
     y_holdout['y_holdout_pred'] = mod.predict(X_holdout[pred_cols])
+    
+    print('format model predictions ...')
+    
+    y_valid = utl_ens.format_preds(dataset = y_valid, preds_cols = 'y_valid_pred')
+    y_test = utl_ens.format_preds(dataset = y_test, preds_cols = 'y_test_pred')
+    y_holdout = utl_ens.format_preds(dataset = y_holdout, preds_cols = 'y_holdout_pred')
     
     print('outputting predctions ..')
     

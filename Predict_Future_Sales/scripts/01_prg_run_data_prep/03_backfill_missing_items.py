@@ -18,6 +18,8 @@ def back_fill_missing_items(cons):
     
     """
     
+    print('working on item sells and price ...')
+    
     # load in the raw data
     item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
@@ -45,26 +47,6 @@ def back_fill_missing_items(cons):
                                       ffill = False
                                       )
     
-    ##-- Refund --#
-    #
-    #refund_unstack = utl.backfill_attr(dataset = agg_base, 
-    #                                   pivot_values = ['n_refund'], 
-    #                                   fillna = 0,
-    #                                   pivot_index = ['year', 'month'], 
-    #                                   pivot_columns = ['shop_id', 'item_id'], 
-    #                                   ffill = False
-    #                                   )
-    #
-    ##-- Sales --#
-    #
-    #sales_unstack = utl.backfill_attr(dataset = agg_base, 
-    #                                  pivot_values = ['n_sale'], 
-    #                                  fillna = 0,
-    #                                  pivot_index = ['year', 'month'], 
-    #                                  pivot_columns = ['shop_id', 'item_id'], 
-    #                                  ffill = False
-    #                                  )
-    
     #-- ID --#
     
     print('Subsetting a ID column ...')
@@ -82,8 +64,6 @@ def back_fill_missing_items(cons):
     join_df = price_unstack[['year', 'month', 'shop_id', 'item_id']]
     join_df = join_df.merge(price_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
     join_df = join_df.merge(total_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
-    #join_df = join_df.merge(refund_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
-    #join_df = join_df.merge(sales_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
     join_df = join_df.merge(id_df, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
     
     #del price_unstack, total_unstack, refund_unstack, sales_unstack, id_df
@@ -117,37 +97,42 @@ def back_fill_missing_items(cons):
     print('Mapping missing holdout sales info ...')
     
     join_df.loc[filt_holdout, 'item_cnt_day'] = -999
-    #join_df.loc[filt_holdout, 'n_refund'] = -999
-    #join_df.loc[filt_holdout, 'n_sale'] = -999
     
     print('Create no sales history indicator ...')
     
     filt_default_price = join_df['item_price'] == -999
     join_df['no_sales_hist_ind'] = filt_default_price.astype(int)
     
-    if True:
-        
-        print('Removing observations not in holdout set ...')
-        
-        # NOTE: this step drops a lot of information
-        # need to filter out excess items not found n holdout set
-        # ideally this should save our runtime resources
-        join_df['shop_item_id'] = join_df['shop_id'].astype(str) + '_' + join_df['item_id'].astype(str)
-        holdout = join_df[join_df['data_split'] == 'holdout']
-        id_null = holdout['ID'] == -999
-        null_holdout = holdout[id_null]
-        shop_item_id = null_holdout['shop_item_id'].unique()
-        filt_no_test = ~join_df['shop_item_id'].isin(shop_item_id)
-        join_df_filt = join_df.loc[filt_no_test, :].reset_index(drop = True)
-        join_df_filt['data_split'].value_counts() 
-        join_df['data_split'].value_counts() 
+    print('Clip item count day totals to [0, 20] interval ...')
     
-    else:
-        
-        # else return the entire dataset
-        join_df_filt = join_df
+    join_df['item_cnt_day'] = join_df['item_cnt_day'].apply(lambda x: 0 if x < 0 else (20 if x > 20 else x))
+   
+    print('Remove all items with no historic sell price from training set ...')
     
-    print('Outputting file ...')
+    filt_train = join_df['data_split'] == 'train'
+    filt_zero_sales = join_df['item_cnt_day'] == 0
+    filt_default_price = join_df['item_price'] == -999
+    filt_train_no_sales = filt_train & filt_default_price & filt_zero_sales
+    join_df = join_df[~filt_train_no_sales]
+    
+    print('Removing observations not in holdout set ...')
+    
+    # NOTE: this step drops a lot of information
+    # need to filter out excess items not found n holdout set
+    # ideally this should save our runtime resources
+    join_df['shop_item_id'] = join_df['shop_id'].astype(str) + '_' + join_df['item_id'].astype(str)
+    holdout = join_df[join_df['data_split'] == 'holdout']
+    id_null = holdout['ID'] == -999
+    null_holdout = holdout[id_null]
+    shop_item_id = null_holdout['shop_item_id'].unique()
+    filt_no_test = ~join_df['shop_item_id'].isin(shop_item_id)
+    join_df_filt = join_df.loc[filt_no_test, :].reset_index(drop = True)
+    join_df_filt['data_split'].value_counts() 
+    join_df['data_split'].value_counts() 
+
+    shape = join_df_filt.shape
+
+    print('Outputting file {} ...'.format(shape))
     
     # output aggreated base data as feather file
     join_df_filt.to_feather(cons.base_agg_comp_fpath)

@@ -53,7 +53,9 @@ def append_supplement_attrs(cons):
     join_cols = ['year', 'month']
     base_agg_comp = base_agg_comp.merge(retail_calander, on = join_cols, how = 'left')
     
-    print('Outputting supplementary data ...')
+    shape = base_agg_comp.shape
+    
+    print('Outputting supplementary data ...'.format(shape))
     
     # output file as a feather file
     base_agg_comp.to_feather(cons.base_agg_supp_fpath)

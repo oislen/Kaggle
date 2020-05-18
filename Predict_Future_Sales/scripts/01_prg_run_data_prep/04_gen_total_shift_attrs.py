@@ -47,7 +47,7 @@ def gen_shift_attrs(cons):
     # set function inputs for item count shift attributes
     index_shift = ['date_block_num']
     columns_shift = ['shop_id', 'item_id']
-    n_shifts = 24
+    n_shifts = 12
     
     # set additional function inputs for total shift attributes
     #columns_shift_shop_total = ['shop_id']
@@ -103,10 +103,13 @@ def gen_shift_attrs(cons):
                                        n_shifts = n_shifts,
                                        fill_value = fill_na
                                        )
+ 
+    shape = base_agg_comp.shape
     
-    print('Outputting results ...')
+    print('Outputting results {} ...'.format(shape))
     
     # output file to feather file
+    base_agg_comp = base_agg_comp.reset_index(drop = True)
     base_agg_comp.to_feather(cons.base_agg_shft_fpath)
     
     return

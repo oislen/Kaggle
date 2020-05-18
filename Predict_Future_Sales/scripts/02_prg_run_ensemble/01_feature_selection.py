@@ -49,7 +49,7 @@ def gen_feature_selection(cons):
                                        feat_imp_fpath = feat_imp_fpath
                                        )
     
-    print(rf_feat_imp.head(10))
+    print(rf_feat_imp.head(20))
     
     #-- LASSO Feature Importance --#
     

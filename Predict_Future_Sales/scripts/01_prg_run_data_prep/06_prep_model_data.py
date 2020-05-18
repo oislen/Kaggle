@@ -39,7 +39,9 @@ def prep_model_data(cons):
     drop_cols = ['item_cat_sub', 'item_cat']
     model_data = base.drop(columns = drop_cols)
     
-    print('outputting model data ....')
+    shape = model_data.shape
+    
+    print('outputting model data {} ....'.format(shape))
     
     # output the model data
     model_data.to_feather(cons.model_data_fpath)

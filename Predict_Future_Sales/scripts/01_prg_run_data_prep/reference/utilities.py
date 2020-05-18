@@ -192,6 +192,7 @@ def backfill_attr(dataset,
                            index = pivot_index,
                            columns = pivot_columns,
                            aggfunc = np.sum,
+                           fill_value = None,
                            dropna = True
                            )
     

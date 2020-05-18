@@ -9,8 +9,6 @@ import pandas as pd
 import utilities_ensemble as utl_ens
 from sklearn.model_selection import GridSearchCV
 import joblib as jl
-import pickle as pk
-import numpy as np
 
 def cv_model_train(data_fpath,
                    tar_cols,
@@ -24,7 +22,7 @@ def cv_model_train(data_fpath,
     """
     """
     
-    print('loading base data ...')
+    print('loading base data {} ...'.format(data_fpath))
     
     # load in model data
     base = pd.read_feather(data_fpath)
@@ -36,15 +34,7 @@ def cv_model_train(data_fpath,
                                     cv_split_dict = cv_split_dict
                                     )
     
-    # determine how many model / cv combinations
-    #n_models = np.prod([len(val) for key, val in model_params.items()])
-    #n_cvs = len(cv_list)
-    #n_combs = n_models * n_cvs
-    
     # set the refit boolean
-    #if n_combs ==1:
-    #    refit_bool = False
-    #elif n_combs > 1:
     refit_bool = True
     
     print('creating grid search object ...')
@@ -62,7 +52,6 @@ def cv_model_train(data_fpath,
     print('running grid search cv ...')
     
     # Split the predictors from the target
-    #cv_list_sub = cv_list[0:3]
     sub_index = [val for lst in cv_list[-1] for val in lst]
     X = base.loc[sub_index, pred_cols]
     y = base.loc[sub_index, tar_cols[0]]
@@ -77,7 +66,7 @@ def cv_model_train(data_fpath,
     
     print(cv_results.head())
     
-    print('outputting best model')
+    print('outputting best model {} ...'.format(model_output_fpath))
     
     # pickle best estimator
     bdtr = gcv.best_estimator_

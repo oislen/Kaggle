@@ -6,6 +6,7 @@ Created on Sun May 17 10:59:45 2020
 """
 
 import pandas as pd
+import numpy as np
 
 def extract_model_cols(dataset):
     
@@ -16,7 +17,7 @@ def extract_model_cols(dataset):
     
     # seperate predictors from response
     data_cols = dataset.columns.tolist()
-    index_cols = ['primary_key', 'ID', 'data_split', 'no_sales_hist_ind']
+    index_cols = ['primary_key', 'ID', 'data_split', 'no_sales_hist_ind', 'holdout_subset_ind']
     tar_cols = ['item_cnt_day']
     excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub', 
                  'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day'
@@ -163,7 +164,10 @@ def extract_data_splits(dataset,
     return data_splits_dict
 
 
-def feat_imp_sum(model, pred_cols, feat_imp_fpath):
+def feat_imp_sum(model, 
+                 pred_cols, 
+                 feat_imp_fpath
+                 ):
            
     # extract feature importance
     feat_imp = pd.DataFrame({'attr':pred_cols,
@@ -181,7 +185,10 @@ def feat_imp_sum(model, pred_cols, feat_imp_fpath):
     
     return feat_imp
     
-def extract_feat_imp(cons, model_type):
+def extract_feat_imp(cons, 
+                     model_type, 
+                     n = 20
+                     ):
     
     """
     """
@@ -194,7 +201,7 @@ def extract_feat_imp(cons, model_type):
         
         randforest_feat_imp = pd.read_csv(cons.randforest_feat_imp)
     
-    feat_imp_cols = randforest_feat_imp['attr'].head(20).tolist()
+    feat_imp_cols = randforest_feat_imp['attr'].head(n).tolist()
     
     pred_cols = list(set(feat_imp_cols + req_cols))
     
@@ -205,3 +212,23 @@ def extract_feat_imp(cons, model_type):
                        }
     
     return model_cols_dict
+
+
+
+def format_preds(dataset, preds_cols):
+    
+    """
+    """
+    
+    data = dataset.copy(True)
+    
+    # map items with no historical sell to 0
+    no_sales_hist_filt = data['no_sales_hist_ind'] == 1
+    data.loc[no_sales_hist_filt, [preds_cols]] = 0
+    
+    # round down remaining results to nearest value
+    data[preds_cols] = data[preds_cols].apply(lambda x: np.floor(x))
+    print(data[preds_cols].value_counts())
+    
+    return data
+    

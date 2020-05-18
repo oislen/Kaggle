@@ -49,7 +49,10 @@ def agg_base_data(cons):
     
     base_concat = pd.concat(objs = [agg_base, base_test_price], axis = 0, ignore_index = True)
     
-    print('outputting aggregated base data ...')
+    # data shape
+    shape = base_concat.shape
+    
+    print('outputting aggregated base data {} ...'.format(shape))
     
     # output aggreated base data as feather file
     base_concat.to_feather(cons.base_agg_data_fpath)
