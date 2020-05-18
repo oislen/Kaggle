@@ -62,3 +62,4 @@ randforest_feat_imp = '{}/randforest_feat_imp.csv'.format(feat_imp_dir)
 # set predictions
 date = dt.datetime.today().strftime('%Y%m%d')
 randforest_preds = '{}/randforest{}'.format(pred_data_dir, date)
+dtree_preds = '{}/dtree{}'.format(pred_data_dir, date)

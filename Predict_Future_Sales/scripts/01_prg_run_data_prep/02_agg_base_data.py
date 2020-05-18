@@ -7,7 +7,7 @@ Created on Thu Apr 30 20:33:00 2020
 
 import pandas as pd
 import reference.clean_constants as clean_cons
-import reference.utilities as utl
+import reference.clean_utilities as utl
 
 def agg_base_data(cons):
 
@@ -49,6 +49,10 @@ def agg_base_data(cons):
     
     base_concat = pd.concat(objs = [agg_base, base_test_price], axis = 0, ignore_index = True)
     
+    print('Clip item count day totals to [0, 20] interval ...')
+    
+    base_concat['item_cnt_day'] = base_concat['item_cnt_day'].apply(lambda x: 0 if x < 0 else (20 if x >= 20 else x))
+   
     # data shape
     shape = base_concat.shape
     

@@ -11,8 +11,8 @@ import sys
 from importlib import import_module
 
 # user settings
-start = 2
-end = 2
+start = 3
+end = 3
 run_range = range(start, end + 1)
 
 # get current wd
@@ -27,6 +27,7 @@ sys.path.append(reference_path)
 # load in required modules
 prg_01 = import_module(name = '01_feature_selection')
 prg_rf = import_module(name = 'mod_randforest')
+prg_dt = import_module(name = 'mod_dtree')
 
 # load in file constants
 cons = import_module(name = 'file_constants')
@@ -37,4 +38,8 @@ if 1 in run_range:
     
 if 2 in run_range:
     print('~~~~~ Fitting, training and predicting ...')
-    prg_rf.mod_randfrest(cons) 
+    prg_rf.mod_randforest(cons) 
+    
+if 3 in run_range:
+    print('~~~~~ Fitting, training and predicting ...')
+    prg_dt.mod_dtree(cons)

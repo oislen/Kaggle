@@ -6,7 +6,7 @@ Created on Sat May  9 19:23:38 2020
 """
 
 import pandas as pd
-import reference.utilities as utl
+import reference.clean_utilities as utl
 
 def back_fill_missing_items(cons):
     
@@ -103,17 +103,13 @@ def back_fill_missing_items(cons):
     filt_default_price = join_df['item_price'] == -999
     join_df['no_sales_hist_ind'] = filt_default_price.astype(int)
     
-    print('Clip item count day totals to [0, 20] interval ...')
-    
-    join_df['item_cnt_day'] = join_df['item_cnt_day'].apply(lambda x: 0 if x < 0 else (20 if x > 20 else x))
-   
-    print('Remove all items with no historic sell price from training set ...')
-    
-    filt_train = join_df['data_split'] == 'train'
-    filt_zero_sales = join_df['item_cnt_day'] == 0
-    filt_default_price = join_df['item_price'] == -999
-    filt_train_no_sales = filt_train & filt_default_price & filt_zero_sales
-    join_df = join_df[~filt_train_no_sales]
+    #print('Remove all items with no historic sell price from training set ...')
+    #
+    #filt_train = join_df['data_split'] == 'train'
+    #filt_zero_sales = join_df['item_cnt_day'] == 0
+    #filt_default_price = join_df['item_price'] == -999
+    #filt_train_no_sales = filt_train & filt_default_price & filt_zero_sales
+    #join_df = join_df[~filt_train_no_sales]
     
     print('Removing observations not in holdout set ...')
     

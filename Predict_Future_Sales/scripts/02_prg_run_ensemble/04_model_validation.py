@@ -45,16 +45,12 @@ def model_validation(pred_paths):
     #-- Cross Tab --#
     
     # create confusion matrix
-    valid_tab = pd.crosstab(index = y_valid['item_cnt_day'], 
-                            columns = y_valid['y_valid_pred']
-                            )
-    print(valid_tab)
+    #valid_tab = pd.crosstab(index = y_valid['item_cnt_day'], columns = y_valid['y_valid_pred'])
+    #print(valid_tab)
     
     # create confusion matrix
-    test_tab = pd.crosstab(index = y_test['item_cnt_day'], 
-                           columns = y_test['y_valid_pred']
-                           )
-    print(test_tab)
+    #test_tab = pd.crosstab(index = y_test['item_cnt_day'], columns = y_test['y_test_pred'])
+    #print(test_tab)
     
     #-- Preds vs True --#
     

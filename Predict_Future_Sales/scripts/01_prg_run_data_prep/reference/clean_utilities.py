@@ -249,7 +249,7 @@ def gen_attr_agg_totals(dataset,
                                   values = values,
                                   index = index,
                                   columns = columns,
-                                  aggfunc = np.sum,
+                                  aggfunc = np.mean,
                                   fill_value = fill_value,
                                   dropna = True
                                   )

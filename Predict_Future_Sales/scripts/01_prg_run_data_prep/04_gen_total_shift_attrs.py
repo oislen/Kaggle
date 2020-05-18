@@ -6,7 +6,8 @@ Created on Thu May 14 18:36:43 2020
 """
 
 import pandas as pd
-import reference.utilities as utl
+import numpy as np
+import reference.clean_utilities as utl
 
 def gen_shift_attrs(cons):
     
@@ -105,6 +106,10 @@ def gen_shift_attrs(cons):
                                        )
  
     shape = base_agg_comp.shape
+    
+    #print('Replace -999s with missing values ...')
+    
+    #base_agg_comp = base_agg_comp.replace(-999, np.nan)
     
     print('Outputting results {} ...'.format(shape))
     

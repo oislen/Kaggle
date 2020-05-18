@@ -6,7 +6,7 @@ Created on Sun May 10 18:06:01 2020
 """
 
 import pandas as pd
-import reference.utilities as utl
+import reference.clean_utilities as utl
 
 def append_supplement_attrs(cons):
     
@@ -55,7 +55,7 @@ def append_supplement_attrs(cons):
     
     shape = base_agg_comp.shape
     
-    print('Outputting supplementary data ...'.format(shape))
+    print('Outputting supplementary data {} ...'.format(shape))
     
     # output file as a feather file
     base_agg_comp.to_feather(cons.base_agg_supp_fpath)
