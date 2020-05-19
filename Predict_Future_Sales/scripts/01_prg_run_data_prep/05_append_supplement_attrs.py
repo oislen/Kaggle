@@ -26,6 +26,8 @@ def append_supplement_attrs(cons):
     
     # output aggreated base data as feather file
     base_agg_comp = pd.read_feather(cons.base_agg_shft_fpath)
+    shape = base_agg_comp.shape
+    print(shape)
     
     print('Extract the price info ...')
     
@@ -54,6 +56,29 @@ def append_supplement_attrs(cons):
     base_agg_comp = base_agg_comp.merge(retail_calander, on = join_cols, how = 'left')
     
     shape = base_agg_comp.shape
+    
+    print('Create delta attributes ...')
+    
+    base_agg_comp['delta_item_price'] = base_agg_comp['item_price'] - base_agg_comp['item_price_shift_1']
+    base_agg_comp['delta_item_cnt_day_1_2'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_2']
+    base_agg_comp['delta_item_cnt_day_1_3'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_3']
+    base_agg_comp['delta_item_cnt_day_1_4'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_4']
+    base_agg_comp['delta_item_cnt_day_1_6'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_6']
+    base_agg_comp['delta_item_cnt_day_1_12'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_12']
+    
+    print('Create interaction attributes ...')
+    
+    base_agg_comp['shop_id_total_item_cnt_day_shift_1_x_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['shop_id_total_item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
+    base_agg_comp['shop_id_total_item_cnt_day_shift_2_x_item_id_total_item_cnt_day_shift_2'] = base_agg_comp['shop_id_total_item_cnt_day_shift_2'] - base_agg_comp['item_id_total_item_cnt_day_shift_2']
+    base_agg_comp['shop_id_total_item_cnt_day_shift_3_x_item_id_total_item_cnt_day_shift_3'] = base_agg_comp['shop_id_total_item_cnt_day_shift_3'] - base_agg_comp['item_id_total_item_cnt_day_shift_3']
+    base_agg_comp['shop_id_total_item_cnt_day_shift_4_x_item_id_total_item_cnt_day_shift_4'] = base_agg_comp['shop_id_total_item_cnt_day_shift_4'] - base_agg_comp['item_id_total_item_cnt_day_shift_4']
+    base_agg_comp['shop_id_total_item_cnt_day_shift_6_x_item_id_total_item_cnt_day_shift_6'] = base_agg_comp['shop_id_total_item_cnt_day_shift_6'] - base_agg_comp['item_id_total_item_cnt_day_shift_6']
+    base_agg_comp['shop_id_total_item_cnt_day_shift_12_x_item_id_total_item_cnt_day_shift_12'] = base_agg_comp['shop_id_total_item_cnt_day_shift_12'] - base_agg_comp['item_id_total_item_cnt_day_shift_12']
+    
+    print('Create proportion attributes ...')
+    
+    base_agg_comp['item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['shop_id_total_item_cnt_day_shift_1']
+    base_agg_comp['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
     
     print('Outputting supplementary data {} ...'.format(shape))
     

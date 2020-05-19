@@ -82,6 +82,8 @@ def gen_shift_attrs(cons):
 
     print('Running shift attributes for item cnt ...')
     
+    #-- Lag Item Cnt Shifts --#
+    
     # create shift attributes
     base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
                                        values = ['item_cnt_day'], 
@@ -90,6 +92,8 @@ def gen_shift_attrs(cons):
                                        lags = lags,
                                        fill_value = fill_na
                                        )
+    
+    #-- Lag Shop Total Shifts --#
     
     # create shift attributes
     base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
@@ -100,6 +104,8 @@ def gen_shift_attrs(cons):
                                        fill_value = fill_na
                                        )
     
+    #--Lag Item Total Shifts --#
+    
     # create shift attributes
     base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
                                        values = ['item_id_total_item_cnt_day'], 
@@ -108,7 +114,17 @@ def gen_shift_attrs(cons):
                                        lags = lags,
                                        fill_value = fill_na
                                        )
- 
+     
+    #-- Lag Item Price --#
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['item_price'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
     #print('Replace -999s with missing values ...')
     
     #base_agg_comp = base_agg_comp.replace(-999, np.nan)
