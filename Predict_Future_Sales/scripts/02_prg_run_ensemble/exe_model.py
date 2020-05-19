@@ -8,10 +8,10 @@ Created on Sun May 17 12:20:21 2020
 from importlib import import_module
 import utilities_ensemble as utl_ens
 
-model_train = import_module(name = '02_model_training')
-model_pred = import_module(name = '03_model_predictions')
-model_valid = import_module(name = '04_model_validation')
-kaggl_pred = import_module(name = '05_format_kaggle_preds')
+model_train = import_module(name = '01_model_training')
+model_pred = import_module(name = '02_model_predictions')
+model_valid = import_module(name = '03_model_validation')
+kaggl_pred = import_module(name = '04_format_kaggle_preds')
 
 def exe_model(cons,
               model_type,
