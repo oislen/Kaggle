@@ -11,7 +11,7 @@ import sys
 from importlib import import_module
 
 # user settings
-start = 1
+start = 4
 end = 6
 run_range = range(start, end + 1)
 
@@ -48,7 +48,7 @@ if 3 in run_range:
     prg_03.back_fill_missing_items(cons)
 
 if 4 in run_range:
-    print('~~~~~ Generate Total Sales Attributes ...')
+    print('~~~~~ Generate Total Sales And Shift Attributes ...')
     prg_04.gen_shift_attrs(cons)
 
 if 5 in run_range:
