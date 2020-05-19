@@ -21,8 +21,10 @@ cwd = os.getcwd()
 # append required paths
 prep_raw_data_path = '{}\\02_prg_run_ensemble'.format(cwd)
 reference_path = '{}\\02_prg_run_ensemble\\reference'.format(cwd)
+exe_path = '{}\\02_prg_run_ensemble\\exe_model'.format(cwd)
 sys.path.append(prep_raw_data_path)
 sys.path.append(reference_path)
+sys.path.append(exe_path)
 
 # load in required modules
 prg_01 = import_module(name = '01_feature_selection')
