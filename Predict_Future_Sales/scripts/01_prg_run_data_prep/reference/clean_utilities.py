@@ -40,7 +40,7 @@ def gen_shift_attr(dataset,
                    values, 
                    index, 
                    columns, 
-                   n_shifts = 12,
+                   lags = 12,
                    fill_value = 0
                    ):
     
@@ -71,15 +71,21 @@ def gen_shift_attr(dataset,
                                  aggfunc = np.sum,
                                  dropna = True
                                  )
-
+    
+    shape = sales_table.shape
+    
+    print(shape)
+    
     # for each required shift
-    for i in range(1, n_shifts + 1):
+    for i in lags:
         
-        print('Working on shift {} of {} ...'.format(i, n_shifts))
+        print('Working on shift {} ...'.format(i))
         print('create shifts ...')
         
         # shift the data by i
         shift_data = sales_table.shift(i, fill_value = 0)
+        shape = shift_data.shape     
+        print(shape)
         
         print('unstacking data ...')
         
@@ -87,12 +93,16 @@ def gen_shift_attr(dataset,
         attr_name = '{}_shift_{}'.format(feat_name, i)
         unstack_data = shift_data.unstack()
         attr_shift_data = unstack_data.reset_index().drop(columns = ['level_0']).rename(columns = {0:attr_name})
+        shape = attr_shift_data.shape
+        print(shape)
         
         print('joining back results ...')
         
         # store the shifted attribute
         data_join = data_join.merge(attr_shift_data, on = join_cols, how = 'left')
-    
+        shape = data_join.shape
+        print(shape)
+        
     print('Consolidating all attributes ...')
     
     # set the join columns
@@ -104,6 +114,8 @@ def gen_shift_attr(dataset,
                         on = join_cols,
                         how = 'left'
                         )
+    shape = data_out.shape
+    print(shape)
     
     return data_out
 
@@ -115,11 +127,10 @@ def gen_most_recent_item_price(dataset):
     
     """
     
-    sort_cols = ['year', 'month', 'shop_id', 'item_id']
-    group_cols = ['item_id']
-    agg_base_sort = dataset.sort_values(by = sort_cols)
+    sort_join_cols = ['date_block_num', 'shop_id', 'item_id']
     agg_dict = {'item_price':'last'}
-    recent_price = agg_base_sort.groupby(group_cols, as_index = False).agg(agg_dict)
+    agg_base_sort = dataset.sort_values(by = sort_join_cols)
+    recent_price = agg_base_sort.groupby(sort_join_cols, as_index = False).agg(agg_dict)
     
     return recent_price
     
@@ -153,6 +164,12 @@ def gen_retail_calender():
     group_cols = ['year', 'month']
     agg_dict = {'n_weekenddays':'sum', 'n_publicholidays':'sum'}
     agg_df = calender_df.groupby(group_cols, as_index = False).agg(agg_dict)
+    
+    # add in number of month days
+    agg_df['days_of_month'] = agg_df['month'].map({1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31})
+    
+    # insert date block num
+    agg_df['date_block_num'] = agg_df.index
     
     # generate total holiday days
     agg_df['totalholidays'] = agg_df['n_weekenddays'] + agg_df['n_publicholidays']
@@ -207,11 +224,7 @@ def backfill_attr(dataset,
     
     # double unstack to get data by year, month, item_id and shop_id
     unstack = table.stack().stack().reset_index()
-    
-    # filter out future dates
-    date_filt = (unstack['year'] == 2015) & (unstack['month'] == 12)
-    unstack = unstack.loc[~date_filt, :]
-    
+
     return unstack
 
 def fill_id(dataset, fill_type, split, fillna = -999):
@@ -253,6 +266,8 @@ def gen_attr_agg_totals(dataset,
                                   fill_value = fill_value,
                                   dropna = True
                                   )
+    shape = totals_table.shape
+    print(shape)
     
     if index == ['date_block_num']:
         
@@ -265,11 +280,15 @@ def gen_attr_agg_totals(dataset,
     attr_name = '{}_total_{}'.format(attr_agg, feat_name)
     unstack_data = totals_table.unstack()
     attr_total_data = unstack_data.reset_index().drop(columns = ['level_0']).rename(columns = {0:attr_name})
+    shape = attr_total_data.shape
+    print(shape)
     
     print('joining back results ...')
      
     # store the total attribute
     data_join = dataset.merge(attr_total_data, on = join_cols, how = 'left')
+    shape = data_join.shape
+    print(shape)
     
     return data_join
 

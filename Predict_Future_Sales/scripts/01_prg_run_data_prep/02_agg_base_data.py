@@ -21,7 +21,8 @@ def agg_base_data(cons):
     
     print('aggregating base data ...')
     
-    # want to aggregate to year, month, shop and product level
+    # want to aggregate to date_block_num, shop and product level
+    sales_train = sales_train.sort_values(by = clean_cons.group_cols)
     agg_base = sales_train.groupby(clean_cons.group_cols, as_index = False).agg(clean_cons.agg_dict)
     
     # add ID column
@@ -37,9 +38,11 @@ def agg_base_data(cons):
     test['n_refund'] = -999
     test['n_sale'] = -999
 
+    print('Getting most recent sale price ...')
+
     # Generate most recent item price for test set 
     recent_price = utl.gen_most_recent_item_price(dataset = agg_base)
-    join_cols = ['item_id']
+    join_cols = ['date_block_num', 'shop_id', 'item_id']
     base_test_price = test.merge(recent_price, on = join_cols, how = 'left')
     
     # Fill in -999 default for missing prices 

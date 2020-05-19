@@ -50,7 +50,7 @@ def append_supplement_attrs(cons):
     print('Generate calendar days ...')
     
     retail_calander = utl.gen_retail_calender()
-    join_cols = ['year', 'month']
+    join_cols = ['date_block_num']
     base_agg_comp = base_agg_comp.merge(retail_calander, on = join_cols, how = 'left')
     
     shape = base_agg_comp.shape

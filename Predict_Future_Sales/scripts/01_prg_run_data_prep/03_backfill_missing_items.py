@@ -32,7 +32,7 @@ def back_fill_missing_items(cons):
     price_unstack = utl.backfill_attr(dataset = agg_base, 
                                       pivot_values = ['item_price'], 
                                       fillna = -999,
-                                      pivot_index = ['year', 'month'], 
+                                      pivot_index = ['date_block_num'], 
                                       pivot_columns = ['shop_id', 'item_id'], 
                                       ffill = True
                                       )
@@ -42,7 +42,7 @@ def back_fill_missing_items(cons):
     total_unstack = utl.backfill_attr(dataset = agg_base, 
                                       pivot_values = ['item_cnt_day'], 
                                       fillna = 0,
-                                      pivot_index = ['year', 'month'], 
+                                      pivot_index = ['date_block_num'], 
                                       pivot_columns = ['shop_id', 'item_id'], 
                                       ffill = False
                                       )
@@ -51,7 +51,7 @@ def back_fill_missing_items(cons):
     
     print('Subsetting a ID column ...')
     
-    sub_cols = ['year', 'month', 'shop_id', 'item_id', 'date_block_num', 'ID']
+    sub_cols = ['shop_id', 'item_id', 'date_block_num', 'ID']
     id_df = agg_base[sub_cols]
     
     del agg_base
@@ -61,18 +61,15 @@ def back_fill_missing_items(cons):
     print('Joining datasets ...')
     
     # create an empty df to join on to
-    join_df = price_unstack[['year', 'month', 'shop_id', 'item_id']]
-    join_df = join_df.merge(price_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
-    join_df = join_df.merge(total_unstack, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
-    join_df = join_df.merge(id_df, on = ['year', 'month', 'shop_id', 'item_id'], how = 'left')
+    join_cols = ['date_block_num', 'shop_id', 'item_id']
+    join_df = price_unstack[join_cols]
+    join_df = join_df.merge(price_unstack, on = join_cols, how = 'left')
+    join_df = join_df.merge(total_unstack, on = join_cols, how = 'left')
+    join_df = join_df.merge(id_df, on = join_cols, how = 'left')
     
     #del price_unstack, total_unstack, refund_unstack, sales_unstack, id_df
     del price_unstack, total_unstack, id_df
-    
-    print('Fill date block ...')
-    
-    join_df['date_block_num'] = join_df['date_block_num'].ffill().bfill()
-    
+
     print('Adding data set splits ...')
     
     join_df['data_split'] = join_df['date_block_num'].apply(lambda x: 'train' if x  <= 33 else 'holdout')

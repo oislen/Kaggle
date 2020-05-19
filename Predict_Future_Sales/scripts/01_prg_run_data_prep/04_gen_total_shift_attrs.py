@@ -40,6 +40,10 @@ def gen_shift_attrs(cons):
     # output aggreated base data as feather file
     base_agg_comp = pd.read_feather(cons.base_agg_comp_fpath)
     
+    shape = base_agg_comp.shape
+    
+    print(shape)
+    
     # set function inputs for total aggregate attributes
     values_total = ['item_cnt_day']
     index_total = ['date_block_num']
@@ -48,7 +52,7 @@ def gen_shift_attrs(cons):
     # set function inputs for item count shift attributes
     index_shift = ['date_block_num']
     columns_shift = ['shop_id', 'item_id']
-    n_shifts = 12
+    lags = [1, 2, 3, 4, 6, 12]
     
     # set additional function inputs for total shift attributes
     #columns_shift_shop_total = ['shop_id']
@@ -83,7 +87,7 @@ def gen_shift_attrs(cons):
                                        values = ['item_cnt_day'], 
                                        index = index_shift, 
                                        columns = columns_shift,
-                                       n_shifts = n_shifts,
+                                       lags = lags,
                                        fill_value = fill_na
                                        )
     
@@ -92,7 +96,7 @@ def gen_shift_attrs(cons):
                                        values = ['shop_id_total_item_cnt_day'], 
                                        index = index_shift, 
                                        columns = columns_shift,
-                                       n_shifts = n_shifts,
+                                       lags = lags,
                                        fill_value = fill_na
                                        )
     
@@ -101,15 +105,19 @@ def gen_shift_attrs(cons):
                                        values = ['item_id_total_item_cnt_day'], 
                                        index = index_shift, 
                                        columns = columns_shift,
-                                       n_shifts = n_shifts,
+                                       lags = lags,
                                        fill_value = fill_na
                                        )
  
-    shape = base_agg_comp.shape
-    
     #print('Replace -999s with missing values ...')
     
     #base_agg_comp = base_agg_comp.replace(-999, np.nan)
+    
+    print('Removing 1st year of data due to lagged attributes ...')
+    
+    filt_1st_year = base_agg_comp['date_block_num'] >= 12
+    base_agg_comp = base_agg_comp[filt_1st_year]
+    shape = base_agg_comp.shape
     
     print('Outputting results {} ...'.format(shape))
     
