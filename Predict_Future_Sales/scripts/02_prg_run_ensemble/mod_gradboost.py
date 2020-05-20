@@ -10,17 +10,16 @@ Created on Wed May 20 09:30:46 2020
 from sklearn.ensemble import GradientBoostingRegressor
 from exe_model import exe_model
 
-def mod_randforest(cons):
+def mod_gradboost(cons):
     
     # set model name
-    model_type = 'randforest'
+    model_type = 'gradboost'
     
     # set model parameters
-    model_params = {'loss':['ls'],
-                    'criterion':['mse'],
-                    'max_depth':[5],
+    model_params = {'criterion':['mse'],
+                    'max_depth':[3],
                     'random_state':[1234],
-                    'n_estimators':[100],
+                    'n_estimators':[10],
                     'max_features':['auto']
                     }
     
@@ -53,6 +52,9 @@ def mod_randforest(cons):
     # set the input data file path
     data_fpath = cons.model_data_fpath
     
+    #set the number of features to use
+    n = 35
+    
     # execute the model
     exe_model(cons = cons,
               model_type = model_type,
@@ -63,5 +65,6 @@ def mod_randforest(cons):
               model_pk_fpath = model_pk_fpath,
               test_split_dict = test_split_dict,
               pred_paths = pred_paths,
-              kaggle_preds = kaggle_preds
+              kaggle_preds = kaggle_preds,
+              n = n
               )

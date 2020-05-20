@@ -7,6 +7,7 @@ Created on Sun May 10 19:15:38 2020
 
 import pandas as pd
 import numpy as np
+import reference.clean_utilities as utl
 from sklearn import preprocessing
 
 def prep_model_data(cons):
@@ -32,6 +33,7 @@ def prep_model_data(cons):
     item_cat_label_enc = preprocessing.LabelEncoder()
     item_cat_label_enc.fit(base['item_cat'].unique())
     base['item_cat_enc'] = item_cat_label_enc.transform(base['item_cat'])
+    #base['item_cat_enc'] = utl.mean_encode(dataset = base, attr = 'item_cat', tar = 'item_cnt_day')
     
     # label encode item cat sub
     item_cat_sub_label_enc = preprocessing.LabelEncoder()

@@ -127,10 +127,13 @@ def gen_most_recent_item_price(dataset):
     
     """
     
-    sort_join_cols = ['date_block_num', 'shop_id', 'item_id']
+    # Note: not all shops sell every item
+    # Note: not all shops are the same price
+    sort_cols = ['date_block_num', 'shop_id', 'item_id']
+    group_cols = ['item_id']
     agg_dict = {'item_price':'last'}
-    agg_base_sort = dataset.sort_values(by = sort_join_cols)
-    recent_price = agg_base_sort.groupby(sort_join_cols, as_index = False).agg(agg_dict)
+    agg_base_sort = dataset.sort_values(by = sort_cols)
+    recent_price = agg_base_sort.groupby(group_cols, as_index = False).agg(agg_dict)
     
     return recent_price
     
@@ -183,7 +186,7 @@ def gen_retail_calender():
 
 def backfill_attr(dataset, 
                   pivot_values, 
-                  fillna,
+                  fillna = None,
                   pivot_index = ['year', 'month'], 
                   pivot_columns = ['shop_id', 'item_id'], 
                   ffill = False
@@ -219,9 +222,11 @@ def backfill_attr(dataset,
         # want to forward fill from given price to next price
         table = table.ffill(axis = 0)
         
-    # add in unknown default
-    table = table.fillna(fillna)
-    
+    if fillna != None:
+            
+        # add in unknown default
+        table = table.fillna(fillna)
+        
     # double unstack to get data by year, month, item_id and shop_id
     unstack = table.stack().stack().reset_index()
 
@@ -292,3 +297,12 @@ def gen_attr_agg_totals(dataset,
     
     return data_join
 
+def mean_encode(dataset, attr, tar):
+        """
+        """
+        mu = dataset[tar].mean()
+        cumsum = dataset.groupby(attr)[tar].cumsum() - dataset[tar]
+        cumcnt = dataset.groupby(attr).cumcount()
+        attr = cumsum/cumcnt
+        attr = attr.fillna(mu)
+        return attr

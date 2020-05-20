@@ -104,12 +104,18 @@ def back_fill_missing_items(cons):
     
     print('Mapping missing holdout sales info ...')
     
-    join_df.loc[filt_holdout, 'item_cnt_day'] = -999
+    join_df.loc[filt_holdout, 'item_cnt_day'] = 0
     
     print('Create no sales history indicator ...')
     
     filt_default_price = join_df['item_price'] == -999
     join_df['no_sales_hist_ind'] = filt_default_price.astype(int)
+    
+    print('Create no sales history holdout set indicator ...')
+    
+    filt_no_sales_holdout = filt_default_price & filt_holdout
+    join_df['no_holdout_sales_hist_ind'] = filt_no_sales_holdout.astype(int)
+    join_df['item_price'] = join_df['item_price'].replace(-999, 0)
     
     #print('Remove all items with no historic sell price from training set ...')
     #

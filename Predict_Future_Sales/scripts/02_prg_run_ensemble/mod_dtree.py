@@ -30,7 +30,7 @@ def mod_dtree(cons):
     
     
     # set the train, valid and test sub limits
-    train_cv_split_dict = [{'train_sub':idx, 'valid_sub':idx + 1} for idx in np.arange(start = 1, stop = 30, step = 12)]
+    train_cv_split_dict = [{'train_sub':idx, 'valid_sub':idx + 1} for idx in np.arange(start = 12, stop = 30, step = 12)]
         
     # set model pk output file path
     model_pk_fpath = '{}/dtree_mode.pickle'.format(cons.models_dir)
@@ -55,6 +55,9 @@ def mod_dtree(cons):
     # set the input data file path
     data_fpath = cons.model_data_fpath
     
+    # set number of features
+    n = 35
+    
     # execute the model
     exe_model(cons = cons,
               model_type = model_type,
@@ -65,7 +68,8 @@ def mod_dtree(cons):
               model_pk_fpath = model_pk_fpath,
               test_split_dict = test_split_dict,
               pred_paths = pred_paths,
-              kaggle_preds = kaggle_preds
+              kaggle_preds = kaggle_preds,
+              n = n
               )
 
     return

@@ -12,7 +12,7 @@ from importlib import import_module
 
 # user settings
 start = 1
-end = 1
+end = 4
 run_range = range(start, end + 1)
 
 # get current wd
@@ -30,6 +30,7 @@ sys.path.append(exe_path)
 prg_01 = import_module(name = '01_feature_selection')
 prg_rf = import_module(name = 'mod_randforest')
 prg_dt = import_module(name = 'mod_dtree')
+prg_gb = import_module(name = 'mod_gradboost')
 
 # load in file constants
 cons = import_module(name = 'file_constants')
@@ -45,3 +46,7 @@ if 2 in run_range:
 if 3 in run_range:
     print('~~~~~ Fitting, training and predicting ...')
     prg_dt.mod_dtree(cons)
+    
+if 4 in run_range:
+    print('~~~~~ Fitting, training and predicting ...')
+    prg_gb.mod_gradboost(cons)

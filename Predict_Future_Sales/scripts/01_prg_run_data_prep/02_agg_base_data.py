@@ -34,15 +34,15 @@ def agg_base_data(cons):
     test['year'] = 2015
     test['month'] = 11
     test['date_block_num'] = 34
-    test['item_cnt_day'] = -999
-    test['n_refund'] = -999
-    test['n_sale'] = -999
+    test['item_cnt_day'] = 0
+    test['n_refund'] = 0
+    test['n_sale'] = 0
 
     print('Getting most recent sale price ...')
 
     # Generate most recent item price for test set 
     recent_price = utl.gen_most_recent_item_price(dataset = agg_base)
-    join_cols = ['date_block_num', 'shop_id', 'item_id']
+    join_cols = ['item_id']
     base_test_price = test.merge(recent_price, on = join_cols, how = 'left')
     
     # Fill in -999 default for missing prices 

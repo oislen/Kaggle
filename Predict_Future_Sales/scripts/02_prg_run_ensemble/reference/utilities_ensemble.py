@@ -21,7 +21,7 @@ def extract_model_cols(dataset):
     tar_cols = ['item_cnt_day']
     excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub', 
                  'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day',
-                 'shop_item_id', 'revenue'
+                 'shop_item_id', 'revenue', 'item_price', 'no_holdout_sales_hist_ind'
                  ]
     pred_cols = [col for col in data_cols if col not in index_cols + tar_cols + excl_cols]
     
@@ -200,9 +200,13 @@ def extract_feat_imp(cons,
     
     if model_type == 'randforest':
         
-        randforest_feat_imp = pd.read_csv(cons.randforest_feat_imp)
+        feat_imp = pd.read_csv(cons.randforest_feat_imp)
     
-    feat_imp_cols = randforest_feat_imp['attr'].head(n).tolist()
+    elif model_type == 'gradboost':
+        
+        feat_imp = pd.read_csv(cons.gradboost_feat_imp)
+    
+    feat_imp_cols = feat_imp['attr'].head(n).tolist()
     
     pred_cols = list(set(feat_imp_cols + req_cols))
     
@@ -233,3 +237,25 @@ def format_preds(dataset, preds_cols):
     
     return data
     
+def downcast_df(dataset):
+    
+    """
+    """
+    
+    data = dataset.copy(True)
+    
+    data_cols = data.columns
+    data_dtypes = data.dtypes
+    print(data_dtypes.value_counts())
+    
+    int32_cols = data_cols[data_dtypes == np.int32]
+    int64_cols = data_cols[data_dtypes == np.int64]
+    float32_cols = data_cols[data_dtypes == np.float64]
+    
+    data[int32_cols] = data[int32_cols].astype(np.int8)
+    data[int64_cols] = data[int64_cols].astype(np.int8)
+    data[float32_cols] = data[float32_cols].astype(np.float32)
+
+    print(data.dtypes.value_counts())
+    
+    return data

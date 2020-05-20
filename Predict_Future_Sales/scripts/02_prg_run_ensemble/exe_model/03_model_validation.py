@@ -28,9 +28,12 @@ def model_validation(pred_paths):
     y_holdout = pd.read_csv(y_holdout_preds_path)
     
     # prediction value counts
-    print('Validation Predictions:', y_valid['y_valid_pred'].value_counts())
-    print('Test Predictions:', y_test['y_test_pred'].value_counts())
-    print('Holdout Predictions:', y_holdout['y_holdout_pred'].value_counts())
+    print('Validation Predictions:')
+    print(y_valid['y_valid_pred'].value_counts())
+    print('Test Predictions:')
+    print(y_test['y_test_pred'].value_counts())
+    print('Holdout Predictions:')
+    print(y_holdout['y_holdout_pred'].value_counts())
     
     #-- RMSE --#
     
@@ -65,7 +68,7 @@ def model_validation(pred_paths):
     #-- Pred Hist --#
     
     # create a hist of pred distribution
-    sns.distplot(a = y_test['item_cnt_day'], bins = 100, kde = False)
+    sns.distplot(a = y_valid['y_valid_pred'], bins = 100, kde = False)
     plt.show() 
     
     sns.distplot(a = y_test['y_test_pred'], bins = 100, kde = False)

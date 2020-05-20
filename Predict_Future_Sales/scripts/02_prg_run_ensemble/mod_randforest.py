@@ -17,7 +17,7 @@ def mod_randforest(cons):
     model_params = {'criterion':['mse'],
                     'max_depth':[7],
                     'random_state':[1234],
-                    'n_estimators':[100],
+                    'n_estimators':[10],
                     'max_features':['auto']
                     }
     
@@ -50,6 +50,9 @@ def mod_randforest(cons):
     # set the input data file path
     data_fpath = cons.model_data_fpath
     
+    # set the number of input features
+    n = 35
+    
     # execute the model
     exe_model(cons = cons,
               model_type = model_type,
@@ -60,5 +63,6 @@ def mod_randforest(cons):
               model_pk_fpath = model_pk_fpath,
               test_split_dict = test_split_dict,
               pred_paths = pred_paths,
-              kaggle_preds = kaggle_preds
+              kaggle_preds = kaggle_preds,
+              n = n
               )

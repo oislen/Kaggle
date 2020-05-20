@@ -30,22 +30,10 @@ def gen_feature_selection(cons):
     # filter out the training data
     filt_train_data = base['data_split'] == 'train'
     train_data = base[filt_train_data]
-
-    # TODO: convert this into a function
-    data_cols = train_data.columns
-    data_dtypes = train_data.dtypes
-    data_dtypes.value_counts()
     
-    int32_cols = data_cols[data_dtypes == np.int32]
-    int64_cols = data_cols[data_dtypes == np.int64]
-    float32_cols = data_cols[data_dtypes == np.float64]
+    # down cast data
+    train_data = utl_ens.downcast_df(train_data)
     
-    train_data[int32_cols] = train_data[int32_cols].astype(np.int8)
-    train_data[int64_cols] = train_data[int64_cols].astype(np.int8)
-    train_data[float32_cols] = train_data[float32_cols].astype(np.float32)
-
-    train_data.dtypes.value_counts()
-
     #-- Random Forest Feature Importance --#
     
     print('Running random forest feature importance ...')
@@ -54,7 +42,7 @@ def gen_feature_selection(cons):
     rfc = RandomForestRegressor(max_depth = 7, 
                                 random_state = 1234, 
                                 criterion = 'mse',
-                                n_estimators = 100,
+                                n_estimators = 10,
                                 n_jobs = 2,
                                 verbose = 2,
                                 max_features = 'auto'
@@ -82,7 +70,7 @@ def gen_feature_selection(cons):
     gbr = GradientBoostingRegressor(max_depth = 3, 
                                     random_state = 1234, 
                                     criterion = 'mse',
-                                    n_estimators = 100,
+                                    n_estimators = 10,
                                     verbose = 2,
                                     max_features = 'auto'
                                     )

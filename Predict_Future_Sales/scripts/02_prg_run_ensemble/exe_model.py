@@ -22,7 +22,8 @@ def exe_model(cons,
               model_pk_fpath,
               test_split_dict,
               pred_paths,
-              kaggle_preds
+              kaggle_preds,
+              n = 35
               ):
     
     """
@@ -31,7 +32,7 @@ def exe_model(cons,
     # load in feature importance cols
     extract_feat_imp = utl_ens.extract_feat_imp(cons = cons, 
                                                 model_type = model_type,
-                                                n = 30
+                                                n = n
                                                 )
     
     # set the target abd predictors to tune
