@@ -52,6 +52,10 @@ def agg_base_data(cons):
     
     base_concat = pd.concat(objs = [agg_base, base_test_price], axis = 0, ignore_index = True)
     
+    print('Calculate revenue ...')
+    
+    base_concat['revenue'] = base_concat['item_price'] * base_concat['item_cnt_day']
+    
     print('Clip item count day totals to [0, 20] interval ...')
     
     base_concat['item_cnt_day'] = base_concat['item_cnt_day'].apply(lambda x: 0 if x < 0 else (20 if x >= 20 else x))

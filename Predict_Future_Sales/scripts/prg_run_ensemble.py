@@ -11,8 +11,8 @@ import sys
 from importlib import import_module
 
 # user settings
-start = 3
-end = 3
+start = 1
+end = 1
 run_range = range(start, end + 1)
 
 # get current wd

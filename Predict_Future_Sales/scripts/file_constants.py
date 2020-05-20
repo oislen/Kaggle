@@ -58,8 +58,10 @@ model_data_fpath = '{}/model_data.feather'.format(model_data_dir)
 
 # set feature importance paths
 randforest_feat_imp = '{}/randforest_feat_imp.csv'.format(feat_imp_dir)
+gradboost_feat_imp = '{}/gradboost_feat_imp.csv'.format(feat_imp_dir)
 
 # set predictions
 date = dt.datetime.today().strftime('%Y%m%d')
 randforest_preds = '{}/randforest{}'.format(pred_data_dir, date)
 dtree_preds = '{}/dtree{}'.format(pred_data_dir, date)
+gradboost_preds = '{}/gradboost{}'.format(pred_data_dir, date)

@@ -56,6 +56,10 @@ def prep_raw_data(cons):
     sales_train['n_refund'] = sales_train['item_cnt_day'].apply(ref_lam)
     sales_train['n_sale'] = sales_train['item_cnt_day'].apply(sale_lam)
     
+    print('Fill negative item price with median ...')    
+    neg_item_price = sales_train['item_price'] < 0
+    sales_train.loc[neg_item_price, 'item_price'] = sales_train['item_price'].median()
+    
     #-- Item Categories --#
     
     print('Preparing Item Data ...')
@@ -71,10 +75,12 @@ def prep_raw_data(cons):
     
     print('Preparing Shop Data ...')
     
-    shops['shop_quotes'] = shops['shop_name'].str.extract('(".*")')[0]
-    shops['shop_brackets'] = shops['shop_name'].str.extract('(\(.*\))')[0]
-    shops['shop_smooth'] = shops['shop_name'].str.replace('".*"|\(.*\)', "")
-    
+    shop_filt = shops['shop_name'] == 'Сергиев Посад ТЦ "7Я"'
+    shops.loc[shop_filt, 'shop_name'] = 'СергиевПосад ТЦ "7Я"'
+    shops['city'] = shops['shop_name'].str.split(' ').map(lambda x: x[0])
+    city_filt = shops['city'] == '!Якутск'
+    shops.loc[city_filt, 'city'] = 'Якутск'
+
     #-- Output Files --#
     
     print('Outputting cleaned raw data ...')

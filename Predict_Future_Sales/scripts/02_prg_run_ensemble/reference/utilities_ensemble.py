@@ -20,7 +20,8 @@ def extract_model_cols(dataset):
     index_cols = ['primary_key', 'ID', 'data_split', 'no_sales_hist_ind', 'holdout_subset_ind']
     tar_cols = ['item_cnt_day']
     excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub', 
-                 'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day'
+                 'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day',
+                 'shop_item_id', 'revenue'
                  ]
     pred_cols = [col for col in data_cols if col not in index_cols + tar_cols + excl_cols]
     

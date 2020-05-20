@@ -45,7 +45,7 @@ def append_supplement_attrs(cons):
     print('Subset required columns ...')
     
     base_cols = base_agg_comp.columns
-    drop_cols = ['item_name', 'item_category_name', 'shop_name', 'shop_quotes', 'shop_brackets', 'shop_smooth']
+    drop_cols = ['item_name', 'item_category_name', 'shop_name']
     sub_cols = base_cols[~base_cols.isin(drop_cols)]
     base_agg_comp = base_agg_comp[sub_cols]
     
@@ -59,21 +59,16 @@ def append_supplement_attrs(cons):
     
     print('Create delta attributes ...')
     
+    # TODO: add delta revenue
     base_agg_comp['delta_item_price'] = base_agg_comp['item_price'] - base_agg_comp['item_price_shift_1']
     base_agg_comp['delta_item_cnt_day_1_2'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_2']
     base_agg_comp['delta_item_cnt_day_1_3'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_3']
-    base_agg_comp['delta_item_cnt_day_1_4'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_4']
-    base_agg_comp['delta_item_cnt_day_1_6'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_6']
-    base_agg_comp['delta_item_cnt_day_1_12'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_12']
     
     print('Create interaction attributes ...')
     
     base_agg_comp['shop_id_total_item_cnt_day_shift_1_x_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['shop_id_total_item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
     base_agg_comp['shop_id_total_item_cnt_day_shift_2_x_item_id_total_item_cnt_day_shift_2'] = base_agg_comp['shop_id_total_item_cnt_day_shift_2'] - base_agg_comp['item_id_total_item_cnt_day_shift_2']
     base_agg_comp['shop_id_total_item_cnt_day_shift_3_x_item_id_total_item_cnt_day_shift_3'] = base_agg_comp['shop_id_total_item_cnt_day_shift_3'] - base_agg_comp['item_id_total_item_cnt_day_shift_3']
-    base_agg_comp['shop_id_total_item_cnt_day_shift_4_x_item_id_total_item_cnt_day_shift_4'] = base_agg_comp['shop_id_total_item_cnt_day_shift_4'] - base_agg_comp['item_id_total_item_cnt_day_shift_4']
-    base_agg_comp['shop_id_total_item_cnt_day_shift_6_x_item_id_total_item_cnt_day_shift_6'] = base_agg_comp['shop_id_total_item_cnt_day_shift_6'] - base_agg_comp['item_id_total_item_cnt_day_shift_6']
-    base_agg_comp['shop_id_total_item_cnt_day_shift_12_x_item_id_total_item_cnt_day_shift_12'] = base_agg_comp['shop_id_total_item_cnt_day_shift_12'] - base_agg_comp['item_id_total_item_cnt_day_shift_12']
     
     print('Create proportion attributes ...')
     

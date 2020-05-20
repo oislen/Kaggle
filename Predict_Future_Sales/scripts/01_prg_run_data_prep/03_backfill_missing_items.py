@@ -37,7 +37,7 @@ def back_fill_missing_items(cons):
                                       ffill = True
                                       )
     
-    #-- Total --#
+    #-- Monthly Sales --#
     
     total_unstack = utl.backfill_attr(dataset = agg_base, 
                                       pivot_values = ['item_cnt_day'], 
@@ -46,6 +46,16 @@ def back_fill_missing_items(cons):
                                       pivot_columns = ['shop_id', 'item_id'], 
                                       ffill = False
                                       )
+    
+    #-- Renenue --#
+    
+    revenue_unstack = utl.backfill_attr(dataset = agg_base, 
+                                        pivot_values = ['revenue'], 
+                                        fillna = 0,
+                                        pivot_index = ['date_block_num'], 
+                                        pivot_columns = ['shop_id', 'item_id'], 
+                                        ffill = False
+                                        )
     
     #-- ID --#
     
@@ -65,6 +75,7 @@ def back_fill_missing_items(cons):
     join_df = price_unstack[join_cols]
     join_df = join_df.merge(price_unstack, on = join_cols, how = 'left')
     join_df = join_df.merge(total_unstack, on = join_cols, how = 'left')
+    join_df = join_df.merge(revenue_unstack, on = join_cols, how = 'left')
     join_df = join_df.merge(id_df, on = join_cols, how = 'left')
     
     #del price_unstack, total_unstack, refund_unstack, sales_unstack, id_df

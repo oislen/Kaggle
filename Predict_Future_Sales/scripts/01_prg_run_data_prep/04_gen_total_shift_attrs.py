@@ -58,6 +58,9 @@ def gen_shift_attrs(cons):
     #columns_shift_shop_total = ['shop_id']
     #columns_shift_item_total = ['item_id']
     
+    #TODO: aggregate total month sales and lag by one
+    #TODO: aggregate by shop category and sub catgory, city
+    
     print('Calculating sold item totals for shop id ...')
  
     # generate the shop sell totals
@@ -125,6 +128,20 @@ def gen_shift_attrs(cons):
                                        lags = [1],
                                        fill_value = fill_na
                                        )
+    
+    
+    #-- Lag Revenue --#
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['revenue'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+    
+    
     #print('Replace -999s with missing values ...')
     
     #base_agg_comp = base_agg_comp.replace(-999, np.nan)
