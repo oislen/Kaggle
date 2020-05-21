@@ -30,21 +30,9 @@ def prep_model_data(cons):
     # TODO: replace with mean encodings here
     
     # label encode  item cat
-    item_cat_label_enc = preprocessing.LabelEncoder()
-    item_cat_label_enc.fit(base['item_cat'].unique())
-    base['item_cat_enc'] = item_cat_label_enc.transform(base['item_cat'])
     #base['item_cat_enc'] = utl.mean_encode(dataset = base, attr = 'item_cat', tar = 'item_cnt_day')
     
-    # label encode item cat sub
-    item_cat_sub_label_enc = preprocessing.LabelEncoder()
-    item_cat_sub_label_enc.fit(base['item_cat_sub'].unique())
-    base['item_cat_sub_enc'] = item_cat_sub_label_enc.transform(base['item_cat_sub'])
-    
     # label encode city
-    city_cat_sub_label_enc = preprocessing.LabelEncoder()
-    city_cat_sub_label_enc.fit(base['city'].unique())
-    base['city_enc'] = city_cat_sub_label_enc.transform(base['city'])
-    
     # set columns to drop
     drop_cols = ['item_cat_sub', 'item_cat', 'city']
     model_data = base.drop(columns = drop_cols)

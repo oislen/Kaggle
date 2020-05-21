@@ -25,7 +25,8 @@ def append_supplement_attrs(cons):
     item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
     
     # output aggreated base data as feather file
-    base_agg_comp = pd.read_feather(cons.base_agg_shft_fpath)
+    base_agg_comp = pd.read_feather(cons.base_agg_comp_fpath)
+    
     shape = base_agg_comp.shape
     print(shape)
     
@@ -56,24 +57,6 @@ def append_supplement_attrs(cons):
     base_agg_comp = base_agg_comp.merge(retail_calander, on = join_cols, how = 'left')
     
     shape = base_agg_comp.shape
-    
-    print('Create delta attributes ...')
-    
-    # TODO: add delta revenue
-    base_agg_comp['delta_item_price'] = base_agg_comp['item_price'] - base_agg_comp['item_price_shift_1']
-    base_agg_comp['delta_item_cnt_day_1_2'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_2']
-    base_agg_comp['delta_item_cnt_day_1_3'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_3']
-    
-    print('Create interaction attributes ...')
-    
-    base_agg_comp['shop_id_total_item_cnt_day_shift_1_x_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['shop_id_total_item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
-    base_agg_comp['shop_id_total_item_cnt_day_shift_2_x_item_id_total_item_cnt_day_shift_2'] = base_agg_comp['shop_id_total_item_cnt_day_shift_2'] - base_agg_comp['item_id_total_item_cnt_day_shift_2']
-    base_agg_comp['shop_id_total_item_cnt_day_shift_3_x_item_id_total_item_cnt_day_shift_3'] = base_agg_comp['shop_id_total_item_cnt_day_shift_3'] - base_agg_comp['item_id_total_item_cnt_day_shift_3']
-    
-    print('Create proportion attributes ...')
-    
-    base_agg_comp['item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['shop_id_total_item_cnt_day_shift_1']
-    base_agg_comp['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
     
     print('Outputting supplementary data {} ...'.format(shape))
     

@@ -257,7 +257,7 @@ def gen_attr_agg_totals(dataset,
     
     # extract the relevant input info
     feat_name = values[0]
-    attr_agg = columns[0]
+    attr_agg = '_'.join(columns)
     join_cols = columns + index
     
     print('creating pivot table ...')
@@ -276,14 +276,18 @@ def gen_attr_agg_totals(dataset,
     
     if index == ['date_block_num']:
         
-        # overwite date block 34 with -999s
-        totals_table.loc[34, :] = -999
+        # overwite date block 34 with 0s
+        totals_table.loc[34, :] = 0
 
     print('unstacking data ...')
 
     # unstack the attribute totals
     attr_name = '{}_total_{}'.format(attr_agg, feat_name)
+    
+    #if len(columns) == 1:
     unstack_data = totals_table.unstack()
+    #elif len(columns) == 2:
+    #    unstack_data = totals_table.unstack().unstack()
     attr_total_data = unstack_data.reset_index().drop(columns = ['level_0']).rename(columns = {0:attr_name})
     shape = attr_total_data.shape
     print(shape)

@@ -52,6 +52,16 @@ def agg_base_data(cons):
     
     base_concat = pd.concat(objs = [agg_base, base_test_price], axis = 0, ignore_index = True)
     
+    print('Removing duplicate shops ...')
+    
+    filt_shop_0 = base_concat['shop_id'] == 0
+    filt_shop_1 = base_concat['shop_id'] == 1
+    filt_shop_10 = base_concat['shop_id'] == 10
+    
+    base_concat.loc[filt_shop_0, 'shop_id'] = 57
+    base_concat.loc[filt_shop_1, 'shop_id'] = 58
+    base_concat.loc[filt_shop_10, 'shop_id'] = 11
+    
     print('Calculate revenue ...')
     
     base_concat['revenue'] = base_concat['item_price'] * base_concat['item_cnt_day']

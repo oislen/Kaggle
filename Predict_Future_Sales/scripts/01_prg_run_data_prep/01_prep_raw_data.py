@@ -7,6 +7,7 @@ Created on Mon Apr 27 20:58:03 2020
 
 import pandas as pd
 import reference.clean_utilities as utl
+from sklearn import preprocessing
 
 def prep_raw_data(cons):
     
@@ -49,6 +50,10 @@ def prep_raw_data(cons):
     sales_train['month'] = sales_train['date'].dt.month
     sales_train['year'] = sales_train['date'].dt.year
     
+    print('Capping price and sales count ...')
+    sales_train['item_cnt_day'] = sales_train['item_cnt_day'].apply(lambda x: x if x < 1000 else 1000)
+    sales_train['item_price'] = sales_train['item_price'].apply(lambda x: x if x < 100000 else 100000).max()
+    
     print('Extracting sales and refund information ...')
     # extract out the sales and refunds
     sale_lam = lambda x: 0 if x <= 0 else x
@@ -71,6 +76,16 @@ def prep_raw_data(cons):
     item_categories['item_cat_sub'] = item_categories['item_category_name'].str.split(' - ', expand = True)[1]
     item_categories['item_cat_sub'] = item_categories['item_cat_sub'].fillna('')
     
+    # label encode categories
+    item_cat_label_enc = preprocessing.LabelEncoder()
+    item_cat_label_enc.fit(item_categories['item_cat'].unique())
+    item_categories['item_cat_enc'] = item_cat_label_enc.transform(item_categories['item_cat'])
+    
+    # label encode item cat sub
+    item_cat_sub_label_enc = preprocessing.LabelEncoder()
+    item_cat_sub_label_enc.fit(item_categories['item_cat_sub'].unique())
+    item_categories['item_cat_sub_enc'] = item_cat_sub_label_enc.transform(item_categories['item_cat_sub'])
+    
     #-- Shop Name --#
     
     print('Preparing Shop Data ...')
@@ -81,6 +96,10 @@ def prep_raw_data(cons):
     city_filt = shops['city'] == '!Якутск'
     shops.loc[city_filt, 'city'] = 'Якутск'
 
+    city_cat_sub_label_enc = preprocessing.LabelEncoder()
+    city_cat_sub_label_enc.fit(shops['city'].unique())
+    shops['city_enc'] = city_cat_sub_label_enc.transform(shops['city'])
+    
     #-- Output Files --#
     
     print('Outputting cleaned raw data ...')

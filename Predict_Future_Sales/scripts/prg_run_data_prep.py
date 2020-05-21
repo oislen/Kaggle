@@ -11,8 +11,8 @@ import sys
 from importlib import import_module
 
 # user settings
-start = 1
-end = 6
+start = 5
+end = 5
 run_range = range(start, end + 1)
 
 # get current wd
@@ -28,8 +28,8 @@ sys.path.append(reference_path)
 prg_01 = import_module(name = '01_prep_raw_data')
 prg_02 = import_module(name = '02_agg_base_data')
 prg_03 = import_module(name = '03_backfill_missing_items')
-prg_04 = import_module(name = '04_gen_total_shift_attrs')
-prg_05 = import_module(name = '05_append_supplement_attrs')
+prg_05 = import_module(name = '05_gen_total_shift_attrs')
+prg_04 = import_module(name = '04_append_supplement_attrs')
 prg_06 = import_module(name = '06_prep_model_data')
 
 # load in file constants
@@ -48,12 +48,12 @@ if 3 in run_range:
     prg_03.back_fill_missing_items(cons)
 
 if 4 in run_range:
-    print('~~~~~ Generate Total Sales And Shift Attributes ...')
-    prg_04.gen_shift_attrs(cons)
+    print('~~~~~ Append supplemenatary data ...')
+    prg_04.append_supplement_attrs(cons)
 
 if 5 in run_range:
-    print('~~~~~ Append supplemenatary data ...')
-    prg_05.append_supplement_attrs(cons)
+    print('~~~~~ Generate Total Sales And Shift Attributes ...')
+    prg_05.gen_shift_attrs(cons)
 
 if 6 in run_range:
     print('~~~~~ Prepare modelling data ...')
