@@ -237,25 +237,30 @@ def format_preds(dataset, preds_cols):
     
     return data
     
-def downcast_df(dataset):
+def cast_df(dataset, cast):
     
     """
     """
     
     data = dataset.copy(True)
-    
+
     data_cols = data.columns
     data_dtypes = data.dtypes
     print(data_dtypes.value_counts())
+       
+    int_cols = data_cols[data_dtypes == int]
+    float_cols = data_cols[data_dtypes == float]
     
-    int32_cols = data_cols[data_dtypes == np.int32]
-    int64_cols = data_cols[data_dtypes == np.int64]
-    float32_cols = data_cols[data_dtypes == np.float64]
+    if cast == 'up':
+ 
+        data[int_cols] = data[int_cols].astype(np.int16)
+        data[float_cols] = data[float_cols].astype(np.float64)
     
-    data[int32_cols] = data[int32_cols].astype(np.int8)
-    data[int64_cols] = data[int64_cols].astype(np.int8)
-    data[float32_cols] = data[float32_cols].astype(np.float32)
-
+    elif cast == 'down':
+  
+        data[int_cols] = data[int_cols].astype(np.int8)
+        data[float_cols] = data[float_cols].astype(np.float32)
+    
     print(data.dtypes.value_counts())
-    
+        
     return data

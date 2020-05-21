@@ -279,13 +279,12 @@ def gen_shift_attrs(cons):
     
     #base_agg_comp['item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['shop_id_total_item_cnt_day_shift_1']
     #base_agg_comp['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
-    
-    
+
     print('Outputting results {} ...'.format(shape))
     
     # output file to feather file
-    base_agg_comp = base_agg_comp.reset_index(drop = True)
-    base_agg_comp.to_feather(cons.base_agg_shft_fpath)
+    model_data = model_data.reset_index(drop = True)
+    model_data.to_feather(cons.base_agg_shft_fpath)
     
     return
     
