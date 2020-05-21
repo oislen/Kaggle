@@ -23,94 +23,183 @@ def prep_model_data(cons):
     print('loading in base data ...')
     
     # load in the bases data file
-    base = pd.read_feather(cons.base_agg_shft_fpath)
+    base_agg_comp = pd.read_feather(cons.base_agg_shft_fpath)
     
-    dataset = base
-    values = ['item_cnt_day']
-    index = ['date_block_num']
-    columns = ['shop_id', 'item_id']
+    # set function inputs for item count shift attributes
+    index_shift = ['date_block_num']
+    columns_shift = ['shop_id', 'item_id']
+    lags = [1, 2, 3, 4, 6, 12]
+    fill_na = 0
     
-    def months_since_purchase(dataset, values, index, columns):
-        
-        data = dataset.copy(True)
-        
-        attr = '_'.join(columns)
-        join_cols = index + columns
-        
-        print('Creating pivot table ...')
-        
-        # create pivot table for item sale by date block
-        sales_table = pd.pivot_table(data = data, 
-                                     values = values,
-                                     index = index,
-                                     columns = columns,
-                                     fill_value = 0,
-                                     aggfunc = np.sum,
-                                     dropna = True
-                                     )
-        
-        print('Formatting table ...')
-        
-        # convert all postive cases to one and all zeros to missing
-        filt_sales = sales_table >= 1
-        sales_table[filt_sales] = 1
-        tab = sales_table[filt_sales]
-        
-        print('Calculating months since first and last purchase ...')
-        
-        # calculate months since first purchase
-        msfp = tab.ffill().notnull().cumsum()
-        mslp = tab.bfill().isnull().cumsum()
-        
-        msfp_unstack = msfp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_first_rec'.format(attr)})
-        mslp_unstack = mslp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_last_rec'.format(attr)})
-        
-        print('Joining back results ...')
-        
-        # join together the months since purchase attributes 
-        msp_unstack = pd.merge(left = msfp_unstack, right = mslp_unstack, how = 'inner', on = join_cols)
-        
-        # join back to data
-        out_data = data.merge(msp_unstack, how = 'left', on = join_cols)
-        
-        return out_data
-        
-    msp = months_since_purchase(dataset, values, index, columns)
+    ########################
+    #-- Shift Attributes --#
+    ########################
+
+    print('Running shift attributes for item cnt ...')
     
-    sales_tab = sales_table[sales_table[filt_sales] == 1]
-    sales_tab.apply(lambda x: x.idxmax())
+    #-- Lag Item Cnt Shifts --#
     
-    # select first puchase month
-    sales_table.apply(lambda x: x.idxmax())
-    sales_table.apply(lambda x: x 
+    print('item_cnt_day')
     
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = lags,
+                                       fill_value = fill_na
+                                       )
+    
+    #-- Lag Shop Total Shifts --#
+    
+    print('shop_id_total_item_cnt_day')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['shop_id_total_item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = lags,
+                                       fill_value = fill_na
+                                       )
+    
+    #--Lag Item Total Shifts --#
+    
+    print('item_id_total_item_cnt_day')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['item_id_total_item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = lags,
+                                       fill_value = fill_na
+                                       )
+     
+    #-- Lag Item Price --#
+    
+    print('item_price')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['item_price'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+    
+    
+    #-- Lag Revenue --#
+    
+    print('revenue')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['revenue'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+    
+    #-- Lag Shop id Cat id Total --#
+    
+    print('item_category_id_total_item_cnt_day')
+    
+    # create shift attributes
+    
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['item_category_id_total_item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+    
+    print('shop_id_item_category_id_total_item_cnt_day')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['shop_id_item_category_id_total_item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+        
+    print('city_enc_total_item_cnt_day')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['city_enc_total_item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+            
+    print('item_id_city_enc_total_item_cnt_day')
+    
+    # create shift attributes
+    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
+                                       values = ['item_id_city_enc_total_item_cnt_day'], 
+                                       index = index_shift, 
+                                       columns = columns_shift,
+                                       lags = [1],
+                                       fill_value = fill_na
+                                       )
+    
+    #print('Replace -999s with missing values ...')
+    
+    #base_agg_comp = base_agg_comp.replace(-999, np.nan)
+    
+    print('Removing 1st year of data due to lagged attributes ...')
+    
+    filt_1st_year = base_agg_comp['date_block_num'] >= 12
+    base_agg_comp = base_agg_comp[filt_1st_year]
+    shape = base_agg_comp.shape
+    
+    
+    print('Create delta attributes ...')
+    
+    # TODO: add delta revenue
+    base_agg_comp['delta_item_price'] = base_agg_comp['item_price'] - base_agg_comp['item_price_shift_1']
+    base_agg_comp['delta_item_cnt_day_1_2'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_2']
+    base_agg_comp['delta_item_cnt_day_1_3'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_3']
+    
+    print('Create interaction attributes ...')
+    
+    #base_agg_comp['shop_id_total_item_cnt_day_shift_1_x_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['shop_id_total_item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
+    #base_agg_comp['shop_id_total_item_cnt_day_shift_2_x_item_id_total_item_cnt_day_shift_2'] = base_agg_comp['shop_id_total_item_cnt_day_shift_2'] - base_agg_comp['item_id_total_item_cnt_day_shift_2']
+    #base_agg_comp['shop_id_total_item_cnt_day_shift_3_x_item_id_total_item_cnt_day_shift_3'] = base_agg_comp['shop_id_total_item_cnt_day_shift_3'] - base_agg_comp['item_id_total_item_cnt_day_shift_3']
+    
+    print('Create proportion attributes ...')
+    
+    base_agg_comp['item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1'] = (base_agg_comp['item_cnt_day_shift_1'] / base_agg_comp['shop_id_total_item_cnt_day_shift_1']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_2_div_shop_id_total_item_cnt_day_shift_2'] = (base_agg_comp['item_cnt_day_shift_2'] / base_agg_comp['shop_id_total_item_cnt_day_shift_2']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_3_div_shop_id_total_item_cnt_day_shift_3'] = (base_agg_comp['item_cnt_day_shift_3'] / base_agg_comp['shop_id_total_item_cnt_day_shift_3']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_4_div_shop_id_total_item_cnt_day_shift_4'] = (base_agg_comp['item_cnt_day_shift_4'] / base_agg_comp['shop_id_total_item_cnt_day_shift_4']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_6_div_shop_id_total_item_cnt_day_shift_6'] = (base_agg_comp['item_cnt_day_shift_6'] / base_agg_comp['shop_id_total_item_cnt_day_shift_6']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_12_div_shop_id_total_item_cnt_day_shift_12'] = (base_agg_comp['item_cnt_day_shift_12'] / base_agg_comp['shop_id_total_item_cnt_day_shift_12']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1'] = (base_agg_comp['item_cnt_day_shift_1'] / base_agg_comp['item_id_total_item_cnt_day_shift_1']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_2_div_item_id_total_item_cnt_day_shift_2'] = (base_agg_comp['item_cnt_day_shift_2'] / base_agg_comp['item_id_total_item_cnt_day_shift_2']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_3_div_item_id_total_item_cnt_day_shift_3'] = (base_agg_comp['item_cnt_day_shift_3'] / base_agg_comp['item_id_total_item_cnt_day_shift_3']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_4_div_item_id_total_item_cnt_day_shift_4'] = (base_agg_comp['item_cnt_day_shift_4'] / base_agg_comp['item_id_total_item_cnt_day_shift_4']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_6_div_item_id_total_item_cnt_day_shift_6'] = (base_agg_comp['item_cnt_day_shift_6'] / base_agg_comp['item_id_total_item_cnt_day_shift_6']).fillna(0)
+    base_agg_comp['item_cnt_day_shift_12_div_item_id_total_item_cnt_day_shift_12'] = (base_agg_comp['item_cnt_day_shift_12'] / base_agg_comp['item_id_total_item_cnt_day_shift_12']).fillna(0)
+
+    print('Outputting results {} ...'.format(shape))
 
     print('Subsetting required columns ...')
     
     # set columns to drop
-    data_cols = base.columns
+    data_cols = base_agg_comp.columns
     drop_cols = ['shop_item_id', 'item_cat', 'item_cat_sub', 'city', 'revenue', ]
     sub_cols = data_cols.drop(drop_cols)
-    model_data = base[sub_cols]
+    model_data = base_agg_comp[sub_cols]
+    model_data = model_data.reset_index(drop = True)
     
-    # TODO: add down casting here to float16 and int8
-    
-    """
-    data_cols = model_data.columns
-    data_dtypes = model_data.dtypes
-    data_dtypes.value_counts()
-    
-    int32_cols = data_cols[data_dtypes == np.int32]
-    int64_cols = data_cols[data_dtypes == np.int64]
-    float32_cols = data_cols[data_dtypes == np.float64]
-    
-    model_data[int32_cols] = model_data[int32_cols].astype(np.int8)
-    model_data[int64_cols] = model_data[int64_cols].astype(np.int8)
-    model_data[float32_cols] = model_data[float32_cols].astype(np.float32)
-    
-    model_data.dtypes.value_counts()
-    """
-
     shape = model_data.shape
     
     print('outputting model data {} ....'.format(shape))

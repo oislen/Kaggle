@@ -6,7 +6,6 @@ Created on Thu May 14 18:36:43 2020
 """
 
 import pandas as pd
-import numpy as np
 import reference.clean_utilities as utl
 
 def gen_shift_attrs(cons):
@@ -48,11 +47,6 @@ def gen_shift_attrs(cons):
     values_total = ['item_cnt_day']
     index_total = ['date_block_num']
     fill_na = 0
-    
-    # set function inputs for item count shift attributes
-    index_shift = ['date_block_num']
-    columns_shift = ['shop_id', 'item_id']
-    lags = [1, 2, 3, 4, 6, 12]
     
     # set additional function inputs for total shift attributes
     #columns_shift_shop_total = ['shop_id']
@@ -131,159 +125,33 @@ def gen_shift_attrs(cons):
                                             fill_value = fill_na
                                             )
     
+    
+    print('Generating months since first and last purchases ...')
+    
+    print('shop_id & item_id ...')
+    
+    # generate item sell totals
+    base_agg_comp = utl.months_since_purchase(dataset = base_agg_comp,
+                                              values =  ['item_cnt_day'],
+                                              index = ['date_block_num'],
+                                              columns = ['shop_id', 'item_id']
+                                              )
+    
+    print('item_id ...')
+    
+    # generate item sell totals
+    base_agg_comp = utl.months_since_purchase(dataset = base_agg_comp,
+                                              values =  ['item_cnt_day'],
+                                              index = ['date_block_num'],
+                                              columns = ['item_id']
+                                              )
+    
+    
+    
 
-    ########################
-    #-- Shift Attributes --#
-    ########################
-
-    print('Running shift attributes for item cnt ...')
-    
-    #-- Lag Item Cnt Shifts --#
-    
-    print('item_cnt_day')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = lags,
-                                       fill_value = fill_na
-                                       )
-    
-    #-- Lag Shop Total Shifts --#
-    
-    print('shop_id_total_item_cnt_day')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['shop_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = lags,
-                                       fill_value = fill_na
-                                       )
-    
-    #--Lag Item Total Shifts --#
-    
-    print('item_id_total_item_cnt_day')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = lags,
-                                       fill_value = fill_na
-                                       )
-     
-    #-- Lag Item Price --#
-    
-    print('item_price')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_price'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
-    
-    
-    #-- Lag Revenue --#
-    
-    print('revenue')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['revenue'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
-    
-    #-- Lag Shop id Cat id Total --#
-    
-    print('item_category_id_total_item_cnt_day')
-    
-    # create shift attributes
-    
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_category_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
-    
-    print('shop_id_item_category_id_total_item_cnt_day')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['shop_id_item_category_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
-        
-    print('city_enc_total_item_cnt_day')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['city_enc_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
-            
-    print('item_id_city_enc_total_item_cnt_day')
-    
-    # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_id_city_enc_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
-    
-    #print('Replace -999s with missing values ...')
-    
-    #base_agg_comp = base_agg_comp.replace(-999, np.nan)
-    
-    print('Removing 1st year of data due to lagged attributes ...')
-    
-    filt_1st_year = base_agg_comp['date_block_num'] >= 12
-    base_agg_comp = base_agg_comp[filt_1st_year]
-    shape = base_agg_comp.shape
-    
-    
-    print('Create delta attributes ...')
-    
-    # TODO: add delta revenue
-    base_agg_comp['delta_item_price'] = base_agg_comp['item_price'] - base_agg_comp['item_price_shift_1']
-    base_agg_comp['delta_item_cnt_day_1_2'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_2']
-    base_agg_comp['delta_item_cnt_day_1_3'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_3']
-    
-    print('Create interaction attributes ...')
-    
-    #base_agg_comp['shop_id_total_item_cnt_day_shift_1_x_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['shop_id_total_item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
-    #base_agg_comp['shop_id_total_item_cnt_day_shift_2_x_item_id_total_item_cnt_day_shift_2'] = base_agg_comp['shop_id_total_item_cnt_day_shift_2'] - base_agg_comp['item_id_total_item_cnt_day_shift_2']
-    #base_agg_comp['shop_id_total_item_cnt_day_shift_3_x_item_id_total_item_cnt_day_shift_3'] = base_agg_comp['shop_id_total_item_cnt_day_shift_3'] - base_agg_comp['item_id_total_item_cnt_day_shift_3']
-    
-    print('Create proportion attributes ...')
-    
-    #base_agg_comp['item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['shop_id_total_item_cnt_day_shift_1']
-    #base_agg_comp['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
-
-    print('Outputting results {} ...'.format(shape))
     
     # output file to feather file
-    model_data = model_data.reset_index(drop = True)
+    model_data = base_agg_comp.reset_index(drop = True)
     model_data.to_feather(cons.base_agg_shft_fpath)
     
     return

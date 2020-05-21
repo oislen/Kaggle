@@ -301,6 +301,65 @@ def gen_attr_agg_totals(dataset,
     
     return data_join
 
+
+
+
+def months_since_purchase(dataset, 
+                          values, 
+                          index, 
+                          columns
+                          ):
+        
+        data = dataset.copy(True)
+        shape = data.shape
+        print(shape)
+        
+        attr = '_'.join(columns)
+        join_cols = index + columns
+        
+        print('Creating pivot table ...')
+        
+        # create pivot table for item sale by date block
+        sales_table = pd.pivot_table(data = data, 
+                                     values = values,
+                                     index = index,
+                                     columns = columns,
+                                     fill_value = 0,
+                                     aggfunc = np.sum,
+                                     dropna = True
+                                     )
+        
+        print('Formatting table ...')
+        
+        # convert all postive cases to one and all zeros to missing
+        filt_sales = sales_table >= 1
+        sales_table[filt_sales] = 1
+        tab = sales_table[filt_sales]
+        
+        print('Calculating months since first and last purchase ...')
+        
+        # calculate months since first purchase
+        msfp = tab.ffill().notnull().cumsum()
+        mslp = tab.bfill().isnull().cumsum()
+        
+        msfp_unstack = msfp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_first_rec'.format(attr)})
+        mslp_unstack = mslp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_last_rec'.format(attr)})
+        
+        print('Joining back results ...')
+        
+        # join together the months since purchase attributes 
+        msp_unstack = pd.merge(left = msfp_unstack, right = mslp_unstack, how = 'inner', on = join_cols)
+        
+        # join back to data
+        out_data = data.merge(msp_unstack, how = 'left', on = join_cols)
+        
+        shape = out_data.shape
+        print(shape)
+        
+        return out_data
+
+
+
 def mean_encode(dataset, attr, tar):
         """
         """
