@@ -6,9 +6,7 @@ Created on Sun May 10 19:15:38 2020
 """
 
 import pandas as pd
-import numpy as np
 import reference.clean_utilities as utl
-from sklearn import preprocessing
 
 def prep_model_data(cons):
     
@@ -189,8 +187,6 @@ def prep_model_data(cons):
     base_agg_comp['item_cnt_day_shift_6_div_item_id_total_item_cnt_day_shift_6'] = (base_agg_comp['item_cnt_day_shift_6'] / base_agg_comp['item_id_total_item_cnt_day_shift_6']).fillna(0)
     base_agg_comp['item_cnt_day_shift_12_div_item_id_total_item_cnt_day_shift_12'] = (base_agg_comp['item_cnt_day_shift_12'] / base_agg_comp['item_id_total_item_cnt_day_shift_12']).fillna(0)
 
-    print('Outputting results {} ...'.format(shape))
-
     print('Subsetting required columns ...')
     
     # set columns to drop
@@ -199,6 +195,10 @@ def prep_model_data(cons):
     sub_cols = data_cols.drop(drop_cols)
     model_data = base_agg_comp[sub_cols]
     model_data = model_data.reset_index(drop = True)
+    
+    print('Recasting data ...')
+    
+    model_data = utl.recast_df(dataset = model_data)
     
     shape = model_data.shape
     

@@ -54,11 +54,11 @@ def model_preds(data_fpath,
     y_test['y_test_pred'] = mod.predict(X_test[pred_cols])
     y_holdout['y_holdout_pred'] = mod.predict(X_holdout[pred_cols])
     
-    print('format model predictions ...')
+    #print('format model predictions ...')
     
-    y_valid = utl_ens.format_preds(dataset = y_valid, preds_cols = 'y_valid_pred')
-    y_test = utl_ens.format_preds(dataset = y_test, preds_cols = 'y_test_pred')
-    y_holdout = utl_ens.format_preds(dataset = y_holdout, preds_cols = 'y_holdout_pred')
+    #y_valid = utl_ens.format_preds(dataset = y_valid, preds_cols = 'y_valid_pred')
+    #y_test = utl_ens.format_preds(dataset = y_test, preds_cols = 'y_test_pred')
+    #y_holdout = utl_ens.format_preds(dataset = y_holdout, preds_cols = 'y_holdout_pred')
     
     print('outputting predctions ..')
     

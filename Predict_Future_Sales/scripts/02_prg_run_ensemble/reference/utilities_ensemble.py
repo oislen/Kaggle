@@ -236,31 +236,3 @@ def format_preds(dataset, preds_cols):
     print(data[preds_cols].value_counts())
     
     return data
-    
-def cast_df(dataset, cast):
-    
-    """
-    """
-    
-    data = dataset.copy(True)
-
-    data_cols = data.columns
-    data_dtypes = data.dtypes
-    print(data_dtypes.value_counts())
-       
-    int_cols = data_cols[data_dtypes == int]
-    float_cols = data_cols[data_dtypes == float]
-    
-    if cast == 'up':
- 
-        data[int_cols] = data[int_cols].astype(np.int16)
-        data[float_cols] = data[float_cols].astype(np.float64)
-    
-    elif cast == 'down':
-  
-        data[int_cols] = data[int_cols].astype(np.int8)
-        data[float_cols] = data[float_cols].astype(np.float32)
-    
-    print(data.dtypes.value_counts())
-        
-    return data
