@@ -400,10 +400,9 @@ def recast_df(dataset):
     """
     """
     
-    data = dataset.copy(True)
+    print('Copying data ...')
     
-    # find max values
-    #max_vals = data.max()
+    data = dataset.copy(True)
     
     print('Converting non-null columns to int32s ...')
     
@@ -414,14 +413,21 @@ def recast_df(dataset):
     # extract int and float columns
     int_cols, float_cols = extract_float_int_cols(data = data)
     
-    # cast to int
-    cast_to_int_cols = [col for col in nonull_cols if col in float_cols]
+    # find non-null floats
+    nonull_float_cols = [col for col in nonull_cols if col in float_cols]
+    
+    # check a random sample 1000 records for all '.0' decimals
+    data_str = data[nonull_float_cols].sample(100000, random_state = 1234).astype(str)
+    true_floats = data_str.apply(lambda x: x.str.contains('\.0').all(), axis = 0)
+    
+    # cast true floats to int
+    cast_to_int_cols = true_floats[true_floats].index
     data[cast_to_int_cols] = data[cast_to_int_cols].astype(np.int32)
       
-    print('Generating column min / max values ...')
-    
     # extract int and float columns
     int_cols, float_cols = extract_float_int_cols(data = data)
+    
+    print('Generating column min / max values ...')
     
     # get maximum values
     max_int = data[int_cols].max().rename('max').reset_index()
@@ -499,3 +505,35 @@ def recast_df(dataset):
     print(data.dtypes.value_counts())
         
     return data
+
+def n_price_changes(dataset, 
+                    values, 
+                    index, 
+                    columns
+                    ):
+    
+    data = dataset.copy(True)
+    
+    print('Calculating number of unique item prices ...')
+    table = pd.pivot_table(data = dataset,
+                           values = values,
+                           index = index,
+                           columns = columns,
+                           aggfunc = np.sum,
+                           fill_value = 0,
+                           dropna = True
+                           )
+    
+    print('Number of price changes ...')
+    sales = table.apply(lambda x: ~x.duplicated(), axis = 0)
+    sales_int = sales.astype(int)
+    price_change = sales_int.cumsum() - 1
+    
+    print('unstacking data ...')
+    price_unstack = price_change.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'n_price_changes'})
+    
+    join_cols = columns + index
+    data_out = data.merge(price_unstack, on = join_cols, how = 'left')
+    
+    return data_out
+    

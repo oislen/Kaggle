@@ -146,10 +146,14 @@ def gen_shift_attrs(cons):
                                               columns = ['item_id']
                                               )
     
+    print('Generating number of price changes ...')
     
-    
+    base_agg_comp = utl.n_price_changes(dataset = base_agg_comp,
+                                        values = ['item_price'],
+                                        index = ['date_block_num'],
+                                        columns = ['shop_id', 'item_id']
+                                        )
 
-    
     # output file to feather file
     model_data = base_agg_comp.reset_index(drop = True)
     model_data.to_feather(cons.base_agg_shft_fpath)

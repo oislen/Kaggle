@@ -52,7 +52,7 @@ def prep_raw_data(cons):
     
     print('Capping price and sales count ...')
     sales_train['item_cnt_day'] = sales_train['item_cnt_day'].apply(lambda x: x if x < 1000 else 1000)
-    sales_train['item_price'] = sales_train['item_price'].apply(lambda x: x if x < 100000 else 100000).max()
+    sales_train['item_price'] = sales_train['item_price'].apply(lambda x: x if x < 100000 else 100000)
     
     print('Extracting sales and refund information ...')
     # extract out the sales and refunds

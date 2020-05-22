@@ -148,9 +148,8 @@ def prep_model_data(cons):
                                        fill_value = fill_na
                                        )
     
-    #print('Replace -999s with missing values ...')
-    
-    #base_agg_comp = base_agg_comp.replace(-999, np.nan)
+
+    #table.apply(lambda x: x.rank(axis = 0, method = 'first'), axis = 1)
     
     print('Removing 1st year of data due to lagged attributes ...')
     
