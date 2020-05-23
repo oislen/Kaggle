@@ -10,13 +10,16 @@ import utilities_ensemble as utl_ens
 from sklearn.model_selection import GridSearchCV
 import joblib as jl
 
+pd.set_option('display.max_columns', 10)
+
 def cv_model_train(data_fpath,
                    tar_cols,
                    pred_cols,
                    model,
                    model_params,
-                   cv_split_dict,
-                   model_output_fpath
+                   train_cv_split_dict,
+                   model_pk_fpath,
+                   cv_sum_fpath 
                    ):
     
     """
@@ -31,7 +34,7 @@ def cv_model_train(data_fpath,
     
     # generate indices for cv splits
     cv_list = utl_ens.gen_cv_splits(dataset = base,
-                                    cv_split_dict = cv_split_dict
+                                    train_cv_split_dict = train_cv_split_dict
                                     )
     
     # set the refit boolean
@@ -62,14 +65,14 @@ def cv_model_train(data_fpath,
     print('generating summary ...')
     
     # generate a summary of the cv results
-    cv_results = utl_ens.gscv_sum(gcv)
+    cv_results = utl_ens.gen_cv_sum(gcv, cv_sum_fpath)
     
     print(cv_results.head())
     
-    print('outputting best model {} ...'.format(model_output_fpath))
+    print('outputting best model {} ...'.format(model_pk_fpath))
     
     # pickle best estimator
     bdtr = gcv.best_estimator_
-    jl.dump(bdtr, model_output_fpath)
+    jl.dump(bdtr, model_pk_fpath)
     
     return

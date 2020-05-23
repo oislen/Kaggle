@@ -11,18 +11,38 @@ import numpy as np
 def extract_model_cols(dataset):
     
     """
+    
+    Extract Model Columns
+    
     """
     
     print('extracting out dataset columns ...')
     
-    # seperate predictors from response
+    # extract the dataset columns
     data_cols = dataset.columns.tolist()
-    index_cols = ['primary_key', 'ID', 'data_split', 'no_sales_hist_ind', 'holdout_subset_ind']
+    
+    # seperate out the index, target and predictor columns
+    index_cols = ['primary_key', 
+                  'ID', 
+                  'data_split',
+                  'meta_level',
+                  'holdout_subset_ind',
+                  'no_sales_hist_ind', 
+                  'no_holdout_sales_hist_ind'
+                  ]
+    
     tar_cols = ['item_cnt_day']
-    excl_cols = ['item_category_id', 'item_cat', 'item_cat_sub', 
-                 'shop_id_total_item_cnt_day', 'item_id_total_item_cnt_day',
-                 'shop_item_id', 'revenue', 'item_price', 'no_holdout_sales_hist_ind'
+    
+    # the columns below contain information which would forward bias the results (data leakage from target)
+    excl_cols = ['shop_id_total_item_cnt_day', 
+                 'item_id_total_item_cnt_day',
+                 'item_category_id_total_item_cnt_day',
+                 'shop_id_item_category_id_total_item_cnt_day',
+                 'city_enc_total_item_cnt_day',
+                 'item_id_city_enc_total_item_cnt_day'
                  ]
+    
+    # extract the predictor columns which are not an element of index, target or exlusion columns
     pred_cols = [col for col in data_cols if col not in index_cols + tar_cols + excl_cols]
     
     # create a dictionary of the output columns
@@ -36,7 +56,7 @@ def extract_model_cols(dataset):
     
 
 def gen_cv_splits(dataset,
-                  cv_split_dict
+                  train_cv_split_dict
                   ):
     
     """
@@ -44,7 +64,7 @@ def gen_cv_splits(dataset,
     
     cv_list = []
     
-    for splits_limits in cv_split_dict:
+    for splits_limits in train_cv_split_dict:
         
         print(splits_limits)
         print('taking subset of data ...')
@@ -82,9 +102,14 @@ def gen_cv_splits(dataset,
 
 
 
-def gscv_sum(clf):
+def gen_cv_sum(clf, cv_sum_fpath):
     
     """
+    
+    Generate Cross Validation Summary
+    
+    
+    
     """
     
     cv_results = pd.DataFrame({'params':clf.cv_results_['params'],
@@ -95,6 +120,8 @@ def gscv_sum(clf):
     
     cv_results = cv_results.sort_values(by = ['rank_test_score'])
     
+    cv_results.to_csv(cv_sum_fpath, index = False)
+    
     return cv_results
     
 
@@ -103,7 +130,7 @@ def extract_data_splits(dataset,
                         index_cols,
                         tar_cols,
                         pred_cols,
-                        data_splits_limits
+                        test_split_dict
                         ):
     
     """
@@ -114,17 +141,26 @@ def extract_data_splits(dataset,
     print('creating data split sub column ...')
     
     # extract out the train, valid and test subset limits
-    trn_sl = data_splits_limits['train_sub']
-    vld_sl = data_splits_limits['valid_sub']
-    tst_sl = data_splits_limits['test_sub']
+    trn_sl = test_split_dict['train_sub']
+    vld_sl = test_split_dict['valid_sub']
+    tst_sl = test_split_dict['test_sub']
     
-
+    # error handling
+    cons_holdout = (trn_sl != 34) and (vld_sl != 34) and (tst_sl != 34)
+    if not cons_holdout:
+        mess = 'Input Error: the specified holdout subset limit is duplicated in the train, validation or test subset limits'
+        raise ValueError(mess)
+    cons_sl = (trn_sl < vld_sl) and (vld_sl < tst_sl) and (tst_sl < 34)
+    if not cons_sl:
+        mess = 'Input Error: the specified train subset limits {}, validation subset limits {} and test subset limits {} are not time orientated.'.format(trn_sl, vld_sl, tst_sl)
+        raise ValueError(mess)
+        
     print('extracting data splits ...')
     
     # define data split filters
     filt_train = dataset['date_block_num'] <= trn_sl
-    filt_valid = dataset['date_block_num'] == vld_sl
-    filt_test = dataset['date_block_num'] == tst_sl
+    filt_valid = (dataset['date_block_num'] > trn_sl) & (dataset['date_block_num'] <= vld_sl)
+    filt_test = (dataset['date_block_num'] > vld_sl) & (dataset['date_block_num'] <= tst_sl)
     filt_holdout = dataset['date_block_num'] == 34
         
     # extract out the data splits
@@ -187,27 +223,43 @@ def feat_imp_sum(model,
     return feat_imp
     
 def extract_feat_imp(cons, 
-                     model_type, 
+                     feat_imp, 
                      n = 20
                      ):
     
     """
+    
+    Extract Feature Importance Documentation
+    
     """
     
+    # input error handling
+    # feat_imp
+    valid_feat_imp = ['randforest', 'gradboost' ]
+    if feat_imp not in valid_feat_imp:
+        mess = 'Input Error: specified feat_imp parameter {} must be one of {}'.format(feat_imp, valid_feat_imp)
+        raise ValueError(mess)
+    # n features
+    valid_n = type(n) == int and n > 0
+    if  not (valid_n):
+        mess = 'Input Error: specified n paramter {} must be a postive integer'.format(n)
+        raise ValueError(mess)
+    
+    # set predefined index, target and required predictor columns
     index_cols = ['primary_key', 'ID', 'data_split', 'holdout_subset_ind', 'no_sales_hist_ind']
     tar_cols = ['item_cnt_day']
     req_cols = ['year', 'month', 'date_block_num', 'item_id', 'shop_id']
     
-    if model_type == 'randforest':
-        
-        feat_imp = pd.read_csv(cons.randforest_feat_imp)
+    # load in feature importance file
+    if feat_imp == 'randforest':
+        feat_imp_df= pd.read_csv(cons.randforest_feat_imp)
+    elif feat_imp == 'gradboost':
+        feat_imp_df = pd.read_csv(cons.gradboost_feat_imp)
     
-    elif model_type == 'gradboost':
-        
-        feat_imp = pd.read_csv(cons.gradboost_feat_imp)
+    # extract the required n features
+    feat_imp_cols = feat_imp_df['attr'].head(n).tolist()
     
-    feat_imp_cols = feat_imp['attr'].head(n).tolist()
-    
+    # return unique set of predictors
     pred_cols = list(set(feat_imp_cols + req_cols))
     
     # create a dictionary of the output columns

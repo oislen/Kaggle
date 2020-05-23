@@ -7,15 +7,19 @@ Created on Sun May 17 12:29:39 2020
 
 import pandas as pd
 
-def format_kaggle_preds(pred_paths,
-                        kaggle_preds
-                        ):
+def format_kaggle_preds(pred_paths):
     
     """
+    
+    Format Kaggle Predictions
+    
     """
     
     # extract out the prediciton paths
     y_holdout_preds_path = pred_paths['y_holdout_preds_path']
+    kaggle_preds = pred_paths['kaggle_preds']
+    
+    # load in holdout predictions
     y_holdout = pd.read_csv(y_holdout_preds_path)
     
     # extract out test predictions

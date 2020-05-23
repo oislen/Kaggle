@@ -163,7 +163,8 @@ def prep_model_data(cons):
     # TODO: add delta revenue
     base_agg_comp['delta_item_price'] = base_agg_comp['item_price'] - base_agg_comp['item_price_shift_1']
     base_agg_comp['delta_item_cnt_day_1_2'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_2']
-    base_agg_comp['delta_item_cnt_day_1_3'] = base_agg_comp['item_cnt_day_shift_1'] - base_agg_comp['item_cnt_day_shift_3']
+    base_agg_comp['delta_item_cnt_day_2_3'] = base_agg_comp['item_cnt_day_shift_2'] - base_agg_comp['item_cnt_day_shift_3']
+    base_agg_comp['delta_item_cnt_day_3_4'] = base_agg_comp['item_cnt_day_shift_3'] - base_agg_comp['item_cnt_day_shift_4']
     
     print('Create interaction attributes ...')
     
@@ -190,7 +191,11 @@ def prep_model_data(cons):
     
     # set columns to drop
     data_cols = base_agg_comp.columns
-    drop_cols = ['shop_item_id', 'item_cat', 'item_cat_sub', 'city', 'revenue', ]
+    drop_cols = ['shop_item_id', 'item_cat', 'item_cat_sub', 'city', 'revenue', 
+                 # dodgey attributes:
+                 'delta_item_price', 'shop_id_item_id_months_last_rec', 
+                 'item_price', 'n_price_changes', 'shop_id_item_id_months_first_rec'
+                 ]
     sub_cols = data_cols.drop(drop_cols)
     model_data = base_agg_comp[sub_cols]
     model_data = model_data.reset_index(drop = True)

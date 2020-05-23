@@ -6,7 +6,6 @@ Created on Sun May 17 15:59:25 2020
 """
 
 import pandas as pd
-import numpy as np
 import utilities_ensemble as utl_ens
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
@@ -16,6 +15,23 @@ pd.set_option('display.max_columns', 10)
 def gen_feature_selection(cons):
     
     """
+    
+    Generate Feature Selction Documentation
+    
+    Function Overview
+    
+    This function does a high level feature importance analysis using random forest and gradient boosting trees.
+    The goal is just get a broad understanding of which features are the most predictive of monthly item sales.
+    The results will feed into the next stage where models are fitted.
+    
+    Defaults
+    
+    gen_feature_selection(cons)
+    
+    Parameters
+    
+    cons - python module, the file_constants.py module
+    
     """
         
     # load in model data
@@ -23,18 +39,15 @@ def gen_feature_selection(cons):
     
     # seperate predictors from response
     model_cols_dict = utl_ens.extract_model_cols(base)
-    index_cols = model_cols_dict['index_cols']
-    tar_cols = model_cols_dict['tar_cols']
     pred_cols = model_cols_dict['pred_cols']
     
     # filter out the training data
-    filt_train_data = base['data_split'] == 'train'
+    filt_train_data = base['meta_level'] == 'level_1'
     train_data = base[filt_train_data]
-    
-    # down cast data
-    train_data = utl_ens.downcast_df(train_data)
-    
+
+    ########################################
     #-- Random Forest Feature Importance --#
+    ########################################
     
     print('Running random forest feature importance ...')
     
@@ -42,7 +55,7 @@ def gen_feature_selection(cons):
     rfc = RandomForestRegressor(max_depth = 7, 
                                 random_state = 1234, 
                                 criterion = 'mse',
-                                n_estimators = 10,
+                                n_estimators = 30,
                                 n_jobs = 2,
                                 verbose = 2,
                                 max_features = 'auto'
@@ -60,18 +73,24 @@ def gen_feature_selection(cons):
     
     print(rf_feat_imp.head(20))
     
+    ################################
     #-- LASSO Feature Importance --#
+    ################################
     
+    ############################################
     #-- Gradient Boosting Feature Importance --#
+    ############################################
     
     print('Running gradient boosting feature importance ...')
     
     # initiate random forest model
-    gbr = GradientBoostingRegressor(max_depth = 3, 
+    gbr = GradientBoostingRegressor(max_depth = 7, 
                                     random_state = 1234, 
                                     criterion = 'mse',
-                                    n_estimators = 10,
+                                    n_estimators = 30,
                                     verbose = 2,
+                                    #validation_fraction = 0.1,
+                                    #n_iter_no_change = 5,
                                     max_features = 'auto'
                                     )
     
@@ -86,3 +105,5 @@ def gen_feature_selection(cons):
                                        )
     
     print(gb_feat_imp.head(20))
+    
+    return

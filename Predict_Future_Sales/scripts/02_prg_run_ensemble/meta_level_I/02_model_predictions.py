@@ -10,11 +10,11 @@ import utilities_ensemble as utl_ens
 import joblib as jl
 
 def model_preds(data_fpath,
-                model_input_fpath,
+                model_pk_fpath,
                 index_cols,
                 tar_cols,
                 pred_cols,
-                data_splits_limits,
+                test_split_dict,
                 pred_paths
                 ):
     
@@ -26,17 +26,17 @@ def model_preds(data_fpath,
     # load in model data
     base = pd.read_feather(data_fpath)
 
-    print('loading in model {} ...'.format(model_input_fpath))
+    print('loading in model {} ...'.format(model_pk_fpath))
 
     # load best estimator here
-    mod = jl.load(model_input_fpath)
+    mod = jl.load(model_pk_fpath)
     
     # run the data splits function
     data_splits_dict = utl_ens.extract_data_splits(dataset = base,
                                                    index_cols = index_cols,
                                                    tar_cols = tar_cols,
                                                    pred_cols = pred_cols,
-                                                   data_splits_limits = data_splits_limits
+                                                   test_split_dict = test_split_dict
                                                    )
     
     # extract out the data splits
