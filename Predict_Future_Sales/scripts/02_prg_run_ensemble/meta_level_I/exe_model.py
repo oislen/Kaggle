@@ -23,7 +23,8 @@ def exe_model(cons,
               cv_sum_fpath,
               test_split_dict,
               pred_paths,
-              n = 35
+              n,
+              skip_train
               ):
     
     """
@@ -42,18 +43,21 @@ def exe_model(cons,
     index_cols = extract_feat_imp['index_cols']
     tar_cols = extract_feat_imp['tar_cols']
     pred_cols = extract_feat_imp['pred_cols']
- 
-    # run cv model training
-    model_train.cv_model_train(data_fpath = data_fpath,
-                               tar_cols = tar_cols,
-                               pred_cols = pred_cols,
-                               model = model,
-                               model_params = model_params,
-                               train_cv_split_dict = train_cv_split_dict,
-                               model_pk_fpath = model_pk_fpath,
-                               cv_sum_fpath = cv_sum_fpath
-                               )
     
+    # if skipping the training step
+    if not skip_train:
+        
+        # run cv model training
+        model_train.cv_model_train(data_fpath = data_fpath,
+                                   tar_cols = tar_cols,
+                                   pred_cols = pred_cols,
+                                   model = model,
+                                   model_params = model_params,
+                                   train_cv_split_dict = train_cv_split_dict,
+                                   model_pk_fpath = model_pk_fpath,
+                                   cv_sum_fpath = cv_sum_fpath
+                                   )
+        
     # get model predictions
     model_pred.model_preds(data_fpath = data_fpath,
                            model_pk_fpath = model_pk_fpath,

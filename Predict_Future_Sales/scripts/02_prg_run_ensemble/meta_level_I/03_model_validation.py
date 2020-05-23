@@ -6,13 +6,14 @@ Created on Sun May 17 12:27:58 2020
 """
 
 import pandas as pd
-import seaborn as sns
-import numpy as np
-import matplotlib.pyplot as plt
+import utilities_ensemble as utl_ens
 
 def model_validation(pred_paths):
     
     """
+    
+    Model Validation Documentation
+    
     """
     
     print('Loading model predictions ...')
@@ -23,9 +24,9 @@ def model_validation(pred_paths):
     y_holdout_preds_path = pred_paths['y_holdout_preds_path']
     
     # load in the predictions
-    y_valid = pd.read_csv(y_valid_preds_path)
-    y_test = pd.read_csv(y_test_preds_path) 
-    y_holdout = pd.read_csv(y_holdout_preds_path)
+    y_valid = pd.read_feather(y_valid_preds_path)
+    y_test = pd.read_feather(y_test_preds_path) 
+    y_holdout = pd.read_feather(y_holdout_preds_path)
     
     # prediction value counts
     print('Validation Predictions:')
@@ -37,45 +38,32 @@ def model_validation(pred_paths):
     
     #-- RMSE --#
     
+    print('Calculating RMSE ...')
+    
     # calculate RMSE
-    valid_rmse = np.sqrt(((y_valid['item_cnt_day'] - y_valid['y_valid_pred']) ** 2).sum() / y_valid.shape[0])
+    valid_rmse = utl_ens.calc_rmse(dataset = y_valid, tar = 'item_cnt_day', pred = 'y_valid_pred', out_fpath = None)
+    test_rmse = utl_ens.calc_rmse(dataset = y_test, tar = 'item_cnt_day', pred = 'y_test_pred', out_fpath = None)
+    
     print('Validation Set RMSE:', valid_rmse)
-    
-    # calculate RMSE
-    test_rmse = np.sqrt(((y_test['item_cnt_day'] - y_test['y_test_pred']) ** 2).sum() / y_test.shape[0])
     print('Test Set RMSE:', test_rmse)
-    
-    #-- Cross Tab --#
-    
-    # create confusion matrix
-    #valid_tab = pd.crosstab(index = y_valid['item_cnt_day'], columns = y_valid['y_valid_pred'])
-    #print(valid_tab)
-    
-    # create confusion matrix
-    #test_tab = pd.crosstab(index = y_test['item_cnt_day'], columns = y_test['y_test_pred'])
-    #print(test_tab)
-    
+
     #-- Preds vs True --#
     
-    # create confusion matrix
-    sns.scatterplot(x = 'item_cnt_day', y = 'y_valid_pred', data = y_valid)
-    plt.show() 
+    print('Plotting predictions vs true tagret scatterplots ...')
     
-    # create confusion matrix
-    sns.scatterplot(x = 'item_cnt_day', y = 'y_test_pred', data = y_test)
-    plt.show() 
+    # create a scatterplot of predictions vs true
+    utl_ens.plot_preds_vs_true(dataset = y_valid, tar = 'item_cnt_day', pred = 'y_valid_pred', out_fpath = None)
+    utl_ens.plot_preds_vs_true(dataset = y_test, tar = 'item_cnt_day', pred = 'y_test_pred', out_fpath = None)
+
+    #-- Preds Hist --#
     
-    #-- Pred Hist --#
+    print('Plotting predictions histograms ...')
     
     # create a hist of pred distribution
-    sns.distplot(a = y_valid['y_valid_pred'], bins = 100, kde = False)
-    plt.show() 
-    
-    sns.distplot(a = y_test['y_test_pred'], bins = 100, kde = False)
-    plt.show() 
-        
-    # create a hist of pred distribution
-    sns.distplot(a = y_holdout['y_holdout_pred'], bins = 100, kde = False)
-    plt.show() 
+    utl_ens.plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', bins = 100, kde = False, out_fpath = None)
+    utl_ens.plot_preds_hist(dataset = y_test, pred = 'item_cnt_day', bins = 100, kde = False, out_fpath = None)
+    utl_ens.plot_preds_hist(dataset = y_valid, pred = 'y_valid_pred', bins = 100, kde = False, out_fpath = None)
+    utl_ens.plot_preds_hist(dataset = y_test, pred = 'y_test_pred', bins = 100, kde = False, out_fpath = None)
+    utl_ens.plot_preds_hist(dataset = y_holdout, pred = 'y_holdout_pred', bins = 100, kde = False, out_fpath = None)
     
     return

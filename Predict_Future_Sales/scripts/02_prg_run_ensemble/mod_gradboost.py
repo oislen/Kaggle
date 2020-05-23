@@ -8,13 +8,11 @@ Created on Wed May 20 09:30:46 2020
 from sklearn.ensemble import GradientBoostingRegressor
 from meta_level_I.exe_model import exe_model
 import numpy as np
-import datetime as dt
 
-def mod_gradboost(cons, max_dept, rand_state, feat_imp, n):
+def mod_gradboost(cons, max_dept, rand_state, feat_imp, n, date, skip_train):
         
     # set the model name, feature importance and n features to use
     model_type = 'gradboost'
-    date = dt.datetime.today().strftime('%Y%m%d')
     
     # set model pk output file path
     model_name = '{}_dept{}'.format(model_type, max_dept)
@@ -43,9 +41,9 @@ def mod_gradboost(cons, max_dept, rand_state, feat_imp, n):
     mod_preds = '{}/{}_{}'.format(cons.pred_data_dir, model_name, date)
     
     # set the output paths
-    y_valid_preds_path = mod_preds + '_valid.csv'
-    y_test_preds_path = mod_preds + '_test.csv'
-    y_holdout_preds_path = mod_preds + '_holdout.csv'
+    y_valid_preds_path = mod_preds + '_valid.feather'
+    y_test_preds_path = mod_preds + '_test.feather'
+    y_holdout_preds_path = mod_preds + '_holdout.feather'
     kaggle_preds = mod_preds + '.csv'
     
     # set final predictions
@@ -69,5 +67,6 @@ def mod_gradboost(cons, max_dept, rand_state, feat_imp, n):
               cv_sum_fpath = cv_sum_fpath,
               test_split_dict = test_split_dict,
               pred_paths = pred_paths,
-              n = n
+              n = n,
+              skip_train = skip_train
               )

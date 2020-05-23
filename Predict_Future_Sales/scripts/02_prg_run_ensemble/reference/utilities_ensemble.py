@@ -7,6 +7,8 @@ Created on Sun May 17 10:59:45 2020
 
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def extract_model_cols(dataset):
     
@@ -288,3 +290,33 @@ def format_preds(dataset, preds_cols):
     print(data[preds_cols].value_counts())
     
     return data
+
+def calc_rmse(dataset, tar, pred, out_fpath = None):
+    """
+    """
+    # calculate RMSE
+    rmse = np.sqrt(((dataset[tar] - dataset[pred]) ** 2).sum() / dataset.shape[0])
+    rmse_dict = {'RMSE':[rmse]}
+    rmse_df = pd.DataFrame(rmse_dict, index = [0])
+    if out_fpath != None:
+        rmse_df.to_csv(out_fpath, index = False)
+    return rmse_df
+
+def plot_preds_vs_true(dataset, tar, pred, out_fpath = None):
+     """
+     """
+     sns.scatterplot(x = tar, y = pred, data = dataset)
+     if out_fpath != None:
+         plt.savefig(out_fpath)
+     plt.show() 
+     return
+ 
+def plot_preds_hist(dataset, pred, bins = 100, kde = False, out_fpath = None):
+    """
+    """
+    # create a hist of pred distribution
+    sns.distplot(a = dataset[pred], bins = bins, kde = kde)
+    plt.show() 
+    if out_fpath != None:
+        plt.savefig(out_fpath)
+    return

@@ -9,10 +9,13 @@ Created on Sun May 17 10:57:04 2020
 import os 
 import sys
 from importlib import import_module
+import datetime as dt
 
 # user settings
-start = 2
-end = 2
+skip_train = True
+n = 30
+start = 4
+end = 4
 run_range = range(start, end + 1)
 
 # get current wd
@@ -35,24 +38,30 @@ prg_gb = import_module(name = 'mod_gradboost')
 # load in file constants
 cons = import_module(name = 'file_constants')
 
+# get todays date
+date = dt.datetime.today().strftime('%Y%m%d')
+
 if 1 in run_range:
     print('~~~~~ Generating feature importance ...')
     prg_feat_imp.gen_feature_selection(cons) 
     
 if 2 in run_range:
     print('~~~~~ Working on Random Forest Models ...')
-    prg_rf.mod_randforest(cons, max_dept = 3, rand_state = 1, feat_imp = 'randforest', n = 30) 
-    prg_rf.mod_randforest(cons, max_dept = 5, rand_state = 2, feat_imp = 'randforest', n = 30) 
-    prg_rf.mod_randforest(cons, max_dept = 7, rand_state = 3, feat_imp = 'randforest', n = 30) 
+    
+    prg_rf.mod_randforest(cons, max_dept = 3, rand_state = 1, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
+    prg_rf.mod_randforest(cons, max_dept = 5, rand_state = 2, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
+    prg_rf.mod_randforest(cons, max_dept = 7, rand_state = 3, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
     
 if 3 in run_range:
     print('~~~~~ Working on Decision Tree Models ...')
-    prg_dt.mod_dtree3(cons, max_dept = 3, rand_state = 1, feat_imp = 'randforest', n = 30)
-    prg_dt.mod_dtree5(cons, max_dept = 5, rand_state = 2, feat_imp = 'randforest', n = 30)
-    prg_dt.mod_dtree7(cons, max_dept = 7, rand_state = 3, feat_imp = 'randforest', n = 30)
+    
+    prg_dt.mod_dtree3(cons, max_dept = 3, rand_state = 1, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+    prg_dt.mod_dtree5(cons, max_dept = 5, rand_state = 2, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+    prg_dt.mod_dtree7(cons, max_dept = 7, rand_state = 3, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
     
 if 4 in run_range:
-    print('~~~~~ Fitting, training and predicting ...')
-    prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, feat_imp = 'gradboost', n = 30)
-    prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, feat_imp = 'gradboost', n = 30)
-    prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, feat_imp = 'gradboost', n = 30)
+    print('~~~~~ Working on Gradient Boosting Models ...')
+    
+    prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
+    prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
+    prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)

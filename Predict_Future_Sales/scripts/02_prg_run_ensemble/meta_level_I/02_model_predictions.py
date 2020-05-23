@@ -68,8 +68,8 @@ def model_preds(data_fpath,
     y_holdout_preds_path = pred_paths['y_holdout_preds_path']
     
     # output predictions
-    y_valid.to_csv(y_valid_preds_path, index = False)
-    y_test.to_csv(y_test_preds_path, index = False)
-    y_holdout.to_csv(y_holdout_preds_path, index = False)
+    y_valid.to_feather(y_valid_preds_path, index = False)
+    y_test.to_feather(y_test_preds_path, index = False)
+    y_holdout.to_feather(y_holdout_preds_path, index = False)
 
     return

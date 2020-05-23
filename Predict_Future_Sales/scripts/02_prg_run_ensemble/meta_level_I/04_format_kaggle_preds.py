@@ -20,7 +20,7 @@ def format_kaggle_preds(pred_paths):
     kaggle_preds = pred_paths['kaggle_preds']
     
     # load in holdout predictions
-    y_holdout = pd.read_csv(y_holdout_preds_path)
+    y_holdout = pd.read_feather(y_holdout_preds_path)
     
     # extract out test predictions
     holdout_subset_filt = y_holdout['holdout_subset_ind'] == 1
