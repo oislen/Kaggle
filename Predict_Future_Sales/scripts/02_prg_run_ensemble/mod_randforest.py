@@ -10,14 +10,10 @@ from meta_level_I.exe_model import exe_model
 import numpy as np
 import datetime as dt
 
-def mod_randforest5(cons):
+def mod_randforest(cons, max_dept, rand_state, feat_imp, n):
     
     # set the model name, feature importance and n features to use
     model_type = 'randforest'
-    max_dept = 5
-    rand_state = 2
-    feat_imp = 'randforest'
-    n = 30
     date = dt.datetime.today().strftime('%Y%m%d')
     
     # set model pk output file path
@@ -45,13 +41,13 @@ def mod_randforest5(cons):
     test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
     
     # set predictions
-    dtree_preds = '{}/{}_{}'.format(cons.pred_data_dir, model_name, date)
+    mod_preds = '{}/{}_{}'.format(cons.pred_data_dir, model_name, date)
     
     # set the output paths
-    y_valid_preds_path = dtree_preds + '_valid.csv'
-    y_test_preds_path = dtree_preds + '_test.csv'
-    y_holdout_preds_path = dtree_preds + '_holdout.csv'
-    kaggle_preds = dtree_preds + '.csv'
+    y_valid_preds_path = mod_preds + '_valid.csv'
+    y_test_preds_path = mod_preds + '_test.csv'
+    y_holdout_preds_path = mod_preds + '_holdout.csv'
+    kaggle_preds = mod_preds + '.csv'
     
     # set final predictions
     pred_paths = {'y_valid_preds_path':y_valid_preds_path,
