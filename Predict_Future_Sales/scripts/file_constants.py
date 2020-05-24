@@ -27,10 +27,11 @@ pred_data_dir = '{}/pred'.format(data_dir)
 feat_imp_dir = '{}/feat_imp'.format(reports_dir)
 cv_results_dir = '{}/cv_results'.format(reports_dir)
 valid_plots_dir = '{}/valid_plots'.format(reports_dir)
+valid_metrics_dir = '{}/valid_metrics'.format(reports_dir)
 
-# set the sub validation plot directories
+# set the sub validation plot / stats directories
 valid_preds_hist_dir = '{}/preds_hist'.format(valid_plots_dir)
-valid_plots_dir = '{}/preds_vs_true'.format(valid_plots_dir)
+valid_preds_vs_true_dir = '{}/preds_vs_true'.format(valid_plots_dir)
 
 # set raw data file paths
 item_categories_fpath = '{}/item_categories.csv'.format(raw_data_dir)

@@ -63,6 +63,7 @@ def gen_cv_splits(dataset,
     
     """
     """
+    data = dataset.copy(True)
     
     cv_list = []
     
@@ -72,7 +73,7 @@ def gen_cv_splits(dataset,
         print('taking subset of data ...')
         
         sub_cols = ['date_block_num', 'data_split', 'primary_key']
-        data = dataset[sub_cols]
+        data_sub = data[sub_cols]
         
         print('creating data split sub column ...')
         
@@ -83,12 +84,12 @@ def gen_cv_splits(dataset,
         print('extracting data splits ...')
     
         # define data split filters
-        filt_train = data['date_block_num'] <= trn_sl
-        filt_valid = data['date_block_num'] == vld_sl
+        filt_train = data_sub['date_block_num'] <= trn_sl
+        filt_valid = data_sub['date_block_num'] == vld_sl
             
         # extract out the data splits
-        train_data = data[filt_train].index.values.astype(int)
-        valid_data = data[filt_valid].index.values.astype(int)
+        train_data = data_sub[filt_train].index.values.astype(int)
+        valid_data = data_sub[filt_valid].index.values.astype(int)
     
         print('creating output dictionary ...')
     
@@ -130,6 +131,7 @@ def gen_cv_sum(clf, cv_sum_fpath):
 
 def extract_data_splits(dataset,
                         index_cols,
+                        req_cols,
                         tar_cols,
                         pred_cols,
                         test_split_dict
@@ -137,6 +139,8 @@ def extract_data_splits(dataset,
     
     """
     """
+
+    data = dataset.copy(True)
 
     print('generating data splits ...')
     
@@ -160,26 +164,30 @@ def extract_data_splits(dataset,
     print('extracting data splits ...')
     
     # define data split filters
-    filt_train = dataset['date_block_num'] <= trn_sl
-    filt_valid = (dataset['date_block_num'] > trn_sl) & (dataset['date_block_num'] <= vld_sl)
-    filt_test = (dataset['date_block_num'] > vld_sl) & (dataset['date_block_num'] <= tst_sl)
-    filt_holdout = dataset['date_block_num'] == 34
+    filt_train = data['date_block_num'] <= trn_sl
+    filt_valid = (data['date_block_num'] > trn_sl) & (data['date_block_num'] <= vld_sl)
+    filt_test = (data['date_block_num'] > vld_sl) & (data['date_block_num'] <= tst_sl)
+    filt_holdout = data['date_block_num'] == 34
+    filt_meta_lvl_II = data['meta_level'].isin(['level_2', 'holdout'])
         
     # extract out the data splits
-    train_data = dataset[filt_train]
-    valid_data = dataset[filt_valid]
-    test_data = dataset[filt_test]
-    holdout_data = dataset[filt_holdout]
+    train_data = data[filt_train]
+    valid_data = data[filt_valid]
+    test_data = data[filt_test]
+    holdout_data = data[filt_holdout]
+    meta_lvl_II = data[filt_meta_lvl_II]
 
     # split datasets into train, valid, test and holdout
     X_train = train_data[index_cols + pred_cols]
-    y_train = train_data[index_cols + tar_cols]
+    y_train = train_data[index_cols + req_cols + tar_cols]
     X_valid = valid_data[index_cols + pred_cols]
-    y_valid = valid_data[index_cols + tar_cols]
+    y_valid = valid_data[index_cols + req_cols + tar_cols]
     X_test = test_data[index_cols + pred_cols]
-    y_test = test_data[index_cols + tar_cols]
+    y_test = test_data[index_cols + req_cols + tar_cols]
     X_holdout = holdout_data[index_cols + pred_cols]
-    y_holdout = holdout_data[index_cols + tar_cols]
+    y_holdout = holdout_data[index_cols + req_cols + tar_cols]
+    X_meta_lvl_II = meta_lvl_II[index_cols + pred_cols]
+    y_meta_lvl_II = meta_lvl_II[index_cols + req_cols + tar_cols]
     
     print('creating output dictionary ...')
     
@@ -188,6 +196,7 @@ def extract_data_splits(dataset,
                         'valid_data':valid_data,
                         'test_data':test_data,
                         'holdout_data':holdout_data,
+                        'meta_lvl_II':meta_lvl_II,
                         'X_train':X_train,
                         'y_train':y_train,
                         'X_valid':X_valid,
@@ -195,11 +204,11 @@ def extract_data_splits(dataset,
                         'X_test':X_test,
                         'y_test':y_test,
                         'X_holdout':X_holdout,
-                        'y_holdout':y_holdout
+                        'y_holdout':y_holdout,
+                        'X_meta_lvl_II':X_meta_lvl_II,
+                        'y_meta_lvl_II':y_meta_lvl_II
                         }
 
-
-    
     return data_splits_dict
 
 
@@ -248,7 +257,7 @@ def extract_feat_imp(cons,
         raise ValueError(mess)
     
     # set predefined index, target and required predictor columns
-    index_cols = ['primary_key', 'ID', 'data_split', 'holdout_subset_ind', 'no_sales_hist_ind']
+    index_cols = ['primary_key', 'ID', 'data_split', 'meta_level', 'holdout_subset_ind', 'no_sales_hist_ind']
     tar_cols = ['item_cnt_day']
     req_cols = ['year', 'month', 'date_block_num', 'item_id', 'shop_id']
     
@@ -266,6 +275,7 @@ def extract_feat_imp(cons,
     
     # create a dictionary of the output columns
     model_cols_dict = {'index_cols':index_cols,
+                       'req_cols':req_cols,
                        'tar_cols':tar_cols,
                        'pred_cols':pred_cols
                        }
@@ -294,29 +304,34 @@ def format_preds(dataset, preds_cols):
 def calc_rmse(dataset, tar, pred, out_fpath = None):
     """
     """
+    data = dataset.copy(True)
     # calculate RMSE
-    rmse = np.sqrt(((dataset[tar] - dataset[pred]) ** 2).sum() / dataset.shape[0])
+    rmse = np.sqrt(((data[tar] - data[pred]) ** 2).sum() / data.shape[0])
     rmse_dict = {'RMSE':[rmse]}
     rmse_df = pd.DataFrame(rmse_dict, index = [0])
     if out_fpath != None:
         rmse_df.to_csv(out_fpath, index = False)
     return rmse_df
 
-def plot_preds_vs_true(dataset, tar, pred, out_fpath = None):
+def plot_preds_vs_true(dataset, tar, pred, model_name, out_fpath = None):
      """
      """
-     sns.scatterplot(x = tar, y = pred, data = dataset)
+     data = dataset.copy(True)
+     sns.scatterplot(x = tar, y = pred, data = data)
+     plt.title(model_name)
      if out_fpath != None:
          plt.savefig(out_fpath)
      plt.show() 
      return
  
-def plot_preds_hist(dataset, pred, bins = 100, kde = False, out_fpath = None):
+def plot_preds_hist(dataset, pred, model_name, bins = 100, kde = False, out_fpath = None):
     """
     """
+    data = dataset.copy(True)
     # create a hist of pred distribution
-    sns.distplot(a = dataset[pred], bins = bins, kde = kde)
-    plt.show() 
+    sns.distplot(a = data[pred], bins = bins, kde = kde)
+    plt.title(model_name)
     if out_fpath != None:
         plt.savefig(out_fpath)
+    plt.show() 
     return

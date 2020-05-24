@@ -8,7 +8,7 @@ Created on Sun May 17 12:27:58 2020
 import pandas as pd
 import utilities_ensemble as utl_ens
 
-def model_validation(pred_paths):
+def model_validation(pred_paths, valid_output_paths, model_name):
     
     """
     
@@ -16,6 +16,17 @@ def model_validation(pred_paths):
     
     """
     
+    # extract out the validation output paths
+    preds_valid_rmse = valid_output_paths['preds_valid_rmse']
+    preds_test_rmse = valid_output_paths['preds_test_rmse']
+    preds_vs_true_valid = valid_output_paths['preds_vs_true_valid']
+    preds_vs_true_test = valid_output_paths['preds_vs_true_test']
+    true_hist_valid = valid_output_paths['true_hist_valid']
+    true_hist_test = valid_output_paths['true_hist_test']
+    preds_hist_valid = valid_output_paths['preds_hist_valid']
+    preds_hist_test = valid_output_paths['preds_hist_test']
+    preds_hist_holdout = valid_output_paths['preds_hist_holdout']
+
     print('Loading model predictions ...')
     
     # extract out the prediciton paths
@@ -41,8 +52,8 @@ def model_validation(pred_paths):
     print('Calculating RMSE ...')
     
     # calculate RMSE
-    valid_rmse = utl_ens.calc_rmse(dataset = y_valid, tar = 'item_cnt_day', pred = 'y_valid_pred', out_fpath = None)
-    test_rmse = utl_ens.calc_rmse(dataset = y_test, tar = 'item_cnt_day', pred = 'y_test_pred', out_fpath = None)
+    valid_rmse = utl_ens.calc_rmse(dataset = y_valid, tar = 'item_cnt_day', pred = 'y_valid_pred', out_fpath = preds_valid_rmse)
+    test_rmse = utl_ens.calc_rmse(dataset = y_test, tar = 'item_cnt_day', pred = 'y_test_pred', out_fpath = preds_test_rmse)
     
     print('Validation Set RMSE:', valid_rmse)
     print('Test Set RMSE:', test_rmse)
@@ -52,18 +63,18 @@ def model_validation(pred_paths):
     print('Plotting predictions vs true tagret scatterplots ...')
     
     # create a scatterplot of predictions vs true
-    utl_ens.plot_preds_vs_true(dataset = y_valid, tar = 'item_cnt_day', pred = 'y_valid_pred', out_fpath = None)
-    utl_ens.plot_preds_vs_true(dataset = y_test, tar = 'item_cnt_day', pred = 'y_test_pred', out_fpath = None)
+    utl_ens.plot_preds_vs_true(dataset = y_valid, tar = 'item_cnt_day', pred = 'y_valid_pred', model_name = model_name, out_fpath = preds_vs_true_valid)
+    utl_ens.plot_preds_vs_true(dataset = y_test, tar = 'item_cnt_day', pred = 'y_test_pred', model_name = model_name, out_fpath = preds_vs_true_test)
 
     #-- Preds Hist --#
     
     print('Plotting predictions histograms ...')
     
     # create a hist of pred distribution
-    utl_ens.plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', bins = 100, kde = False, out_fpath = None)
-    utl_ens.plot_preds_hist(dataset = y_test, pred = 'item_cnt_day', bins = 100, kde = False, out_fpath = None)
-    utl_ens.plot_preds_hist(dataset = y_valid, pred = 'y_valid_pred', bins = 100, kde = False, out_fpath = None)
-    utl_ens.plot_preds_hist(dataset = y_test, pred = 'y_test_pred', bins = 100, kde = False, out_fpath = None)
-    utl_ens.plot_preds_hist(dataset = y_holdout, pred = 'y_holdout_pred', bins = 100, kde = False, out_fpath = None)
+    utl_ens.plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', bins = 100, kde = False, model_name = model_name, out_fpath = true_hist_valid)
+    utl_ens.plot_preds_hist(dataset = y_test, pred = 'item_cnt_day', bins = 100, kde = False, model_name = model_name, out_fpath = true_hist_test)
+    utl_ens.plot_preds_hist(dataset = y_valid, pred = 'y_valid_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_valid)
+    utl_ens.plot_preds_hist(dataset = y_test, pred = 'y_test_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_test)
+    utl_ens.plot_preds_hist(dataset = y_holdout, pred = 'y_holdout_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_holdout)
     
     return
