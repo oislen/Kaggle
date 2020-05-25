@@ -7,4 +7,6 @@ IEEE-CIS_Fraud_Detection/
 Predict_Future_Sales/data
 Predict_Future_Sales/report
 Predict_Future_Sales/models
+Predict_Future_Sales/final_submission
+Predict_Future_Sales/final_submission.zip
 *.pyc

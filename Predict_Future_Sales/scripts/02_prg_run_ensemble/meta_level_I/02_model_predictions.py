@@ -8,6 +8,7 @@ Created on Sun May 17 16:00:32 2020
 import pandas as pd
 import utilities_ensemble as utl_ens
 import joblib as jl
+import pickle as pk
 
 def model_preds(data_fpath,
                 model_pk_fpath,
@@ -31,6 +32,7 @@ def model_preds(data_fpath,
 
     # load best estimator here
     mod = jl.load(model_pk_fpath)
+    mod = pk.load(open(model_pk_fpath, "rb"))
     
     print('splitting out dataset ...')
     
@@ -54,6 +56,9 @@ def model_preds(data_fpath,
     y_meta_lvl_II = data_splits_dict['y_meta_lvl_II']
     
     print('making predictions ...')
+
+    print(X_valid[pred_cols].head())
+    print(y_test.head())
 
     # make predictions for valid, test, holdout and meta lvl II
     y_valid['y_valid_pred'] = mod.predict(X_valid[pred_cols])

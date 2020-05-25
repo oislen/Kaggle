@@ -9,6 +9,7 @@ import pandas as pd
 import utilities_ensemble as utl_ens
 from sklearn.model_selection import GridSearchCV
 import joblib as jl
+import pickle as pk
 
 pd.set_option('display.max_columns', 10)
 
@@ -59,6 +60,9 @@ def cv_model_train(data_fpath,
     X = base.loc[sub_index, pred_cols]
     y = base.loc[sub_index, tar_cols[0]]
     
+    print(X.head())
+    print(y.head())
+    
     # fit cv object
     gcv.fit(X, y)
     
@@ -74,5 +78,6 @@ def cv_model_train(data_fpath,
     # pickle best estimator
     bdtr = gcv.best_estimator_
     jl.dump(bdtr, model_pk_fpath)
+    pk.dump(bdtr, open(model_pk_fpath, "wb"))
     
     return

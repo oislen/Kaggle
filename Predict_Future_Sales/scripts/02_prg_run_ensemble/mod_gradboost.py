@@ -16,7 +16,7 @@ def mod_gradboost(cons, max_dept, rand_state, feat_imp, n, date, skip_train, mod
     
     # set model pk output file path
     model_name = '{}_dept{}'.format(model_type, max_dept)
-    model_pk_fpath = '{}/{}_model.joblib'.format(cons.models_dir, model_name)
+    model_pk_fpath = '{}/{}_model.pkl'.format(cons.models_dir, model_name)
     cv_sum_fpath = '{}/{}_cv_summary.csv'.format(cons.cv_results_dir, model_name)
     
     print(model_pk_fpath)

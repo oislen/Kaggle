@@ -178,16 +178,16 @@ def extract_data_splits(dataset,
     meta_lvl_II = data[filt_meta_lvl_II]
 
     # split datasets into train, valid, test and holdout
-    X_train = train_data[index_cols + pred_cols]
-    y_train = train_data[index_cols + req_cols + tar_cols]
-    X_valid = valid_data[index_cols + pred_cols]
-    y_valid = valid_data[index_cols + req_cols + tar_cols]
-    X_test = test_data[index_cols + pred_cols]
-    y_test = test_data[index_cols + req_cols + tar_cols]
-    X_holdout = holdout_data[index_cols + pred_cols]
-    y_holdout = holdout_data[index_cols + req_cols + tar_cols]
-    X_meta_lvl_II = meta_lvl_II[index_cols + pred_cols]
-    y_meta_lvl_II = meta_lvl_II[index_cols + req_cols + tar_cols]
+    X_train = train_data[list(set(index_cols + pred_cols))]
+    y_train = train_data[list(set(index_cols + req_cols + tar_cols))]
+    X_valid = valid_data[list(set(index_cols + pred_cols))]
+    y_valid = valid_data[list(set(index_cols + req_cols + tar_cols))]
+    X_test = test_data[list(set(index_cols + pred_cols))]
+    y_test = test_data[list(set(index_cols + req_cols + tar_cols))]
+    X_holdout = holdout_data[list(set(index_cols + pred_cols))]
+    y_holdout = holdout_data[list(set(index_cols + req_cols + tar_cols))]
+    X_meta_lvl_II = meta_lvl_II[list(set(index_cols + pred_cols))]
+    y_meta_lvl_II = meta_lvl_II[list(set(index_cols + req_cols + tar_cols))]
     
     print('creating output dictionary ...')
     
