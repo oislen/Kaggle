@@ -26,7 +26,7 @@ def prep_model_data(cons):
     # set function inputs for item count shift attributes
     index_shift = ['date_block_num']
     columns_shift = ['shop_id', 'item_id']
-    lags = [1, 2, 3, 4, 6, 12]
+    lags = [1, 2, 3, 4]
     fill_na = 0
     
     ########################
@@ -153,7 +153,7 @@ def prep_model_data(cons):
     
     print('Removing 1st year of data due to lagged attributes ...')
     
-    filt_1st_year = base_agg_comp['date_block_num'] >= 12
+    filt_1st_year = base_agg_comp['date_block_num'] >= 4
     base_agg_comp = base_agg_comp[filt_1st_year]
     shape = base_agg_comp.shape
     
@@ -166,27 +166,30 @@ def prep_model_data(cons):
     base_agg_comp['delta_item_cnt_day_2_3'] = base_agg_comp['item_cnt_day_shift_2'] - base_agg_comp['item_cnt_day_shift_3']
     base_agg_comp['delta_item_cnt_day_3_4'] = base_agg_comp['item_cnt_day_shift_3'] - base_agg_comp['item_cnt_day_shift_4']
     
-    print('Create interaction attributes ...')
-    
-    #base_agg_comp['shop_id_total_item_cnt_day_shift_1_x_item_id_total_item_cnt_day_shift_1'] = base_agg_comp['shop_id_total_item_cnt_day_shift_1'] - base_agg_comp['item_id_total_item_cnt_day_shift_1']
-    #base_agg_comp['shop_id_total_item_cnt_day_shift_2_x_item_id_total_item_cnt_day_shift_2'] = base_agg_comp['shop_id_total_item_cnt_day_shift_2'] - base_agg_comp['item_id_total_item_cnt_day_shift_2']
-    #base_agg_comp['shop_id_total_item_cnt_day_shift_3_x_item_id_total_item_cnt_day_shift_3'] = base_agg_comp['shop_id_total_item_cnt_day_shift_3'] - base_agg_comp['item_id_total_item_cnt_day_shift_3']
-    
     print('Create proportion attributes ...')
     
     base_agg_comp['item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1'] = (base_agg_comp['item_cnt_day_shift_1'] / base_agg_comp['shop_id_total_item_cnt_day_shift_1']).fillna(0)
     base_agg_comp['item_cnt_day_shift_2_div_shop_id_total_item_cnt_day_shift_2'] = (base_agg_comp['item_cnt_day_shift_2'] / base_agg_comp['shop_id_total_item_cnt_day_shift_2']).fillna(0)
     base_agg_comp['item_cnt_day_shift_3_div_shop_id_total_item_cnt_day_shift_3'] = (base_agg_comp['item_cnt_day_shift_3'] / base_agg_comp['shop_id_total_item_cnt_day_shift_3']).fillna(0)
     base_agg_comp['item_cnt_day_shift_4_div_shop_id_total_item_cnt_day_shift_4'] = (base_agg_comp['item_cnt_day_shift_4'] / base_agg_comp['shop_id_total_item_cnt_day_shift_4']).fillna(0)
-    base_agg_comp['item_cnt_day_shift_6_div_shop_id_total_item_cnt_day_shift_6'] = (base_agg_comp['item_cnt_day_shift_6'] / base_agg_comp['shop_id_total_item_cnt_day_shift_6']).fillna(0)
-    base_agg_comp['item_cnt_day_shift_12_div_shop_id_total_item_cnt_day_shift_12'] = (base_agg_comp['item_cnt_day_shift_12'] / base_agg_comp['shop_id_total_item_cnt_day_shift_12']).fillna(0)
     base_agg_comp['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1'] = (base_agg_comp['item_cnt_day_shift_1'] / base_agg_comp['item_id_total_item_cnt_day_shift_1']).fillna(0)
     base_agg_comp['item_cnt_day_shift_2_div_item_id_total_item_cnt_day_shift_2'] = (base_agg_comp['item_cnt_day_shift_2'] / base_agg_comp['item_id_total_item_cnt_day_shift_2']).fillna(0)
     base_agg_comp['item_cnt_day_shift_3_div_item_id_total_item_cnt_day_shift_3'] = (base_agg_comp['item_cnt_day_shift_3'] / base_agg_comp['item_id_total_item_cnt_day_shift_3']).fillna(0)
     base_agg_comp['item_cnt_day_shift_4_div_item_id_total_item_cnt_day_shift_4'] = (base_agg_comp['item_cnt_day_shift_4'] / base_agg_comp['item_id_total_item_cnt_day_shift_4']).fillna(0)
-    base_agg_comp['item_cnt_day_shift_6_div_item_id_total_item_cnt_day_shift_6'] = (base_agg_comp['item_cnt_day_shift_6'] / base_agg_comp['item_id_total_item_cnt_day_shift_6']).fillna(0)
-    base_agg_comp['item_cnt_day_shift_12_div_item_id_total_item_cnt_day_shift_12'] = (base_agg_comp['item_cnt_day_shift_12'] / base_agg_comp['item_id_total_item_cnt_day_shift_12']).fillna(0)
 
+    print('Mean encoding data ...')
+    
+    base_agg_comp['date_block_num_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['date_block_num'], tar = 'item_cnt_day')
+    base_agg_comp['shop_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['shop_id'], tar = 'item_cnt_day')
+    base_agg_comp['item_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_id'], tar = 'item_cnt_day')
+    base_agg_comp['shop_item_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['shop_item_id'], tar = 'item_cnt_day')
+    base_agg_comp['item_category_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_category_id'], tar = 'item_cnt_day')
+    base_agg_comp['item_cat_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_cat'], tar = 'item_cnt_day')
+    base_agg_comp['item_cat_sub_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_cat_sub'], tar = 'item_cnt_day')
+    base_agg_comp['city_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['city'], tar = 'item_cnt_day')
+    base_agg_comp['year_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['year'], tar = 'item_cnt_day')
+    base_agg_comp['month_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['month'], tar = 'item_cnt_day')
+    
     print('Subsetting required columns ...')
     
     # set columns to drop

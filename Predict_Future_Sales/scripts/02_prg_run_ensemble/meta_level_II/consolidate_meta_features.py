@@ -5,7 +5,6 @@ Created on Sun May 24 16:21:45 2020
 @author: oislen
 """
 
-
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -20,6 +19,8 @@ def rmse_cv(model, X_train, y):
     return(rmse)
 
 #-- Consolidate Meta Features --#
+
+"""
 
 file = ['dtree_dept3_20200523_meta_lvl_II_feats.feather',
         'dtree_dept5_20200523_meta_lvl_II_feats.feather',
@@ -60,17 +61,26 @@ for idx, f in enumerate(file):
 # output meta feature
 meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
 join_data.to_feather(meta_feat_fpath)
+"""
+meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
+join_data = pd.read_feather(meta_feat_fpath)
+
+
+sns.scatterplot(x = 'gradboost_dept3_20200523', y = 'randforest_dept7_20200523', data = join_data)
+
 
 #-- Prepare modelling features --#
 
 # extract out columns
 meta_cols = join_data.columns
 
+
 index_cols = ['primary_key', 'ID', 'data_split', 'meta_level', 'holdout_subset_ind',
               'no_sales_hist_ind', 'year', 'month', 'date_block_num', 'item_id',
               'shop_id']
 
 pred_cols = meta_cols[meta_cols.str.contains('_dept')].tolist()
+pred_cols = ['gradboost_dept3_20200523', 'randforest_dept7_20200523']
 
 tar_col = ['item_cnt_day']
 
@@ -123,7 +133,7 @@ y_holdout = holdout[index_cols + tar_col]
 # tune alphas
 model_ridge = Ridge()
 model_lasso = LassoCV(alphas = [1, 0.1, 0.001, 0.0005]).fit(X_train[pred_cols], y_train['item_cnt_day'])
-alphas_ridge = list(np.arange(0,2000, 100))
+alphas_ridge = list(np.arange(0,20000, 500))
 #alphas_lasso = list(np.arange(0.001, 1, 0.01))
 cv_ridge = [rmse_cv(Ridge(alpha = alpha), X_train[pred_cols], y_train['item_cnt_day']).mean() for alpha in alphas_ridge]
 #cv_lasso = [rmse_cv(Lasso(alpha = alpha), X_train[pred_cols], y_train['item_cnt_day']).mean() for alpha in alphas_lasso]

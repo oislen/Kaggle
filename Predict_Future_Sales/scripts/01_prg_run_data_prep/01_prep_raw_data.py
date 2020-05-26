@@ -77,6 +77,8 @@ def prep_raw_data(cons):
     item_categories['item_cat_sub'] = item_categories['item_cat_sub'].fillna('')
     
     # label encode categories
+    utl.mean_encode(dataset = item_categories, attr = 'item_cat', tar = 'item_cnt_day', agg_fun = 'mean', encode_type = 'stand')
+    
     item_cat_label_enc = preprocessing.LabelEncoder()
     item_cat_label_enc.fit(item_categories['item_cat'].unique())
     item_categories['item_cat_enc'] = item_cat_label_enc.transform(item_categories['item_cat'])

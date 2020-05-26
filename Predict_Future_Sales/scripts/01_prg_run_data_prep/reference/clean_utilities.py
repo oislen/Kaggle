@@ -309,65 +309,90 @@ def months_since_purchase(dataset,
                           index, 
                           columns
                           ):
-        
-        data = dataset.copy(True)
-        shape = data.shape
-        print(shape)
-        
-        attr = '_'.join(columns)
-        join_cols = index + columns
-        
-        print('Creating pivot table ...')
-        
-        # create pivot table for item sale by date block
-        sales_table = pd.pivot_table(data = data, 
-                                     values = values,
-                                     index = index,
-                                     columns = columns,
-                                     fill_value = 0,
-                                     aggfunc = np.sum,
-                                     dropna = True
-                                     )
-        
-        print('Formatting table ...')
-        
-        # convert all postive cases to one and all zeros to missing
-        filt_sales = sales_table >= 1
-        sales_table[filt_sales] = 1
-        tab = sales_table[filt_sales]
-        
-        print('Calculating months since first and last purchase ...')
-        
-        # calculate months since first purchase
-        msfp = tab.ffill().notnull().cumsum()
-        mslp = tab.bfill().isnull().cumsum()
-        
-        msfp_unstack = msfp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_first_rec'.format(attr)})
-        mslp_unstack = mslp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_last_rec'.format(attr)})
-        
-        print('Joining back results ...')
-        
-        # join together the months since purchase attributes 
-        msp_unstack = pd.merge(left = msfp_unstack, right = mslp_unstack, how = 'inner', on = join_cols)
-        
-        # join back to data
-        out_data = data.merge(msp_unstack, how = 'left', on = join_cols)
-        
-        shape = out_data.shape
-        print(shape)
-        
-        return out_data
+    
+    data = dataset.copy(True)
+    shape = data.shape
+    print(shape)
+    
+    attr = '_'.join(columns)
+    join_cols = index + columns
+    
+    print('Creating pivot table ...')
+    
+    # create pivot table for item sale by date block
+    sales_table = pd.pivot_table(data = data, 
+                                 values = values,
+                                 index = index,
+                                 columns = columns,
+                                 fill_value = 0,
+                                 aggfunc = np.sum,
+                                 dropna = True
+                                 )
+    
+    print('Formatting table ...')
+    
+    # convert all postive cases to one and all zeros to missing
+    filt_sales = sales_table >= 1
+    sales_table[filt_sales] = 1
+    tab = sales_table[filt_sales]
+    
+    print('Calculating months since first and last purchase ...')
+    
+    # calculate months since first purchase
+    msfp = tab.ffill().notnull().cumsum()
+    mslp = tab.bfill().isnull().cumsum()
+    
+    msfp_unstack = msfp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_first_rec'.format(attr)})
+    mslp_unstack = mslp.unstack().reset_index().drop(columns = ['level_0']).rename(columns = {0:'{}_months_last_rec'.format(attr)})
+    
+    print('Joining back results ...')
+    
+    # join together the months since purchase attributes 
+    msp_unstack = pd.merge(left = msfp_unstack, right = mslp_unstack, how = 'inner', on = join_cols)
+    
+    # join back to data
+    out_data = data.merge(msp_unstack, how = 'left', on = join_cols)
+    
+    shape = out_data.shape
+    print(shape)
+    
+    return out_data
 
 
-def mean_encode(dataset, attr, tar):
-        """
-        """
-        mu = dataset[tar].mean()
-        cumsum = dataset.groupby(attr)[tar].cumsum() - dataset[tar]
+def mean_encode(dataset, attr, tar, alpha = 100, encode_type = 'leave-one-out'):
+    
+    """
+    """
+     
+    stat = dataset[tar].mean()
+    attr_name = '_'.join(attr)
+    feat_name = '{}_mean_enc'.format(attr_name)
+    
+    if encode_type == 'leave-one-out':
+        
+        # mean encode
+        target_sum  = dataset.groupby(attr)[tar].transform('sum')
+        n_objects = dataset.groupby(attr)[tar].transform('count')
+        stat_enc = (target_sum - dataset[tar]) / (n_objects - 1)
+        stat_enc = stat_enc.fillna(stat).rename(feat_name)
+ 
+    elif encode_type == 'smoothing':
+        
+        # mean encode
+        target_mean = dataset.groupby(attr)[tar].transform('mean')
+        n_objects = dataset.groupby(attr)[tar].transform('count')
+        stat_enc = (target_mean * n_objects + stat * alpha) / (n_objects + alpha)
+        stat_enc = stat_enc.fillna(stat).rename(feat_name)
+            
+    elif encode_type == 'expanding_mean':
+        
+        # mean encode
+        cumsum = dataset.groupby(by = attr)[tar].cumsum() - dataset[tar]
         cumcnt = dataset.groupby(attr).cumcount()
-        attr = cumsum/cumcnt
-        attr = attr.fillna(mu)
-        return attr
+        stat_enc = cumsum / cumcnt
+        stat_enc = stat_enc.fillna(stat).rename(feat_name)
+      
+    return stat_enc
 
 
     
