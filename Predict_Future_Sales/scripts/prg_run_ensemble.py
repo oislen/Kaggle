@@ -13,8 +13,8 @@ from importlib import import_module
 # user settings
 skip_train = True
 n = 30
-start = 2
-end = 2
+start = 1
+end = 1
 run_range = range(start, end + 1)
 
 # get current wd

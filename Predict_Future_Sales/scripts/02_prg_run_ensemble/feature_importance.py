@@ -12,7 +12,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 
 pd.set_option('display.max_columns', 10)
 
-def gen_feature_selection(cons):
+def gen_feature_selection(cons, feat_type = 'randforest'):
     
     """
     
@@ -49,30 +49,32 @@ def gen_feature_selection(cons):
     #-- Random Forest Feature Importance --#
     ########################################
     
-    print('Running random forest feature importance ...')
+    if feat_type == 'randforest':
     
-    # initiate random forest model
-    rfc = RandomForestRegressor(max_depth = 7, 
-                                random_state = 1234, 
-                                criterion = 'mse',
-                                n_estimators = 30,
-                                n_jobs = 2,
-                                verbose = 2,
-                                max_features = 'auto'
-                                )
-    
-    # fit random forests model
-    rfc.fit(train_data[pred_cols], train_data['item_cnt_day'])
-    
-    # extract feature importance
-    feat_imp_fpath = cons.randforest_feat_imp
-    rf_feat_imp = utl_ens.feat_imp_sum(model = rfc, 
-                                       pred_cols = pred_cols, 
-                                       feat_imp_fpath = feat_imp_fpath
-                                       )
-    
-    print(rf_feat_imp.head(20))
-    
+        print('Running random forest feature importance ...')
+        
+        # initiate random forest model
+        rfc = RandomForestRegressor(max_depth = 7, 
+                                    random_state = 1234, 
+                                    criterion = 'mse',
+                                    n_estimators = 20,
+                                    n_jobs = 2,
+                                    verbose = 2,
+                                    max_features = 'auto'
+                                    )
+        
+        # fit random forests model
+        rfc.fit(train_data[pred_cols], train_data['item_cnt_day'])
+        
+        # extract feature importance
+        feat_imp_fpath = cons.randforest_feat_imp
+        rf_feat_imp = utl_ens.feat_imp_sum(model = rfc, 
+                                           pred_cols = pred_cols, 
+                                           feat_imp_fpath = feat_imp_fpath
+                                           )
+        
+        print(rf_feat_imp.head(20))
+        
     ################################
     #-- LASSO Feature Importance --#
     ################################
@@ -81,29 +83,31 @@ def gen_feature_selection(cons):
     #-- Gradient Boosting Feature Importance --#
     ############################################
     
-    print('Running gradient boosting feature importance ...')
-    
-    # initiate random forest model
-    gbr = GradientBoostingRegressor(max_depth = 7, 
-                                    random_state = 1234, 
-                                    criterion = 'mse',
-                                    n_estimators = 30,
-                                    verbose = 2,
-                                    #validation_fraction = 0.1,
-                                    #n_iter_no_change = 5,
-                                    max_features = 'auto'
-                                    )
-    
-    # fit random forests model
-    gbr.fit(train_data[pred_cols], train_data['item_cnt_day'])
-    
-    # extract feature importance
-    feat_imp_fpath = cons.gradboost_feat_imp
-    gb_feat_imp = utl_ens.feat_imp_sum(model = gbr, 
-                                       pred_cols = pred_cols, 
-                                       feat_imp_fpath = feat_imp_fpath
-                                       )
-    
-    print(gb_feat_imp.head(20))
-    
+    elif feat_type == 'gradboost':
+        
+        print('Running gradient boosting feature importance ...')
+        
+        # initiate random forest model
+        gbr = GradientBoostingRegressor(max_depth = 7, 
+                                        random_state = 1234, 
+                                        criterion = 'mse',
+                                        n_estimators = 20,
+                                        verbose = 2,
+                                        #validation_fraction = 0.1,
+                                        #n_iter_no_change = 5,
+                                        max_features = 'auto'
+                                        )
+        
+        # fit random forests model
+        gbr.fit(train_data[pred_cols], train_data['item_cnt_day'])
+        
+        # extract feature importance
+        feat_imp_fpath = cons.gradboost_feat_imp
+        gb_feat_imp = utl_ens.feat_imp_sum(model = gbr, 
+                                           pred_cols = pred_cols, 
+                                           feat_imp_fpath = feat_imp_fpath
+                                           )
+        
+        print(gb_feat_imp.head(20))
+        
     return

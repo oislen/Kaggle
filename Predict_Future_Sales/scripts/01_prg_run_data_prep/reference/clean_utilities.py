@@ -363,32 +363,36 @@ def mean_encode(dataset, attr, tar, alpha = 100, encode_type = 'leave-one-out'):
     
     """
     """
-     
-    stat = dataset[tar].mean()
+    
+    # filter zeros
+    filt_zero_tar = dataset[tar] > 0
+    filt_data = dataset[filt_zero_tar]
+    
+    stat = filt_data[tar].mean()
     attr_name = '_'.join(attr)
     feat_name = '{}_mean_enc'.format(attr_name)
     
     if encode_type == 'leave-one-out':
         
         # mean encode
-        target_sum  = dataset.groupby(attr)[tar].transform('sum')
-        n_objects = dataset.groupby(attr)[tar].transform('count')
-        stat_enc = (target_sum - dataset[tar]) / (n_objects - 1)
+        target_sum  = filt_data.groupby(attr)[tar].transform('sum')
+        n_objects = filt_data.groupby(attr)[tar].transform('count')
+        stat_enc = (target_sum - filt_data[tar]) / (n_objects - 1)
         stat_enc = stat_enc.fillna(stat).rename(feat_name)
  
     elif encode_type == 'smoothing':
         
         # mean encode
-        target_mean = dataset.groupby(attr)[tar].transform('mean')
-        n_objects = dataset.groupby(attr)[tar].transform('count')
+        target_mean = filt_data.groupby(attr)[tar].transform('mean')
+        n_objects = filt_data.groupby(attr)[tar].transform('count')
         stat_enc = (target_mean * n_objects + stat * alpha) / (n_objects + alpha)
         stat_enc = stat_enc.fillna(stat).rename(feat_name)
             
     elif encode_type == 'expanding_mean':
         
         # mean encode
-        cumsum = dataset.groupby(by = attr)[tar].cumsum() - dataset[tar]
-        cumcnt = dataset.groupby(attr).cumcount()
+        cumsum = filt_data.groupby(by = attr)[tar].cumsum() - filt_data[tar]
+        cumcnt = filt_data.groupby(attr).cumcount()
         stat_enc = cumsum / cumcnt
         stat_enc = stat_enc.fillna(stat).rename(feat_name)
       

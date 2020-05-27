@@ -38,38 +38,10 @@ index_cols = ['date_block_num', 'shop_id', 'item_id', 'ID', 'data_split',
 
 tar_cols = ['item_cnt_day']
 
-pred_cols = ['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1',
-             'price_decimal_len',
-             'item_id_city_enc_total_item_cnt_day_shift_1',
-             'item_id_total_item_cnt_day_shift_1',
-             'item_price_shift_1',
-             'item_id_months_first_rec',
-             'revenue_shift_1',
-             'shop_id',
-             'date_block_num',
-             'item_id',
-             'shop_id_total_item_cnt_day_shift_12',
-             'item_cat_sub_enc',
-             'delta_item_cnt_day_1_2',
-             'month',
-             'item_cnt_day_shift_1',
-             'item_cnt_day_shift_3_div_item_id_total_item_cnt_day_shift_3',
-             'item_category_id_total_item_cnt_day_shift_1',
-             'item_cnt_day_shift_2',
-             'totalholidays',
-             'item_category_id',
-             'item_cnt_day_shift_2_div_item_id_total_item_cnt_day_shift_2',
-             'year',
-             'price_decimal',
-             'item_cnt_day_shift_3',
-             'shop_id_total_item_cnt_day_shift_2',
-             'item_cnt_day_shift_12',
-             'item_cnt_day_shift_6',
-             'item_id_total_item_cnt_day_shift_2',
-             'item_cat_enc',
-             'item_cnt_day_shift_4',
-             'shop_id_item_category_id_total_item_cnt_day_shift_1',
-             'shop_id_total_item_cnt_day_shift_4'
+pred_cols = ['item_cnt_day_shift_1', 'item_cnt_day_shift_2', 'item_cnt_day_shift_3',
+             'shop_id_total_item_cnt_day_shift_1', 'shop_id_total_item_cnt_day_shift_2', 'shop_id_total_item_cnt_day_shift_3',
+             'item_id_total_item_cnt_day_shift_1', 'item_id_total_item_cnt_day_shift_2', 'item_id_total_item_cnt_day_shift_3',
+             'shop_id_mean_enc', 'item_id_mean_enc',
              ]
     
 # run the data splits function
@@ -91,39 +63,11 @@ y_test = data_splits_dict['y_test']
 X_holdout = data_splits_dict['X_holdout']
 y_holdout = data_splits_dict['y_holdout']
 
-x_preds = ['item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1',
-           'price_decimal_len',
-           'item_id_city_enc_total_item_cnt_day_shift_1',
-           'item_id_total_item_cnt_day_shift_1',
-           'item_price_shift_1',
-           'item_id_months_first_rec',
-           'revenue_shift_1',
-           'shop_id',
-           'date_block_num',
-           'item_id',
-           'shop_id_total_item_cnt_day_shift_12',
-           'item_cat_sub_enc',
-           'delta_item_cnt_day_1_2',
-           'month',
-           'item_cnt_day_shift_1',
-           'item_cnt_day_shift_3_div_item_id_total_item_cnt_day_shift_3',
-           'item_category_id_total_item_cnt_day_shift_1',
-           'item_cnt_day_shift_2',
-           'totalholidays',
-           'item_category_id',
-           'item_cnt_day_shift_2_div_item_id_total_item_cnt_day_shift_2',
-           'year',
-           'price_decimal',
-           'item_cnt_day_shift_3',
-           'shop_id_total_item_cnt_day_shift_2',
-           'item_cnt_day_shift_12',
-           'item_cnt_day_shift_6',
-           'item_id_total_item_cnt_day_shift_2',
-           'item_cat_enc',
-           'item_cnt_day_shift_4',
-           'shop_id_item_category_id_total_item_cnt_day_shift_1',
-           'shop_id_total_item_cnt_day_shift_4'
-           ]
+x_preds = ['item_cnt_day_shift_1', 'item_cnt_day_shift_2', 'item_cnt_day_shift_3',
+            'shop_id_total_item_cnt_day_shift_1', 'shop_id_total_item_cnt_day_shift_2', 'shop_id_total_item_cnt_day_shift_3',
+            'item_id_total_item_cnt_day_shift_1', 'item_id_total_item_cnt_day_shift_2', 'item_id_total_item_cnt_day_shift_3',
+            'shop_id_mean_enc', 'item_id_mean_enc'
+            ]
 
 y_tar = 'item_cnt_day'
 
