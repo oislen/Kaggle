@@ -1,4 +1,4 @@
-name: analytics
+name: kaggle
 channels:
   - r
   - defaults
@@ -238,5 +238,5 @@ dependencies:
     - pygam==0.8.0
     - python-utils==2.3.0
     - xgboost==1.1.0
-prefix: C:\Users\User\Anaconda3\envs\analytics
+prefix: C:\Users\User\Anaconda3\envs\kaggle
 
