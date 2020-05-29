@@ -268,10 +268,10 @@ def extract_feat_imp(cons,
         feat_imp_df = pd.read_csv(cons.gradboost_feat_imp)
     
     # extract the required n features
-    feat_imp_cols = feat_imp_df['attr'].head(n).tolist()
+    feat_imp_cols = feat_imp_df.loc[0:n, 'attr'].tolist()
     
     # return unique set of predictors
-    pred_cols = list(set(feat_imp_cols + req_cols))
+    pred_cols = pd.Series(feat_imp_cols + req_cols).drop_duplicates().tolist()
     
     # create a dictionary of the output columns
     model_cols_dict = {'index_cols':index_cols,

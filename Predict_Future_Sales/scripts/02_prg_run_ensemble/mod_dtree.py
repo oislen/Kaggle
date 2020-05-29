@@ -28,18 +28,21 @@ def mod_dtree(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_t
     print(model)
     
     # set model parameters
-    model_params = {'criterion':['friedman_mse'],
-                    'splitter':['best', 'random'],
+    model_params = {'criterion':['mse'],
+                    'splitter':['best'],
                     'max_depth':[max_dept],
-                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 4, 8]],
+                    'min_samples_split':[2, 4, 8],
+                    'min_samples_leaf':[2, 4, 8],
+                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 4]],
                     'random_state':[rand_state]
                     }
     
     print(model_params)
     
     # set the train, valid and test sub limits
-    train_cv_split_dict = [{'train_sub':idx, 'valid_sub':idx + 1} for idx in np.arange(start = 12, stop = 29, step = 5)]
-        
+    #train_cv_split_dict = [{'train_sub':idx, 'valid_sub':idx + 1} for idx in np.arange(start = 12, stop = 29, step = 5)]
+    train_cv_split_dict = [{'train_sub':28, 'valid_sub':29}]
+    
     # set the train, valid and test sub limits
     test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
     

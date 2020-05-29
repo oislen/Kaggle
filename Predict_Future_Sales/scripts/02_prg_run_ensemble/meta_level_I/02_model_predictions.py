@@ -31,8 +31,8 @@ def model_preds(data_fpath,
     print('loading in model {} ...'.format(model_pk_fpath))
 
     # load best estimator here
-    mod = jl.load(model_pk_fpath)
-    mod = pk.load(open(model_pk_fpath, "rb"))
+    #mod = jl.load(model_pk_fpath)
+    mod = pk.load(open(model_pk_fpath, "rb"),  encoding = "latin1")
     
     print('splitting out dataset ...')
     
@@ -60,6 +60,8 @@ def model_preds(data_fpath,
     print(X_valid[pred_cols].head())
     print(y_test.head())
 
+    print(pred_cols)
+    
     # make predictions for valid, test, holdout and meta lvl II
     y_valid['y_valid_pred'] = mod.predict(X_valid[pred_cols])
     y_test['y_test_pred'] = mod.predict(X_test[pred_cols])

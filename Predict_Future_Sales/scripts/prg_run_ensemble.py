@@ -9,12 +9,14 @@ Created on Sun May 17 10:57:04 2020
 import os 
 import sys
 from importlib import import_module
+import numpy as np
 
+np.random.seed(1234)
 # user settings
-skip_train = False
+skip_train = True
 n = 30
 start = 2
-end = 3
+end = 2
 run_range = range(start, end + 1)
 
 # get current wd
@@ -40,31 +42,32 @@ if 1 in run_range:
     print('~~~~~ Generating feature importance ...')
     
     prg_feat_imp = import_module(name = 'feature_importance')
-    prg_feat_imp.gen_feature_selection(cons) 
+    prg_feat_imp.gen_feature_selection(cons,  feat_type = 'randforest') 
+    prg_feat_imp.gen_feature_selection(cons,  feat_type = 'gradboost') 
     
 if 2 in run_range:
     
     print('~~~~~ Working on Decision Tree Models ...')
     
     prg_dt = import_module(name = 'mod_dtree')
-    prg_dt.mod_dtree(cons, max_dept = 3, rand_state = 1, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, model_type = 'dtree')
-    #prg_dt.mod_dtree(cons, max_dept = 5, rand_state = 2, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, model_type = 'dtree')
-    #prg_dt.mod_dtree(cons, max_dept = 7, rand_state = 3, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, model_type = 'dtree')
+    prg_dt.mod_dtree(cons, max_dept = 3, rand_state = 1, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+    prg_dt.mod_dtree(cons, max_dept = 5, rand_state = 2, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+    prg_dt.mod_dtree(cons, max_dept = 7, rand_state = 3, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
     
 if 3 in run_range:
     
     print('~~~~~ Working on Random Forest Models ...')
     
     prg_rf = import_module(name = 'mod_randforest')
-    prg_rf.mod_randforest(cons, max_dept = 3, rand_state = 1, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, model_type = 'randforest') 
-    #prg_rf.mod_randforest(cons, max_dept = 5, rand_state = 2, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, model_type = 'randforest') 
-    #prg_rf.mod_randforest(cons, max_dept = 7, rand_state = 3, feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, model_type = 'randforest') 
+    prg_rf.mod_randforest(cons, max_dept = 3, rand_state = 1, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
+    prg_rf.mod_randforest(cons, max_dept = 5, rand_state = 2, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
+    prg_rf.mod_randforest(cons, max_dept = 7, rand_state = 3, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
     
 if 4 in run_range:
     
     print('~~~~~ Working on Gradient Boosting Models ...')
     
     prg_gb = import_module(name = 'mod_gradboost')
-    #prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, model_type = 'gradboost')
-    #prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, model_type = 'gradboost')
-    #prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, model_type = 'gradboost')
+    prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
+    prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
+    prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)

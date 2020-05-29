@@ -55,6 +55,8 @@ def cv_model_train(data_fpath,
     
     print('running grid search cv ...')
     
+    print(pred_cols)
+    
     # Split the predictors from the target
     sub_index = [val for lst in cv_list[-1] for val in lst]
     X = base.loc[sub_index, pred_cols]
@@ -77,9 +79,9 @@ def cv_model_train(data_fpath,
     
     # refit model
     bdtr = gcv.best_estimator_
-    bdtr = bdtr.fit(X, y)
+    #bdtr = bdtr.fit(X, y)
     # pickle best estimator
     jl.dump(bdtr, model_pk_fpath)
-    pk.dump(bdtr, open(model_pk_fpath, "wb"))
+    pk.dump(bdtr, open(model_pk_fpath, "wb"), protocol = pk.HIGHEST_PROTOCOL)
     
     return

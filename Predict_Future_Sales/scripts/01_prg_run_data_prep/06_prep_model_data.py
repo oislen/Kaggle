@@ -221,14 +221,14 @@ def prep_model_data(cons):
     drop_cols = ['shop_item_id', 
                  'item_cat', 
                  'item_cat_sub', 
-                 'city' 
-                 #'revenue' 
+                 'city',
+                 'revenue',
                  # dodgey attributes:
-                 #'delta_item_price', 
-                 #'shop_id_item_id_months_last_rec', 
-                 #'item_price', 
-                 #'n_price_changes', 
-                 #'shop_id_item_id_months_first_rec'
+                 'delta_item_price', 
+                 'shop_id_item_id_months_last_rec', 
+                 'item_price', 
+                 'n_price_changes', 
+                 'shop_id_item_id_months_first_rec'
                  ]
     sub_cols = data_cols.drop(drop_cols)
     model_data = base_agg_comp[sub_cols]
