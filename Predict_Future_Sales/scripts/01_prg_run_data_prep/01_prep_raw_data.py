@@ -72,21 +72,29 @@ def prep_raw_data(cons):
     print('Extracting category information ...')
     # extract the item category and sub-category
     item_categories['item_category_name'].value_counts()
-    item_categories['item_cat'] = item_categories['item_category_name'].str.split(' - ', expand = True)[0]
-    item_categories['item_cat_sub'] = item_categories['item_category_name'].str.split(' - ', expand = True)[1]
-    item_categories['item_cat_sub'] = item_categories['item_cat_sub'].fillna('')
+    item_cat = item_categories['item_category_name'].str.split(' - ', expand = True)[0]
+    item_cat_sub = item_categories['item_category_name'].str.split(' - ', expand = True)[1]
+        
+    # clean item categories
+    item_cat = item_cat.str.replace('Payment.*', 'Payment Cards')
+    item_categories['item_cat'] = item_cat.str.replace('.*[Gg]ames.*', 'Games')
+        
+    # clean item cat
+    item_cat_sub = item_cat_sub.fillna('')
+    item_cat_sub = item_cat_sub.str.replace('^Audiobooks.*', 'Audiobooks')
+    item_cat_sub = item_cat_sub.str.replace('^CD.*', 'CD')
+    item_cat_sub = item_cat_sub.str.replace('^Live.*', 'Live')
+    item_categories['item_cat_sub'] = item_cat_sub.str.replace('^Teaching.*', 'Teaching')
     
-    # label encode categories
-    utl.mean_encode(dataset = item_categories, attr = 'item_cat', tar = 'item_cnt_day', agg_fun = 'mean', encode_type = 'stand')
-    
+    # label encode item cat
     item_cat_label_enc = preprocessing.LabelEncoder()
     item_cat_label_enc.fit(item_categories['item_cat'].unique())
-    item_categories['item_cat_enc'] = item_cat_label_enc.transform(item_categories['item_cat'])
+    item_categories['item_cat_id'] = item_cat_label_enc.transform(item_categories['item_cat'])
     
     # label encode item cat sub
     item_cat_sub_label_enc = preprocessing.LabelEncoder()
     item_cat_sub_label_enc.fit(item_categories['item_cat_sub'].unique())
-    item_categories['item_cat_sub_enc'] = item_cat_sub_label_enc.transform(item_categories['item_cat_sub'])
+    item_categories['item_cat_sub_id'] = item_cat_sub_label_enc.transform(item_categories['item_cat_sub'])
     
     #-- Shop Name --#
     
@@ -98,9 +106,20 @@ def prep_raw_data(cons):
     city_filt = shops['city'] == '!Якутск'
     shops.loc[city_filt, 'city'] = 'Якутск'
 
+    # label encode city
     city_cat_sub_label_enc = preprocessing.LabelEncoder()
     city_cat_sub_label_enc.fit(shops['city'].unique())
     shops['city_enc'] = city_cat_sub_label_enc.transform(shops['city'])
+    
+    #-- Downcase Data --#
+    
+    # recast data
+    sample_submission = utl.recast_df(dataset = sample_submission)
+    items = utl.recast_df(dataset = items)
+    shops = utl.recast_df(dataset = shops)
+    item_categories = utl.recast_df(dataset = item_categories)
+    sales_train = utl.recast_df(dataset = sales_train)
+    test = utl.recast_df(dataset = test)
     
     #-- Output Files --#
     

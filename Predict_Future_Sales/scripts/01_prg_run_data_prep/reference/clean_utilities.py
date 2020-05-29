@@ -365,8 +365,8 @@ def mean_encode(dataset, attr, tar, alpha = 100, encode_type = 'leave-one-out'):
     """
     
     # filter zeros
-    filt_zero_tar = dataset[tar] > 0
-    filt_data = dataset[filt_zero_tar]
+    #filt_zero_tar = dataset[tar] > 0
+    filt_data = dataset.copy(True)#[filt_zero_tar]
     
     stat = filt_data[tar].mean()
     attr_name = '_'.join(attr)
@@ -424,7 +424,7 @@ def extract_float_int_cols(data):
     
     return int_cols, float_cols
     
-def recast_df(dataset):
+def recast_df(dataset, sample_size = 100000):
     
     """
     """
@@ -432,6 +432,7 @@ def recast_df(dataset):
     print('Copying data ...')
     
     data = dataset.copy(True)
+    n_rows = data.shape[0]
     
     print('Converting non-null columns to int32s ...')
     
@@ -445,17 +446,20 @@ def recast_df(dataset):
     # find non-null floats
     nonull_float_cols = [col for col in nonull_cols if col in float_cols]
     
-    # check a random sample 1000 records for all '.0' decimals
-    data_str = data[nonull_float_cols].sample(100000, random_state = 1234).astype(str)
-    true_floats = data_str.apply(lambda x: x.str.contains('\.0').all(), axis = 0)
-    
-    # cast true floats to int
-    cast_to_int_cols = true_floats[true_floats].index
-    data[cast_to_int_cols] = data[cast_to_int_cols].astype(np.int32)
-      
-    # extract int and float columns
-    int_cols, float_cols = extract_float_int_cols(data = data)
-    
+    if nonull_float_cols != []:
+        
+        # check a random sample 1000 records for all '.0' decimals
+        n_sample = [n_rows if n_rows < sample_size else sample_size][0]
+        data_str = data[nonull_float_cols].sample(n_sample, random_state = 1234).astype(str)
+        true_floats = data_str.apply(lambda x: x.str.contains('\.0').all(), axis = 0)
+        
+        # cast true floats to int
+        cast_to_int_cols = true_floats[true_floats].index
+        data[cast_to_int_cols] = data[cast_to_int_cols].astype(np.int32)
+          
+        # extract int and float columns
+        int_cols, float_cols = extract_float_int_cols(data = data)
+        
     print('Generating column min / max values ...')
     
     # get maximum values
@@ -566,3 +570,26 @@ def n_price_changes(dataset,
     
     return data_out
     
+def filter_zero_item_prices(dataset):
+    
+    # load in pickled holdout item shop id combination
+    #holdout_shop_item_id_comb = pk.load(open(cons.holdout_shop_item_id_comb, 'rb'))
+    dataset['shop_item_id'].nunique()
+    
+    # create filters for item price and holdout shop item combination
+    price_tab = pd.pivot_table(data = dataset,
+                               index = 'date_block_num',
+                               columns = ['shop_id', 'item_id'],
+                               values = 'item_price'
+                               )
+    all_zero_price = (price_tab == 0).all()
+    keep_shop_item_comb = all_zero_price[all_zero_price].reset_index().drop(columns = 0)
+    keep_shop_item_comb_series = keep_shop_item_comb['shop_id'].astype(str) + '_' + keep_shop_item_comb['item_id'].astype(str)
+    
+    filt_shop_item_id = dataset['shop_item_id'].isin(keep_shop_item_comb_series)
+    filt_default_price = dataset['item_price'] == 0
+    
+    filt_data = dataset[~filt_default_price | filt_shop_item_id]
+    
+    return filt_data
+        

@@ -7,6 +7,7 @@ Created on Sun May 10 19:15:38 2020
 
 import pandas as pd
 import reference.clean_utilities as utl
+import pickle as pk
 
 def prep_model_data(cons):
     
@@ -190,14 +191,44 @@ def prep_model_data(cons):
     base_agg_comp['year_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['year'], tar = 'item_cnt_day')
     base_agg_comp['month_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['month'], tar = 'item_cnt_day')
     
+    """
+    print('Remove all items with no historic sell price from training set ...')
+    
+    # load in pickled holdout item shop id combination
+    #holdout_shop_item_id_comb = pk.load(open(cons.holdout_shop_item_id_comb, 'rb'))
+    base_agg_comp['shop_item_id'].nunique()
+    
+    # create filters for item price and holdout shop item combination
+    price_tab = pd.pivot_table(data = base_agg_comp,
+                               index = 'date_block_num',
+                               columns = ['shop_id', 'item_id'],
+                               values = 'item_price'
+                               )
+    all_zero_price = (price_tab == 0).all()
+    keep_shop_item_comb = all_zero_price[all_zero_price].reset_index().drop(columns = 0)
+    keep_shop_item_comb_series = keep_shop_item_comb['shop_id'].astype(str) + '_' + keep_shop_item_comb['item_id'].astype(str)
+    
+    filt_shop_item_id = base_agg_comp['shop_item_id'].isin(keep_shop_item_comb_series)
+    filt_default_price = base_agg_comp['item_price'] == 0
+    
+    base_agg_comp = base_agg_comp[~filt_default_price | filt_shop_item_id]
+    """
+    
     print('Subsetting required columns ...')
     
     # set columns to drop
     data_cols = base_agg_comp.columns
-    drop_cols = ['shop_item_id', 'item_cat', 'item_cat_sub', 'city', 'revenue', 
+    drop_cols = ['shop_item_id', 
+                 'item_cat', 
+                 'item_cat_sub', 
+                 'city' 
+                 #'revenue' 
                  # dodgey attributes:
-                 'delta_item_price', 'shop_id_item_id_months_last_rec', 
-                 'item_price', 'n_price_changes', 'shop_id_item_id_months_first_rec'
+                 #'delta_item_price', 
+                 #'shop_id_item_id_months_last_rec', 
+                 #'item_price', 
+                 #'n_price_changes', 
+                 #'shop_id_item_id_months_first_rec'
                  ]
     sub_cols = data_cols.drop(drop_cols)
     model_data = base_agg_comp[sub_cols]

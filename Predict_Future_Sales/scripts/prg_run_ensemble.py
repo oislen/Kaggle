@@ -11,10 +11,10 @@ import sys
 from importlib import import_module
 
 # user settings
-skip_train = True
+skip_train = False
 n = 30
-start = 1
-end = 1
+start = 2
+end = 3
 run_range = range(start, end + 1)
 
 # get current wd

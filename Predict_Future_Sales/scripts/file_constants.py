@@ -22,6 +22,7 @@ clean_data_dir = '{}/clean'.format(data_dir)
 base_data_dir = '{}/base'.format(data_dir)
 model_data_dir = '{}/model'.format(data_dir)
 pred_data_dir = '{}/pred'.format(data_dir)
+ref_data_dir = '{}/ref'.format(data_dir)
 
 # set report sub directories
 feat_imp_dir = '{}/feat_imp'.format(reports_dir)
@@ -64,3 +65,6 @@ model_data_fpath = '{}/model_data.feather'.format(model_data_dir)
 # set feature importance paths
 randforest_feat_imp = '{}/randforest_feat_imp.csv'.format(feat_imp_dir)
 gradboost_feat_imp = '{}/gradboost_feat_imp.csv'.format(feat_imp_dir)
+
+# set directory to pickled test shop item id combinations
+holdout_shop_item_id_comb = '{}/holdout_shop_item_id_comb.pickle'.format(ref_data_dir)

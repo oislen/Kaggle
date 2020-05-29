@@ -154,6 +154,10 @@ def gen_shift_attrs(cons):
                                         columns = ['shop_id', 'item_id']
                                         )
 
+    print('Recast data ...')
+    
+    base_agg_comp = utl.recast_df(dataset = base_agg_comp)
+    
     # output file to feather file
     model_data = base_agg_comp.reset_index(drop = True)
     model_data.to_feather(cons.base_agg_shft_fpath)

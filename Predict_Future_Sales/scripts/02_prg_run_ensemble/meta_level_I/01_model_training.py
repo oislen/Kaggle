@@ -75,8 +75,10 @@ def cv_model_train(data_fpath,
     
     print('outputting best model {} ...'.format(model_pk_fpath))
     
-    # pickle best estimator
+    # refit model
     bdtr = gcv.best_estimator_
+    bdtr = bdtr.fit(X, y)
+    # pickle best estimator
     jl.dump(bdtr, model_pk_fpath)
     pk.dump(bdtr, open(model_pk_fpath, "wb"))
     

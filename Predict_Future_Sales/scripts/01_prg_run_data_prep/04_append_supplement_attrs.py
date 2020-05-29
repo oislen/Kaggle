@@ -58,6 +58,10 @@ def append_supplement_attrs(cons):
     
     shape = base_agg_comp.shape
     
+    print('Recast data ...')
+    
+    base_agg_comp = utl.recast_df(dataset = base_agg_comp)
+    
     print('Outputting supplementary data {} ...'.format(shape))
     
     # output file as a feather file

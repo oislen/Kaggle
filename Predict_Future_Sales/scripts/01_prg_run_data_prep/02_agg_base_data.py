@@ -8,6 +8,7 @@ Created on Thu Apr 30 20:33:00 2020
 import pandas as pd
 import reference.clean_constants as clean_cons
 import reference.clean_utilities as utl
+import pickle as pk
 
 def agg_base_data(cons):
 
@@ -37,7 +38,13 @@ def agg_base_data(cons):
     test['item_cnt_day'] = 0
     test['n_refund'] = 0
     test['n_sale'] = 0
-
+    
+    print('Pickling holdout shop_item_id combination...')
+    
+    test['shop_item_id'] = test['shop_id'].astype(str) + '_' + test['item_id'].astype(str)
+    holdout_shop_item_id = test['shop_item_id'].unique()
+    pk.dump(holdout_shop_item_id, open(cons.holdout_shop_item_id_comb, "wb"))
+    
     print('Getting most recent sale price ...')
 
     # Generate most recent item price for test set 
@@ -52,6 +59,7 @@ def agg_base_data(cons):
     
     base_concat = pd.concat(objs = [agg_base, base_test_price], axis = 0, ignore_index = True)
     
+    # note this impacts shop item id combination
     print('Removing duplicate shops ...')
     
     filt_shop_0 = base_concat['shop_id'] == 0
@@ -61,7 +69,7 @@ def agg_base_data(cons):
     base_concat.loc[filt_shop_0, 'shop_id'] = 57
     base_concat.loc[filt_shop_1, 'shop_id'] = 58
     base_concat.loc[filt_shop_10, 'shop_id'] = 11
-    
+
     print('Calculate revenue ...')
     
     base_concat['revenue'] = base_concat['item_price'] * base_concat['item_cnt_day']
@@ -72,6 +80,10 @@ def agg_base_data(cons):
    
     # data shape
     shape = base_concat.shape
+    
+    print('Recast data ...')
+    
+    base_concat = utl.recast_df(dataset = base_concat)
     
     print('outputting aggregated base data {} ...'.format(shape))
     
