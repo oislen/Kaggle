@@ -7,6 +7,8 @@ Created on Sun May 10 19:15:38 2020
 
 import pandas as pd
 import reference.clean_utilities as utl
+import reference.clean_constants as clean_cons
+from sklearn.preprocessing import StandardScaler
 import pickle as pk
 
 def prep_model_data(cons):
@@ -233,6 +235,14 @@ def prep_model_data(cons):
     sub_cols = data_cols.drop(drop_cols)
     model_data = base_agg_comp[sub_cols]
     model_data = model_data.reset_index(drop = True)
+    
+    print('Normalise data ...')
+    
+    ignore_cols = clean_cons.norm_ign_cols
+    norm_cols = [col for col in model_data.columns if col not in ignore_cols]
+    scaler = StandardScaler()
+    scaler.fit(model_data[norm_cols])
+    model_data[norm_cols] = scaler.transform(X = model_data[norm_cols])
     
     print('Recasting data ...')
     

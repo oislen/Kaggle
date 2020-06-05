@@ -47,3 +47,8 @@ russian_holidays = {'2013':{'russian_new_year':(dt.date(2012, 12, 31), dt.date(2
                             'unity_day':(dt.date(2015, 11, 4), dt.date(2015, 11, 4))
                             }
                     }
+
+norm_ign_cols = ['date_block_num', 'shop_id', 'item_id', 'item_cnt_day', 'ID',
+                 'data_split', 'meta_level', 'primary_key', 'holdout_subset_ind',
+                 'no_sales_hist_ind', 'no_holdout_sales_hist_ind', 'item_category_id', 'item_cat_id',
+                 'item_cat_sub_id', 'city_enc']

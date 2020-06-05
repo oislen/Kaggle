@@ -13,10 +13,10 @@ import numpy as np
 
 np.random.seed(1234)
 # user settings
-skip_train = True
+skip_train = False
 n = 30
-start = 2
-end = 2
+start = 3
+end = 3
 run_range = range(start, end + 1)
 
 # get current wd
@@ -53,8 +53,15 @@ if 2 in run_range:
     prg_dt.mod_dtree(cons, max_dept = 3, rand_state = 1, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
     prg_dt.mod_dtree(cons, max_dept = 5, rand_state = 2, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
     prg_dt.mod_dtree(cons, max_dept = 7, rand_state = 3, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
-    
+ 
 if 3 in run_range:
+    
+    print('~~~~~ Working on KNN Models ...')
+    
+    prg_knn = import_module(name = 'mod_knn')
+    prg_knn.mod_knn(cons, model_type = 'knn', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+
+if 4 in run_range:
     
     print('~~~~~ Working on Random Forest Models ...')
     
@@ -63,7 +70,7 @@ if 3 in run_range:
     prg_rf.mod_randforest(cons, max_dept = 5, rand_state = 2, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
     prg_rf.mod_randforest(cons, max_dept = 7, rand_state = 3, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train) 
     
-if 4 in run_range:
+if 5 in run_range:
     
     print('~~~~~ Working on Gradient Boosting Models ...')
     
