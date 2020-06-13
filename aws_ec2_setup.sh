@@ -1,3 +1,18 @@
+# AWS Setup
+# Big Data Workloads
+# Amazon Linux 2
+# c3.4xlarge (16 vCPUs, 30GiB, 2 x 160 SSD)
+# eu-west-1c
+# ec2-user
+# useful links
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connection-prereqs.html#connection-prereqs-get-info-about-instance
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
+# https://docs.aws.amazon.com/transfer/latest/userguide/getting-started-use-the-service.html
+# https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-2-install-gui/
+
+# check available memory
+free
+
 # install git
 sudo yum install git-all
 
@@ -29,17 +44,17 @@ export PATH=~/anaconda3/bin:$PATH
 conda init bash
 # reset terminal
 
-# create kaggle environment
-#conda create --name aws
-#conda activate kaggle
-#conda install pandas
-#conda install scipy
-#conda install scikit-learn
-#conda install statsmodels
-#conda install seaborn
-#pip install pygam
+# create aws environment
+conda create --name aws
+conda activate aws
+conda install pandas
+conda install scipy
+conda install scikit-learn
+conda install statsmodels
+conda install seaborn
+pip install pygam
 #conda env export > aws.yml
-conda env create -f aws.yml
+#conda env create -f aws.yml
 # reset terminal
 
 # install tigervnc
