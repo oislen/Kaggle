@@ -14,17 +14,17 @@
 free
 
 # install git
+sudo yum update
 sudo yum install git-all
 
 # git clone aws setup repo
 git clone https://github.com/oislen/AWS.git
 
 # configure vim
-sudo yum update
 sudo yum install vim
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp AWS/.vimrc ~/.
-vim AWS/aws_ec2_setup.sh
+vim AWS/ec2_setup.sh
 :PluginInstall
 :q
 #sudo yum install curl vim exuberant-ctags git ack-grep
