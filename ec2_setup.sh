@@ -50,8 +50,9 @@ conda init bash
 conda config --set auto_activate_base false
 # reset terminal
 
-# create aws environment
-conda create --name aws
+# auto create aws environment
+conda deactivate
+conda create --yes --name aws
 conda activate aws
 conda install --yes pandas
 conda install --yes scipy
