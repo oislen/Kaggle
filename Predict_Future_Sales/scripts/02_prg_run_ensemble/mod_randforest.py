@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from meta_level_I.exe_model import exe_model
 import numpy as np
 
-def mod_randforest(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_type):
+def mod_randforest(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_type, n_cpu):
     
     """
     """
@@ -32,7 +32,8 @@ def mod_randforest(cons, max_dept, rand_state, feat_imp, n, date, skip_train, mo
                     'max_depth':[max_dept],
                     'random_state':[rand_state],
                     'n_estimators':[25],
-                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2]]
+                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2]],
+                    'n_jobs':[n_cpu]
                     }
     
     print(model_params)

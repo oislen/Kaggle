@@ -6,7 +6,8 @@ Created on Sun Apr 26 17:15:06 2020
 """
 
 # set project directories
-git_dir = 'C:/Users/User/Documents/GitHub'
+#git_dir = 'C:/Users/User/Documents/GitHub'
+git_dir = '/run'
 comp_dir = '{}/Kaggle/Predict_Future_Sales'.format(git_dir)
 data_dir = '{}/data'.format(comp_dir)
 scripts_dir = '{}/scripts'.format(comp_dir)

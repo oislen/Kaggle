@@ -12,7 +12,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 
 pd.set_option('display.max_columns', 10)
 
-def gen_feature_selection(cons, feat_type = 'randforest'):
+def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
     
     """
     
@@ -58,7 +58,7 @@ def gen_feature_selection(cons, feat_type = 'randforest'):
                                     random_state = 1234, 
                                     criterion = 'mse',
                                     n_estimators = 20,
-                                    n_jobs = 2,
+                                    n_jobs = n_cpu,
                                     verbose = 2,
                                     max_features = 'auto'
                                     )

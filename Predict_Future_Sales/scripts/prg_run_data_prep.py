@@ -20,8 +20,8 @@ run_range = range(start, end + 1)
 cwd = os.getcwd()
 
 # append required paths
-prep_raw_data_path = '{}\\01_prg_run_data_prep'.format(cwd)
-reference_path = '{}\\01_prg_run_data_prep\\reference'.format(cwd)
+prep_raw_data_path = '{}/01_prg_run_data_prep'.format(cwd)
+reference_path = '{}/01_prg_run_data_prep/reference'.format(cwd)
 sys.path.append(prep_raw_data_path)
 sys.path.append(reference_path)
 

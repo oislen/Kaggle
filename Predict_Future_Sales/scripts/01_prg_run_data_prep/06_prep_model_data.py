@@ -236,6 +236,7 @@ def prep_model_data(cons):
     model_data = base_agg_comp[sub_cols]
     model_data = model_data.reset_index(drop = True)
     
+    """
     print('Normalise data ...')
     
     ignore_cols = clean_cons.norm_ign_cols
@@ -243,6 +244,7 @@ def prep_model_data(cons):
     scaler = StandardScaler()
     scaler.fit(model_data[norm_cols])
     model_data[norm_cols] = scaler.transform(X = model_data[norm_cols])
+    """
     
     print('Recasting data ...')
     
