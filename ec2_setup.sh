@@ -13,9 +13,10 @@
 # note: right click to copy paste into putty
 
 # STEP 1: Cinfugure EC2 Instance
-# check available memory
-free
-df -H
+# check available memory and cpu capacity
+free -h
+df -h
+lscpu
 # reset premission for the instance
 ls -larth /.
 sudo chmod -R 777 /opt /dev /run /sys/fs/cgroup
@@ -36,6 +37,23 @@ cp ~/AWS/.vimrc ~/.
 #sudo yum install curl vim exuberant-ctags git ack-grep
 #sudo pip install pep8 flake8 pyflakes isort yapf
 #touch ~/.vimrc
+
+# STEP 2: Configure GUI
+# install tigervnc
+cat /etc/os-release
+sudo amazon-linux-extras install mate-desktop1.x
+sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
+echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
+sudo yum install tigervnc-server
+vncpasswd
+#n
+vncserver :1
+sudo cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service
+sudo sed -i 's/<USER>/ec2-user/' /etc/systemd/system/vncserver@.service
+sudo systemctl daemon-reload
+sudo systemctl enable vncserver@:1
+sudo systemctl start vncserver@:1
+
 
 # STEP 2: Install Conda Environment
 # download and install anaconda
@@ -62,18 +80,26 @@ conda install --yes scipy
 conda install --yes scikit-learn
 conda install --yes statsmodels
 conda install --yes seaborn
+conda install --yes spyder
+conda install --yes notebook
+conda install --yes pyarrow
 pip install pygam
 conda list
 #conda env export > aws.yml
 #conda env create -f aws.yml
-# reset terminal
+
 
 # STEP 4: Create Kaggle Repo
 # create kaggle scripts & data
 # upload raw data to ec2
 cd /run
 sudo git clone https://github.com/oislen/Kaggle.git 
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/raw
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/clean
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/base
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/model
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/pred
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/ref
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report
 cd /
 sudo chmod 777 -R /run/Kaggle
@@ -82,25 +108,3 @@ sudo chmod 777 -R /run/Kaggle
 # via winscp
 #sudo cp -rf /home/ec2-user/raw/ /opt/Kaggle/Predict_Future_Sales/data/
 
-
-
-# install tigervnc
-sudo amazon-linux-extras install mate-desktop1.x
-sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
-echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
-sudo yum install tigervnc-server
-vncpasswd
-n
-vncserver :1
-sudo cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service
-
-
-sudo yum update -y
-sudo yum install -y pixman pixman-devel libXfont
-sudo yum -y install tigervnc-server
-vncpasswd
-sudo service sshd restart
-sudo vi /etc/sysconfig/vncservers
-sudo service vncserver start
-sudo chkconfig vncserver on
-#vncserver :1
