@@ -10,47 +10,50 @@
 # https://docs.aws.amazon.com/transfer/latest/userguide/getting-started-use-the-service.html
 # https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-2-install-gui/
 # note: winscp sftp settings: sudo /usr/lib/openssh/sftp-server
+# note: right click to copy paste into putty
 
+# STEP 1: Cinfugure EC2 Instance
 # check available memory
 free
-df
-
+df -H
 # reset premission for the instance
-sudo chmod -R 777 /.
-
+ls -larth /.
+sudo chmod -R 777 /opt /dev /run /sys/fs/cgroup
+ls -larth /.
 # install git
-sudo yum update
-sudo yum install git-all
-
+sudo yum update -y
+sudo yum install git-all -y
 # git clone aws setup repo
 git clone https://github.com/oislen/AWS.git
-
 # configure vim
 sudo yum install vim
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp ~/AWS/.vimrc ~/.
-vim AWS/ec2_setup.sh
-:PluginInstall
-:q
+# Note need to install plugins
+#vim AWS/ec2_setup.sh
+#:PluginInstall
+#:q
 #sudo yum install curl vim exuberant-ctags git ack-grep
 #sudo pip install pep8 flake8 pyflakes isort yapf
 #touch ~/.vimrc
 
+# STEP 2: Install Conda Environment
 # download and install anaconda
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
 bash Anaconda3-2020.02-Linux-x86_64.sh
 yes
-<ENTER>
+<ENTER>  
+/dev/anaconda3
 yes
-#reset terminal
-
-# configure conda
-export PATH=~/anaconda3/bin:$PATH
-conda init bash
-conda config --set auto_activate_base false
 # reset terminal
+exit
 
+# STEP 3: Create Conda Environement
+# configure conda
 # auto create aws environment
+#export PATH=/dev/anaconda3/bin:$PATH
+#conda init bash
+conda config --set auto_activate_base false
 conda deactivate
 conda create --yes --name aws
 conda activate aws
@@ -60,18 +63,38 @@ conda install --yes scikit-learn
 conda install --yes statsmodels
 conda install --yes seaborn
 pip install pygam
+conda list
 #conda env export > aws.yml
 #conda env create -f aws.yml
 # reset terminal
 
+# STEP 4: Create Kaggle Repo
 # create kaggle scripts & data
 # upload raw data to ec2
-sudo git clone https://github.com/oislen/Kaggle.git
-sudo mkdir /opt/Kaggle/Predict_Future_Sales/data
-sudo mkdir /opt/Kaggle/Predict_Future_Sales/report
-sudo cp -rf /home/ec2-user/raw/ /opt/Kaggle/Predict_Future_Sales/data/
+cd /run
+sudo git clone https://github.com/oislen/Kaggle.git 
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report
+cd /
+sudo chmod 777 -R /run/Kaggle
+
+# STEP 5: UPLOAD Data
+# via winscp
+#sudo cp -rf /home/ec2-user/raw/ /opt/Kaggle/Predict_Future_Sales/data/
+
+
 
 # install tigervnc
+sudo amazon-linux-extras install mate-desktop1.x
+sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
+echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
+sudo yum install tigervnc-server
+vncpasswd
+n
+vncserver :1
+sudo cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service
+
+
 sudo yum update -y
 sudo yum install -y pixman pixman-devel libXfont
 sudo yum -y install tigervnc-server
