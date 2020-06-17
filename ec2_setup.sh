@@ -53,7 +53,7 @@ sudo sed -i 's/<USER>/ec2-user/' /etc/systemd/system/vncserver@.service
 sudo systemctl daemon-reload
 sudo systemctl enable vncserver@:1
 sudo systemctl start vncserver@:1
-
+# switch over to gui
 
 # STEP 2: Install Conda Environment
 # download and install anaconda
