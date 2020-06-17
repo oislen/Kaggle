@@ -100,7 +100,7 @@ sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/base
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/model
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/pred
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/ref
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/feat_imp
 cd /
 sudo chmod 777 -R /run/Kaggle
 
