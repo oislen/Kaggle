@@ -8,7 +8,7 @@ Created on Sun May 31 19:54:33 2020
 from sklearn.neighbors import KNeighborsRegressor
 from meta_level_I.exe_model import exe_model
 
-def mod_knn(cons, feat_imp, n, date, skip_train, model_type):
+def mod_knn(cons, feat_imp, n, date, skip_train, model_type, n_cpu):
     
     """
     """
@@ -65,7 +65,8 @@ def mod_knn(cons, feat_imp, n, date, skip_train, model_type):
               test_split_dict = test_split_dict,
               n = n,
               model_name = model_name,
-              skip_train = skip_train
+              skip_train = skip_train,
+              n_cpu = n_cpu
               )
 
     return

@@ -20,7 +20,8 @@ def cv_model_train(data_fpath,
                    model_params,
                    train_cv_split_dict,
                    model_pk_fpath,
-                   cv_sum_fpath 
+                   cv_sum_fpath,
+                   n_cpu
                    ):
     
     """
@@ -47,7 +48,7 @@ def cv_model_train(data_fpath,
     gcv = GridSearchCV(estimator = model, 
                        param_grid = model_params,
                        scoring = 'neg_root_mean_squared_error',
-                       n_jobs = 2,
+                       n_jobs = n_cpu,
                        cv = cv_list,
                        refit = refit_bool,
                        verbose = 2

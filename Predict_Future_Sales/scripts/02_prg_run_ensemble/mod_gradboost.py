@@ -9,7 +9,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from meta_level_I.exe_model import exe_model
 import numpy as np
 
-def mod_gradboost(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_type):
+def mod_gradboost(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_type, n_cpu):
         
     """
     """
@@ -28,11 +28,11 @@ def mod_gradboost(cons, max_dept, rand_state, feat_imp, n, date, skip_train, mod
     print(model)
     
     # set model parameters
-    model_params = {'criterion':['friedman_mse'],
+    model_params = {'criterion':['friedman_mse', 'mse'],
                     'max_depth':[max_dept],
-                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2]],
+                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
                     'random_state':[rand_state],
-                    'n_estimators':[25]
+                    'n_estimators':[25, 30, 35, 40]
                     }
 
     print(model_params)
@@ -67,7 +67,8 @@ def mod_gradboost(cons, max_dept, rand_state, feat_imp, n, date, skip_train, mod
               test_split_dict = test_split_dict,
               n = n,
               model_name = model_name,
-              skip_train = skip_train
+              skip_train = skip_train,
+              n_cpu = n_cpu
               )
     
     return

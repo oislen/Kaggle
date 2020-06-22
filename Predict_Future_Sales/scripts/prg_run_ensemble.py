@@ -16,9 +16,9 @@ np.random.seed(1234)
 skip_train = False
 n = 30
 start = 1
-end = 1
+end = 5
 run_range = range(start, end + 1)
-n_cpu = -1
+n_cpu = 16
 
 # get current wd
 cwd = os.getcwd()
@@ -51,16 +51,16 @@ if 2 in run_range:
     print('~~~~~ Working on Decision Tree Models ...')
     
     prg_dt = import_module(name = 'mod_dtree')
-    prg_dt.mod_dtree(cons, max_dept = 3, rand_state = 1, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
-    prg_dt.mod_dtree(cons, max_dept = 5, rand_state = 2, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
-    prg_dt.mod_dtree(cons, max_dept = 7, rand_state = 3, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+    prg_dt.mod_dtree(cons, max_dept = 3, rand_state = 1, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
+    prg_dt.mod_dtree(cons, max_dept = 5, rand_state = 2, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
+    prg_dt.mod_dtree(cons, max_dept = 7, rand_state = 3, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
  
-if 3 in run_range:
+#if 3 in run_range:
     
-    print('~~~~~ Working on KNN Models ...')
+    #print('~~~~~ Working on KNN Models ...')
     
-    prg_knn = import_module(name = 'mod_knn')
-    prg_knn.mod_knn(cons, model_type = 'knn', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train)
+    #prg_knn = import_module(name = 'mod_knn')
+    #prg_knn.mod_knn(cons, model_type = 'knn', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
 
 if 4 in run_range:
     
@@ -76,6 +76,6 @@ if 5 in run_range:
     print('~~~~~ Working on Gradient Boosting Models ...')
     
     prg_gb = import_module(name = 'mod_gradboost')
-    prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
-    prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
-    prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train)
+    prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
+    prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
+    prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)

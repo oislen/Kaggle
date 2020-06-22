@@ -9,7 +9,7 @@ from sklearn.tree import DecisionTreeRegressor
 from meta_level_I.exe_model import exe_model
 import numpy as np
 
-def mod_dtree(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_type):
+def mod_dtree(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_type, n_cpu):
     
     """
     """
@@ -28,12 +28,12 @@ def mod_dtree(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_t
     print(model)
     
     # set model parameters
-    model_params = {'criterion':['mse'],
-                    'splitter':['best'],
+    model_params = {'criterion':['mse', 'friedman_mse'],
+                    'splitter':['best', 'random'],
                     'max_depth':[max_dept],
-                    'min_samples_split':[2, 4, 8],
-                    'min_samples_leaf':[2, 4, 8],
-                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 4]],
+                    'min_samples_split':[2, 3, 4, 5, 6, 7, 8],
+                    'min_samples_leaf':[2, 3, 4, 5, 6, 7, 8],
+                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
                     'random_state':[rand_state]
                     }
     
@@ -69,7 +69,8 @@ def mod_dtree(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_t
               test_split_dict = test_split_dict,
               n = n,
               model_name = model_name,
-              skip_train = skip_train
+              skip_train = skip_train,
+              n_cpu = n_cpu
               )
 
     return

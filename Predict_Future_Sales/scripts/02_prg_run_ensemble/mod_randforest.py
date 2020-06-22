@@ -31,8 +31,8 @@ def mod_randforest(cons, max_dept, rand_state, feat_imp, n, date, skip_train, mo
     model_params = {'criterion':['mse'],
                     'max_depth':[max_dept],
                     'random_state':[rand_state],
-                    'n_estimators':[25],
-                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2]],
+                    'n_estimators':[25, 30, 35, 40],
+                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
                     'n_jobs':[n_cpu]
                     }
     
@@ -68,7 +68,8 @@ def mod_randforest(cons, max_dept, rand_state, feat_imp, n, date, skip_train, mo
               test_split_dict = test_split_dict,
               n = n,
               model_name = model_name,
-              skip_train = skip_train
+              skip_train = skip_train,
+              n_cpu = n_cpu
               )
     
     return

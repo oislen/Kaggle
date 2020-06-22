@@ -25,7 +25,8 @@ def exe_model(cons,
               test_split_dict,
               n,
               model_name,
-              skip_train
+              skip_train,
+              n_cpu
               ):
     
     """
@@ -103,7 +104,8 @@ def exe_model(cons,
                                    model_params = model_params,
                                    train_cv_split_dict = train_cv_split_dict,
                                    model_pk_fpath = model_pk_fpath,
-                                   cv_sum_fpath = cv_sum_fpath
+                                   cv_sum_fpath = cv_sum_fpath,
+                                   n_cpu = n_cpu
                                    )
         
     # get model predictions
