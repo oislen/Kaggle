@@ -20,6 +20,7 @@ lscpu
 # reset premission for the instance
 ls -larth /.
 sudo chmod -R 777 /opt /dev /run /sys/fs/cgroup
+sudo chmod 775 /var/run/screen
 ls -larth /.
 # install git
 sudo yum update -y
@@ -40,6 +41,7 @@ cp ~/AWS/.vimrc ~/.
 
 # STEP 2: Configure GUI
 # install tigervnc
+#screen
 cat /etc/os-release
 sudo amazon-linux-extras install mate-desktop1.x
 sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
