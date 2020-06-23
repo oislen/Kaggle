@@ -29,11 +29,11 @@ def mod_dtree(cons, max_dept, rand_state, feat_imp, n, date, skip_train, model_t
     
     # set model parameters
     model_params = {'criterion':['mse', 'friedman_mse'],
-                    'splitter':['best', 'random'],
+                    'splitter':['best'],
                     'max_depth':[max_dept],
-                    'min_samples_split':[2, 3, 4, 5, 6, 7, 8],
-                    'min_samples_leaf':[2, 3, 4, 5, 6, 7, 8],
-                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
+                    'min_samples_split':[2, 4, 8],
+                    'min_samples_leaf':[2, 4, 8],
+                    'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4]],
                     'random_state':[rand_state]
                     }
     

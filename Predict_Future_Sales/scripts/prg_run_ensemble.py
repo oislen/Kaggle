@@ -15,10 +15,10 @@ np.random.seed(1234)
 # user settings
 skip_train = False
 n = 30
-start = 1
-end = 5
+start = 2
+end = 2
 run_range = range(start, end + 1)
-n_cpu = 16
+n_cpu = 6
 
 # get current wd
 cwd = os.getcwd()
