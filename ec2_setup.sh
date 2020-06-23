@@ -17,6 +17,8 @@
 free -h
 df -h
 lscpu
+# calculate percentage of used memory
+free -m | awk 'FNR == 2 {print $3/($3+$4)*100}'
 # reset premission for the instance
 ls -larth /.
 sudo chmod -R 777 /opt /dev /run /sys/fs/cgroup
@@ -31,6 +33,11 @@ git clone https://github.com/oislen/AWS.git
 sudo yum install vim
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp ~/AWS/.vimrc ~/.
+# install htop
+sudo yum install htop -y
+# update overcommit memory setting
+cat /proc/sys/vm/overcommit_memory
+echo 1 | sudo tee /proc/sys/vm/overcommit_memory
 # Note need to install plugins
 #vim AWS/ec2_setup.sh
 #:PluginInstall
@@ -59,6 +66,7 @@ sudo systemctl start vncserver@:1
 
 # STEP 2: Install Conda Environment
 # download and install anaconda
+cd ~
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
 bash Anaconda3-2020.02-Linux-x86_64.sh
 yes
@@ -96,13 +104,21 @@ conda list
 # upload raw data to ec2
 cd /run
 sudo git clone https://github.com/oislen/Kaggle.git 
+# cretae data sub folders
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/raw
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/clean
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/base
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/model
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/pred
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/ref
+# create report sub-folders
 sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/feat_imp
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/cv_results
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/valid_metrics
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/valid_plots/preds_vs_true
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/valid_plots/preds_hist
+# create models sub-filder
+sudo mkdir -p /run/Kaggle/Predict_Future_Sales/models
 cd /
 sudo chmod 777 -R /run/Kaggle
 
