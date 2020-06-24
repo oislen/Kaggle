@@ -33,6 +33,9 @@ git clone https://github.com/oislen/AWS.git
 sudo yum install vim
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp ~/AWS/.vimrc ~/.
+# configure .bashrc file
+cp ~/AWS/.bashrc ~/.
+source .bashrc
 # install htop
 sudo yum install htop -y
 # update overcommit memory setting
