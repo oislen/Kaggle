@@ -7,6 +7,7 @@ Created on Sun Jan 31 11:09:57 2021
 
 # load libraries
 import os
+import sys
 
 # set programme constants
 comp_name = 'digit-recognizer'
@@ -19,9 +20,11 @@ batch_size = 64
 sample_shape = (28, 28, 1)
 
 # set directories
-root_dir = 'C:\\Users\\User\\Documents\\GitHub\\Kaggle\\Digit_Recognizer'
-scripts_dir = os.path.join(root_dir, 'scripts')
-data_dir = os.path.join(root_dir, 'data')
+root_dir = 'C:\\Users\\User\\Documents\\GitHub\\Kaggle'
+utilities_dir = os.path.join(root_dir, 'utilities')
+digit_comp_dir = os.path.join(root_dir, 'Digit_Recognizer')
+scripts_dir = os.path.join(digit_comp_dir, 'scripts')
+data_dir = os.path.join(digit_comp_dir, 'data')
 
 # define filenames
 zip_data_fname = '{}.zip'.format(comp_name)
@@ -35,3 +38,5 @@ sample_sub_data_fpath = os.path.join(data_dir, sample_sub_data_fname)
 test_data_fpath = os.path.join(data_dir, test_data_fname)
 train_data_fpath = os.path.join(data_dir, train_data_fname)
 
+# append utilities directory to path
+sys.path.append(utilities_dir)
