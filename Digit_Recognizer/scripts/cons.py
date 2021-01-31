@@ -15,6 +15,8 @@ unzip_data = True
 del_zip = True
 random_state = 1234
 valid_size = 0.1
+batch_size = 64
+sample_shape = (28, 28, 1)
 
 # set directories
 root_dir = 'C:\\Users\\User\\Documents\\GitHub\\Kaggle\\Digit_Recognizer'
