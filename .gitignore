@@ -3,7 +3,7 @@ HousePrices/data
 HousePrices/report
 Titanic/data
 Titanic/report
-IEEE-CIS_Fraud_Detection/
+IEEE-CIS_Fraud_Detection/*.csv
 Predict_Future_Sales/data
 Predict_Future_Sales/report
 Predict_Future_Sales/models
