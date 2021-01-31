@@ -7,7 +7,6 @@ Created on Sun Jan 31 11:09:08 2021
 
 # import relevant libraries
 import os
-import cons as cons
 import subprocess
 import zipfile
 
@@ -99,7 +98,7 @@ def download_comp_data(comp_name,
         print('downing kaggle data ..')
         
         # define the kaggle api command to download the data
-        kaggle_cmd = 'kaggle competitions download -c {} -p {}'.format(cons.comp_name, data_dir)
+        kaggle_cmd = 'kaggle competitions download -c {} -p {}'.format(comp_name, data_dir)
         
         # run kaggle cmd in commandline
         subprocess.run(kaggle_cmd.split())
@@ -133,14 +132,3 @@ def download_comp_data(comp_name,
         os.remove(path = zip_data_fpath)
         
     return 0
-
-# if script run as main programme
-if __name__ == '__main__':
-    
-    # download competition data
-    download_comp_data(comp_name = cons.comp_name,
-                       data_dir = cons.data_dir,
-                       download_data = cons.download_data, 
-                       unzip_data = cons.unzip_data, 
-                       del_zip = cons.del_zip
-                       )
