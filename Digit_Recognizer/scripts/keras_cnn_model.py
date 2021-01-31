@@ -9,7 +9,7 @@ Created on Sun Jan 31 14:21:47 2021
 import cons
 import numpy as np
 import pandas as pd
-from LeNet_Model import LeNet_Model
+from CNN.LeNet_Model import LeNet_Model
 from fit_model import fit_model
 from process_data import process_data
 
