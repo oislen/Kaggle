@@ -14,6 +14,7 @@ from fit_model import fit_model
 from process_data import process_data
 
 from keras.preprocessing.image import ImageDataGenerator
+from keras.optimizers import RMSprop #, Adam
 from graph import plot_confusion_matrix, display_errors
 from sklearn.metrics import confusion_matrix
 
@@ -39,12 +40,17 @@ model = LeNet_Model(input_shape = cons.sample_shape,
                     n_targets = 10
                     )
 
+# define the optimiser to use
+#optimizer = Adam(lr = 0.001)
+optimizer = RMSprop(lr = 0.001, rho = 0.9, epsilon = 1e-08, decay = 0.0)
+    
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model_name = 'lenet', 
           model = model, 
           epochs = 5,
           batch_size = cons.batch_size,
-          datagen = datagen, 
+          optimizer = optimizer,
+          datagen = None, 
           X_train = X_train,
           X_val = X_valid, 
           Y_train = y_train, 
