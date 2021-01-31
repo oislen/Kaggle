@@ -104,27 +104,26 @@ def process_data(train_data_fpath,
     
     # normalise training data
     X_train = X_train / 255
-    X_test = test.values / 255
+    X_test = test / 255
+    
+    print('reshaping data ...')
+    
+    # reshape image into 3 dimensions: height = 28px, width = 28px, canal = 1 (greyscale)
+    X_train = X_train.values.reshape(-1, 28, 28, 1)
+    X_test = X_test.values.reshape(-1, 28, 28, 1)
     
     print('dummy encoding targets ...')
     
     # dummy encode labels
-    y_train = pd.get_dummies(y_train)
+    y_train = pd.get_dummies(y_train).values
     
     print('splitting into training and validation sets ...')
     
     # randomly split the data into training and validation sets
-    X_train, X_valid, y_train, y_valid = train_test_split(X_train.values, 
-                                                          y_train.values,
+    X_train, X_valid, y_train, y_valid = train_test_split(X_train, 
+                                                          y_train,
                                                           test_size = valid_size, 
                                                           random_state = random_state
                                                           )
     
     return X_train, y_train, X_valid, y_valid, X_test
-
-# run process function
-X_train, y_train, X_valid, y_valid, X_test = process_data(train_data_fpath = cons.train_data_fpath,
-                                                          test_data_fpath = cons.test_data_fpath,
-                                                          valid_size = cons.valid_size,
-                                                          random_state = cons.random_state
-                                                          )
