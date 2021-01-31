@@ -28,6 +28,15 @@ def download_comp_data(comp_name,
     The data is downloaded as a .zip file and extracted to a specified location.
     The .zip file can be deleted once file extraction is compeleted.
     
+    Defaults 
+    
+    download_comp_data(comp_name,
+                       data_dir,
+                       download_data = True, 
+                       unzip_data = True, 
+                       del_zip = True
+                       )
+    
     Parameters
     
     comp_name - String, the name of the competition to download data for.
