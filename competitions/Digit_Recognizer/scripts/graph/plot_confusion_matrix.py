@@ -11,7 +11,6 @@ from matplotlib import pyplot as plt
 import itertools
   
 def plot_confusion_matrix(conf_matrix, 
-                          classes,
                           normalize = False,
                           title = 'Confusion matrix',
                           cmap = plt.cm.Blues
@@ -19,10 +18,51 @@ def plot_confusion_matrix(conf_matrix,
     
     """
     
-    This function prints and plots the confusion matrix.
-    Normalization can be applied by setting `normalize=True`.
+    Plot Confusion Matrix Documentation
+    
+    Function Overview
+    
+    This function prints and plots a confusion matrix as heatmap overlayed with class counts.
+    Normalisation can be applied by setting `normalize = True`.
+    
+    Defaults
+    
+    plot_confusion_matrix(conf_matrix, 
+                          normalize = False,
+                          title = 'Confusion matrix',
+                          cmap = plt.cm.Blues
+                          )
+    
+    Parameters
+    
+    conf_matrix - 2D Numpy Array, the confusion matrix to plot
+    normalize - Boolean, whether or not to normalise the confusion matrix by the total number of confusion matrix records, default is False
+    title - String, the plot title, default is 'Confusion matrix'
+    cmap - Colour Map, a matplotlib colour plot for colour settings, default is plt.cm.Blues
+    
+    Returns 
+    
+    0 for successful execution
+    
+    Example
+    
+    plot_confusion_matrix(conf_matrix = confusion_mtx, 
+                          normalize = False,
+                          title = 'Confusion matrix',
+                          cmap = plt.cm.Blues
+                          )
+    
+    Source 
+    
+    https://www.kaggle.com/yassineghouzam/introduction-to-cnn-keras-0-997-top-6
     
     """
+    
+    # determine the number of classes from the square confusion matrix
+    num_classes = len(conf_matrix)
+    
+    # generate the range of classes
+    classes = range(num_classes)
     
     # plot confusion matrix
     plt.imshow(conf_matrix, interpolation='nearest', cmap=cmap)
