@@ -10,15 +10,44 @@ from matplotlib import pyplot as plt
 
 def plot_errors(errors_index,
                 img_errors,
-                pred_errors, 
-                obs_errors,
+                pred_labels, 
+                obs_labels,
                 nrows = 2,
                 ncols = 3
                 ):
     
     """ 
     
-    This function shows 6 images with their predicted and real labels
+    Plot Errors Documention
+    
+    Function Overview
+    
+    This function plots images with their predicted and real labels.
+    
+    Defaults
+    
+    plot_errors(errors_index,
+                img_errors,
+                pred_labels, 
+                obs_labels,
+                nrows = 2,
+                ncols = 3
+                )
+    
+    Parameters
+    
+    errors_index - np.array, the image indices to plot 
+    img_errors - np.array, the image pixels 
+    pred_labels - np.array, the predicted labels
+    obs_labels - np.array, the observed labels
+    
+    Returns
+    
+    0 for successful execution
+    
+    Source 
+    
+    https://www.kaggle.com/yassineghouzam/introduction-to-cnn-keras-0-997-top-6
     
     """
     
@@ -42,11 +71,11 @@ def plot_errors(errors_index,
             error = errors_index[idx]
             
             # plot image
-            ax[row,col].imshow((img_errors[error]))
+            ax[row,col].imshow(img_errors[error])
             
             # extract out error info
-            pred_error = pred_errors[error]
-            obs_error = obs_errors[error]
+            pred_error = pred_labels[error]
+            obs_error = obs_labels[error]
             
             # create error label
             err_label = "Predicted label :{}\nTrue label :{}".format(pred_error, obs_error)
