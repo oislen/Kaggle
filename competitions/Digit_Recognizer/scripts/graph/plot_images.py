@@ -47,6 +47,10 @@ def plot_images(data,
                 n_rows = 1
                 )
     
+    Source
+    
+    https://github.com/jiadaizhao/Advanced-Machine-Learning-Specialization
+    
     """
     
     # determine number of images to plot
