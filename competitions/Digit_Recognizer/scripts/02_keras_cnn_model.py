@@ -83,9 +83,7 @@ Y_true = np.argmax(y_valid,axis = 1)
 confusion_mtx = confusion_matrix(Y_true, Y_pred_classes) 
 
 # plot the confusion matrix
-plot_confusion_matrix.plot_confusion_matrix(confusion_mtx, 
-                                            classes = range(10)
-                                            )
+plot_confusion_matrix.plot_confusion_matrix(confusion_mtx)
 
 ######################
 #-- Error Analysis --#
