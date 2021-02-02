@@ -22,7 +22,7 @@ sample_shape = (28, 28, 1)
 # set directories
 root_dir = 'C:\\Users\\User\\Documents\\GitHub\\Kaggle'
 utilities_dir = os.path.join(root_dir, 'utilities')
-digit_comp_dir = os.path.join(root_dir, 'Digit_Recognizer')
+digit_comp_dir = os.path.join(root_dir, 'competitions\\Digit_Recognizer')
 scripts_dir = os.path.join(digit_comp_dir, 'scripts')
 data_dir = os.path.join(digit_comp_dir, 'data')
 
