@@ -15,7 +15,7 @@ from process_data import process_data
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop #, Adam
-from graph import plot_confusion_matrix, display_errors
+from graph import plot_images, plot_confusion_matrix, plot_errors
 from sklearn.metrics import confusion_matrix
 
 # run process data func to load and process data
@@ -24,6 +24,11 @@ X_train, y_train, X_valid, y_valid, X_test = process_data(train_data_fpath = con
                                                           valid_size = cons.valid_size,
                                                           random_state = cons.random_state
                                                           )
+
+# plot training and validation data
+plot_images.plot_images(X_train)
+plot_images.plot_images(X_valid)
+plot_images.plot_images(X_test)
 
 # define image augmentation
 datagen = ImageDataGenerator(horizontal_flip = True,
@@ -34,6 +39,10 @@ datagen = ImageDataGenerator(horizontal_flip = True,
 
 # apply image augmentation
 datagen.fit(X_train)
+
+################
+#-- Modellig --#
+################
 
 # generate lenet model architecture
 model = LeNet_Model(input_shape = cons.sample_shape,
@@ -47,38 +56,49 @@ optimizer = RMSprop(lr = 0.001, rho = 0.9, epsilon = 1e-08, decay = 0.0)
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model_name = 'lenet', 
           model = model, 
-          epochs = 5,
+          epochs = 1,
           batch_size = cons.batch_size,
           optimizer = optimizer,
-          datagen = None, 
+          datagen = datagen, 
           X_train = X_train,
           X_val = X_valid, 
           Y_train = y_train, 
           Y_val = y_valid
           )
 
+#########################
+#-- Model Predicitons --#
+#########################
+
 # Predict the values from the validation dataset
 Y_pred = model.predict(X_valid)
+
 # Convert predictions classes to one hot vectors 
 Y_pred_classes = np.argmax(Y_pred,axis = 1) 
+
 # Convert validation observations to one hot vectors
 Y_true = np.argmax(y_valid,axis = 1) 
+
 # compute the confusion matrix
 confusion_mtx = confusion_matrix(Y_true, Y_pred_classes) 
+
 # plot the confusion matrix
-plot_confusion_matrix(confusion_mtx, classes = range(10))
-    
+plot_confusion_matrix.plot_confusion_matrix(confusion_mtx, 
+                                            classes = range(10)
+                                            )
 
-# Display some error results 
+######################
+#-- Error Analysis --#
+###################### 
 
-# Errors are difference between predicted labels and true labels
+# find error cases
 errors = (Y_pred_classes - Y_true != 0)
 
+# extract error cases
 Y_pred_classes_errors = Y_pred_classes[errors]
 Y_pred_errors = Y_pred[errors]
 Y_true_errors = Y_true[errors]
 X_val_errors = X_valid[errors]
-
 
 # Probabilities of the wrong predicted numbers
 Y_pred_errors_prob = np.max(Y_pred_errors,axis = 1)
@@ -96,7 +116,15 @@ sorted_dela_errors = np.argsort(delta_pred_true_errors)
 most_important_errors = sorted_dela_errors[-6:]
 
 # Show the top 6 errors
-display_errors(most_important_errors, X_val_errors, Y_pred_classes_errors, Y_true_errors)
+plot_errors.plot_errors(most_important_errors, 
+                        X_val_errors, 
+                        Y_pred_classes_errors, 
+                        Y_true_errors
+                        )
+
+#########################
+#-- Kaggle Submission --#
+#########################
 
 # predict results
 results = model.predict(X_test)
