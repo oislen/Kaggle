@@ -136,5 +136,7 @@ results = pd.Series(results,name="Label")
 
 submission = pd.concat([pd.Series(range(1,28001),name = "ImageId"),results],axis = 1)
 
-#submission.to_csv(kaggle_dir + "data/pred_1yu.csv",index=False)
+submission.to_csv(cons.pred_data_fpath,
+                  index = False
+                  )
 
