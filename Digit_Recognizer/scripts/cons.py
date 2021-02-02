@@ -31,12 +31,14 @@ zip_data_fname = '{}.zip'.format(comp_name)
 sample_sub_data_fname = 'sample_submission.csv'
 test_data_fname = 'test.csv'
 train_data_fname = 'train.csv'
+pred_data_fname = 'preds.csv'
 
 # create file paths
 zip_data_fpath = os.path.join(data_dir, zip_data_fname)
 sample_sub_data_fpath = os.path.join(data_dir, sample_sub_data_fname)
 test_data_fpath = os.path.join(data_dir, test_data_fname)
 train_data_fpath = os.path.join(data_dir, train_data_fname)
+pred_data_fpath = os.path.join(data_dir, pred_data_fname)
 
 # append utilities directory to path
 sys.path.append(utilities_dir)
