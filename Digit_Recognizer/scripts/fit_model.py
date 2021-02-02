@@ -5,9 +5,10 @@ Created on Sun Jan 31 15:31:42 2021
 @author: oislen
 """
 
+# load relevant libraries
 import os
 from keras.callbacks import ModelCheckpoint
-from graph import plot_history
+from graph import plot_model_fit
 
 def fit_model(model,
               X_train, 
@@ -19,7 +20,9 @@ def fit_model(model,
               datagen = None, 
               model_name = None,
               output_dir = "data/checkpoints",
-              class_weight = None, 
+              class_weight = None,
+              loss = 'categorical_crossentropy',
+              metric = 'accuracy',
               epochs = 60, 
               verbose = False
               ):
@@ -36,8 +39,8 @@ def fit_model(model,
     
     # compile model (can use another optimizer)
     model.compile(optimizer = optimizer,
-                  loss = 'categorical_crossentropy',
-                  metrics = ['accuracy']
+                  loss = loss,
+                  metrics = [metric]
                  )
     
     if datagen == None:
@@ -56,15 +59,15 @@ def fit_model(model,
     check_points = [ModelCheckpoint(os.path.join(output_dir, "{model_name}").format(model_name=model_name) + "-{epoch:02d}-{val_loss:.2f}.hdf5", save_best_only=True),] if model_name is not None else []
     
     # starts training
-    history = model.fit(x = x,
-                        validation_data = validation_data,
-                        y = y,
-                        epochs = epochs, 
-                        steps_per_epoch = steps_per_epoch,
-                        callbacks = check_points,
-                        class_weight = class_weight
-                        )  
+    model_fit = model.fit(x = x,
+                          validation_data = validation_data,
+                          y = y,
+                          epochs = epochs, 
+                          steps_per_epoch = steps_per_epoch,
+                          callbacks = check_points,
+                          class_weight = class_weight
+                          )  
     
-    plot_history(history)
+    plot_model_fit.plot_model_fit(model_fit = model_fit)
     
     return 0
