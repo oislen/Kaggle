@@ -20,6 +20,7 @@ from keras.optimizers import RMSprop #, Adam
 from graph.plot_images import plot_images
 from graph.plot_confusion_matrix import plot_confusion_matrix
 from graph.plot_errors import plot_errors
+from graph.plot_heatmap import plot_heatmap
 from sklearn.metrics import confusion_matrix
 
 #######################
@@ -59,8 +60,6 @@ lenet_model = LeNet_Model(image_shape = cons.sample_shape,
                           n_targets = 10
                           )
 
-lenet_model.summary()
-
 # define the optimiser to use
 #optimizer = Adam(lr = 0.001)
 optimizer = RMSprop(lr = 0.001, rho = 0.9, epsilon = 1e-08, decay = 0.0)
@@ -81,32 +80,20 @@ fit_model(model_name = 'lenet',
 #-- FCNN --#
 
 # generate FCNN model architecture
-fcnn_model = FCNN_Model(image_shape = (154, 154, 1)), 
+fcnn_model = FCNN_Model(image_shape = cons.sample_shape, 
                         n_targets = 10
                         )
 
-fcnn_model.summary()
-
-optimizer = RMSprop(lr = 0.001, rho = 0.9, epsilon = 1e-08, decay = 0.0)
-    
-# Attention: Windows implementation may cause an error here. In that case use model_name=None.
-fit_model(model_name = 'fcnn', 
-          model = fcnn_model, 
-          epochs = 1,
-          batch_size = cons.batch_size,
-          optimizer = optimizer,
-          datagen = datagen, 
-          X_train = X_train,
-          X_val = X_valid, 
-          Y_train = y_train, 
-          Y_val = y_valid
-          )
-
 # copy weights from LeNet model to FCNN model
 copy_weights(base_model = lenet_model, 
-             fcnn_model = fcnn_model
+             target_model = fcnn_model
              )
 
+# generate predictions for FCNN model
+fcnn_preds = fcnn_model.predict(X_valid)
+
+# plot the heatmap for the fcnn predictions
+plot_heatmap(X_valid, fcnn_preds[:, :, :, 1])
 
 #########################
 #-- Model Predicitons --#
