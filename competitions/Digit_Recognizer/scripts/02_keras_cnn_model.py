@@ -6,22 +6,30 @@ Created on Sun Jan 31 14:21:47 2021
 """
 
 # load in relevant libraries
-import cons
 import numpy as np
-import pandas as pd
-from CNN.LeNet_Model import LeNet_Model
-from CNN.FCNN_Model import FCNN_Model
-from copy_weights import copy_weights
-from fit_model import fit_model
-from process_data import process_data
+from sklearn.metrics import confusion_matrix
 
+# load keras modules
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import RMSprop #, Adam
+from keras.callbacks import ReduceLROnPlateau
+
+# load custom utility libraries
+import cons
+from process_data import process_data
+from gen_sub_file import gen_sub_file
+
+# load CNN modules
+from CNN.LeNet_Model import LeNet_Model
+from CNN.FCNN_Model import FCNN_Model
+from CNN.copy_weights import copy_weights
+from CNN.fit_model import fit_model
+
+# load graphing modules
 from graph.plot_images import plot_images
 from graph.plot_confusion_matrix import plot_confusion_matrix
 from graph.plot_errors import plot_errors
 from graph.plot_heatmap import plot_heatmap
-from sklearn.metrics import confusion_matrix
 
 #######################
 #-- Data Processing --#
@@ -38,6 +46,15 @@ X_train, y_train, X_valid, y_valid, X_test = process_data(train_data_fpath = con
 plot_images(X_train)
 plot_images(X_valid)
 plot_images(X_test)
+
+
+# set a learning rate annealer
+learning_rate_reduction = ReduceLROnPlateau(monitor = 'val_accuracy', 
+                                            patience = 3, 
+                                            verbose = 1, 
+                                            factor = 0.5, 
+                                            min_lr = 0.00001
+                                            )
 
 # define image augmentation
 datagen = ImageDataGenerator(horizontal_flip = True,
@@ -62,14 +79,19 @@ lenet_model = LeNet_Model(image_shape = cons.sample_shape,
 
 # define the optimiser to use
 #optimizer = Adam(lr = 0.001)
-optimizer = RMSprop(lr = 0.001, rho = 0.9, epsilon = 1e-08, decay = 0.0)
+optimizer = RMSprop(lr = 0.001, 
+                    rho = 0.9, 
+                    epsilon = 1e-08, 
+                    decay = 0.0
+                    )
     
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
-fit_model(model_name = 'lenet', 
-          model = lenet_model, 
-          epochs = 1,
+fit_model(model = lenet_model, 
+          epochs = 3,
+          starting_epoch = None,
           batch_size = cons.batch_size,
           optimizer = optimizer,
+          lrate_red = learning_rate_reduction,
           datagen = datagen, 
           X_train = X_train,
           X_val = X_valid, 
@@ -79,21 +101,24 @@ fit_model(model_name = 'lenet',
 
 #-- FCNN --#
 
-# generate FCNN model architecture
-fcnn_model = FCNN_Model(image_shape = cons.sample_shape, 
-                        n_targets = 10
-                        )
-
-# copy weights from LeNet model to FCNN model
-copy_weights(base_model = lenet_model, 
-             target_model = fcnn_model
-             )
-
-# generate predictions for FCNN model
-fcnn_preds = fcnn_model.predict(X_valid)
-
-# plot the heatmap for the fcnn predictions
-plot_heatmap(X_valid, fcnn_preds[:, :, :, 1])
+# ignore FCNN methods for time being
+if False:
+    
+    # generate FCNN model architecture
+    fcnn_model = FCNN_Model(image_shape = cons.sample_shape, 
+                            n_targets = 10
+                            )
+    
+    # copy weights from LeNet model to FCNN model
+    copy_weights(base_model = lenet_model, 
+                 target_model = fcnn_model
+                 )
+    
+    # generate predictions for FCNN model
+    fcnn_preds = fcnn_model.predict(X_valid)
+    
+    # plot the heatmap for the fcnn predictions
+    plot_heatmap(X_valid, fcnn_preds[:, :, :, 1])
 
 #########################
 #-- Model Predicitons --#
@@ -153,17 +178,8 @@ plot_errors(most_important_errors,
 #-- Kaggle Submission --#
 #########################
 
-# predict results
-results = lenet_model.predict(X_test)
-
-# select the indix with the maximum probability
-results = np.argmax(results,axis = 1)
-
-results = pd.Series(results,name="Label")
-
-submission = pd.concat([pd.Series(range(1,28001),name = "ImageId"),results],axis = 1)
-
-#submission.to_csv(cons.pred_data_fpath,
-#                  index = False
-#                  )
-
+# generate the kaggle submission file
+gen_sub_file(model = lenet_model, 
+             test_data = X_test, 
+             pred_data_fpath = cons.pred_data_fpath
+             )
