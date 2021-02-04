@@ -42,7 +42,7 @@ def FCNN_Model(image_shape,
             
         5. Conv2D 
             - filters: 128  
-            - kernal: 8 x 8 
+            - kernal: 7 x 7 
             - activation: relu 
              - padding: same
             
@@ -89,7 +89,7 @@ def FCNN_Model(image_shape,
     
     # set model constants
     kernel_size_1 = (5, 5)    
-    kernel_size_2 = (8, 8)  
+    kernel_size_2 = (7, 7)  
     kernel_size_3 = (1, 1)
     act_func = 'relu'
     pad = 'same'
