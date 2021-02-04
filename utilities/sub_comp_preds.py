@@ -8,7 +8,6 @@ Created on Tue Feb  2 14:13:05 2021
 # load in relevant libraries
 import os
 import subprocess
-import cons
 from get_comp_subs import get_comp_subs
 
 def sub_comp_preds(comp_name,
