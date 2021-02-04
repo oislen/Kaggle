@@ -141,7 +141,8 @@ def LeNet_Model(image_shape,
     
     # create level
     model = Model(inputs = inputs, 
-                  outputs = dense_layer_3
+                  outputs = dense_layer_3,
+                  name = "LeNet"
                  )
     
     return model

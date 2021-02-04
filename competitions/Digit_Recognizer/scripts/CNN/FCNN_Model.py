@@ -147,7 +147,8 @@ def FCNN_Model(image_shape,
 
     # create final model
     model = Model(inputs = inputs, 
-                  outputs = conv_layer_5
+                  outputs = conv_layer_5,
+                  name = "FCNN"
                  )
     
     return model
