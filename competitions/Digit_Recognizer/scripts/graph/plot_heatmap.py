@@ -5,7 +5,7 @@ Created on Thu Feb  4 17:07:52 2021
 @author: oislen
 """
 
-import matplotlib.py as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_heatmap(images, 
@@ -73,7 +73,7 @@ def plot_heatmap(images,
         plt.axis('off')
         
         # plot the image predictions in the below subplot
-        plt.imshow(heatmap[i])
+        plt.imshow(image_preds[i])
         
     # show the plot
     plt.show()
