@@ -16,8 +16,8 @@ from keras.callbacks import ReduceLROnPlateau
 
 # load custom utility libraries
 import cons
-from process_data import process_data
-from gen_sub_file import gen_sub_file
+from utilities.process_data import process_data
+from utilities.gen_sub_file import gen_sub_file
 
 # load CNN modules
 from CNN.LeNet_Model import LeNet_Model
@@ -87,7 +87,7 @@ optimizer = RMSprop(lr = 0.001,
     
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model = lenet_model, 
-          epochs = 3,
+          epochs = 30,
           starting_epoch = None,
           batch_size = cons.batch_size,
           optimizer = optimizer,
