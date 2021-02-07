@@ -47,15 +47,6 @@ plot_images(X_train)
 plot_images(X_valid)
 plot_images(X_test)
 
-
-# set a learning rate annealer
-learning_rate_reduction = ReduceLROnPlateau(monitor = 'val_accuracy', 
-                                            patience = 3, 
-                                            verbose = 1, 
-                                            factor = 0.5, 
-                                            min_lr = 0.00001
-                                            )
-
 # define image augmentation
 datagen = ImageDataGenerator(horizontal_flip = True,
                              width_shift_range = 0.2,
@@ -85,6 +76,14 @@ optimizer = RMSprop(lr = 0.001,
                     decay = 0.0
                     )
     
+# set a learning rate annealer
+learning_rate_reduction = ReduceLROnPlateau(monitor = 'val_accuracy', 
+                                            patience = 3, 
+                                            verbose = 1, 
+                                            factor = 0.5, 
+                                            min_lr = 0.00001
+                                            )
+
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model = lenet_model, 
           epochs = 30,
