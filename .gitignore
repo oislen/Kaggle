@@ -8,5 +8,6 @@ competitions/Predict_Future_Sales/report
 competitions/Predict_Future_Sales/models
 competitions/Predict_Future_Sales/final_submission
 competitions/Predict_Future_Sales/final_submission.zip
+*.ipynb_checkpoints
 *.pyc
 *.hdf5
