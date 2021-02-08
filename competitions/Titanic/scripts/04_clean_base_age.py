@@ -15,19 +15,16 @@ print('Loading in libraries and data ...')
 
 # load in relevant libraries
 import pandas as pd
+import cons
 
 # sklearn will be used for the modelling and classification
 from sklearn import ensemble
 
 # load cusotm functions
-import sys
-sys.path.append('C:/Users/User/Documents/Data_Analytics/Python/value_analysis')
 import value_analysis as va
 
 # load in data
-input_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-base_name = 'base_clean.csv'
-base = pd.read_csv(input_dir + base_name, sep = '|')
+base = pd.read_csv(cons.base_clean_data_fpath, sep = '|')
 
 # check data types
 base.dtypes
@@ -100,13 +97,13 @@ gbm.fit(X_train,
 y_valid['Age_pred'] = gbm.predict(X_valid)
 
 # genrate the regression metrics
-va.metrics(y_obs = y_valid['Age'], 
-           y_pred = y_valid['Age_pred'], 
-           target_type = 'reg'
-           )
+va.perf_metrics(y_obs = y_valid['Age'], 
+                y_pred = y_valid['Age_pred'], 
+                target_type = 'reg'
+                )
 
 # create prediction, observation and residual plots
-va.vis_preds_obs_resids(obs = 'Age',
+va.Vis.preds_obs_resids(obs = 'Age',
                         preds = 'Age_pred',
                         dataset = y_valid
                         )
@@ -179,13 +176,13 @@ gbm.fit(X_train,
 y_valid['Age_pred'] = gbm.predict(X_valid)
 
 # genrate the regression metrics
-va.metrics(y_obs = y_valid['Age'], 
-           y_pred = y_valid['Age_pred'], 
-           target_type = 'reg'
-           )
+va.perf_metrics(y_obs = y_valid['Age'], 
+                y_pred = y_valid['Age_pred'], 
+                target_type = 'reg'
+                )
 
 # create prediction, observation and residual plots
-va.vis_preds_obs_resids(obs = 'Age',
+va.Vis.preds_obs_resids(obs = 'Age',
                         preds = 'Age_pred',
                         dataset = y_valid
                         )
@@ -206,12 +203,8 @@ base = pd.concat(objs = [base_train, base_test],
 
 print('Outputting data ...')
 
-# define the output location and filename
-output_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-output_filename = 'base_clean_2.csv'
-
 # output the dataset
-base.to_csv(output_dir + output_filename,
+base.to_csv(cons.base_clean_2_data_fpath,
             sep = '|',
             encoding = 'utf-8',
             header = True,

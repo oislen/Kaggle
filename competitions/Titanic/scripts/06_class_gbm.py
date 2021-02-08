@@ -18,16 +18,13 @@ import pandas as pd
 
 # sklearn will be used for the modelling and classification
 from sklearn import ensemble
+import cons
 
 # load cusotm functions
-import sys
-sys.path.append('C:/Users/User/Documents/Data_Analytics/Python/value_analysis')
 import value_analysis as va
 
 # load in data
-input_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-base_name = 'base_engin.csv'
-base = pd.read_csv(input_dir + base_name, 
+base = pd.read_csv(cons.base_engin_data_fpath, 
                    sep = '|'
                    )
 
@@ -128,12 +125,8 @@ predictions['Survived'] = base_test['Survived'] .astype(int)
 predictions['PassengerId'] = base_test.index + 1
 predictions = predictions[['PassengerId', 'Survived']]
 
-# define the output location and filename
-output_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-output_filename = 'preds9.csv'
-
 # output the dataset
-predictions.to_csv(output_dir + output_filename,
+predictions.to_csv(cons.pred_data_fpath,
                    sep = ',',
                    encoding = 'utf-8',
                    header = True,

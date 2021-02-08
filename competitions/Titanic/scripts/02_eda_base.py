@@ -14,19 +14,13 @@ Created on Sat Nov  3 11:21:09 2018
 # load in relevant libraries
 import pandas as pd
 import numpy as np
+import cons
 
 # load cusotm functions
-import sys
-sys.path.append('C:/Users/User/Documents/Data_Analytics/Python/value_analysis')
 import value_analysis as va
 
 # load in data
-input_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-base_name = 'base.csv'
-base = pd.read_csv(input_dir + base_name, sep = '|')
-
-# define the general output dir
-report_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\report\\attempt_3\\'
+base = pd.read_csv(cons.base_data_fpath, sep = '|')
 
 # redefine some of the numeric variables into categories
 base['cat_survived'] = base['Survived'].map({1.0:'yes', 0.0:'no'})
@@ -45,29 +39,23 @@ This section of the script performs a univariate analysis.
 
 """
 
-# define the output path for the visualisations
-output_vis_path = report_dir + 'univariate_analysis\\plots\\'
-
 """
 #############################
 #-- Decriptive Statistics --#
 #############################
 """
 
-# define the output path for the descript statistics
-output_desc_stats_path = report_dir + 'univariate_analysis\\descriptive_stats\\'
-
 # generate numeric statistics
-numeric_stats = va.desc_stats(dataset = base, 
+numeric_stats = va.Desc.stats(dataset = base, 
                               attrs = base.columns, 
                               stats_type = "numeric",
-                              path = output_desc_stats_path
+                              output_dir = cons.univar_stats_dir
                               )
 
-string_stats = va.desc_stats(dataset = base, 
+string_stats = va.Desc.stats(dataset = base, 
                              attrs = base.columns, 
                              stats_type = "string",
-                             path = output_desc_stats_path
+                             output_dir = cons.univar_stats_dir
                              )
 
 """
@@ -80,7 +68,7 @@ string_stats = va.desc_stats(dataset = base,
 #-- Histograms --#
 ##################
 
-va.vis_hist(dataset = base,
+va.Vis.hist(dataset = base,
             num_var = ['Age', 'Fare', 'FamSize', 'Parch', 'SibSp', 'Pclass'],
             bins = None,
             hist = True,
@@ -91,19 +79,19 @@ va.vis_hist(dataset = base,
 #-- Count Plots --#
 ###################
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['cat_survived']
              )
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['Sex']
              )
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['cat_alone']
              )
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['Embarked']
              )
 
@@ -126,55 +114,50 @@ This section of the script performs a bivariate analysis
 #-- Association Tests --#
 #########################
 
-# define the output path for the association tests
-output_assoc_path = report_dir + 'bivariate_analysis\\association_tests\\'
-
 # generate the association tests
-va.var_assoc(dataset = base,
-             attrs = ['Survived', 'Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'],
-             response = None,
-             assoc_type = 'nominal',
-             path = output_assoc_path
-             )
+va.Desc.assoc(dataset = base,
+              attrs = ['Survived', 'Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'],
+              response = None,
+              assoc_type = 'nominal',
+              output_dir = cons.bivar_assoc_dir
+              )
 
 #########################
 #-- Correlation Tests --#
 #########################
 
-# define the output path for the association tests
-output_cor_path = report_dir + 'bivariate_analysis\\correlation_tests\\'
 
 # generate the correlation tests
-va.var_corr(dataset = base,
-            attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
-            response = None,
-            corr_type = 'spearman',
-            path = output_cor_path
-            )
+va.Desc.corr(dataset = base,
+             attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
+             response = None,
+             corr_type = 'spearman',
+             output_dir = cons.bivar_corr_dir
+             )
 
 # generate the correlation tests
-va.var_corr(dataset = base,
-            attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
-            response = None,
-            corr_type = 'kendall',
-            path = output_cor_path
-            )
+va.Desc.corr(dataset = base,
+             attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
+             response = None,
+             corr_type = 'kendall',
+             output_dir = cons.bivar_corr_dir
+             )
 
 # generate the correlation tests
-va.var_corr(dataset = base,
-            attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
-            response = None,
-            corr_type = 'goodmans_g',
-            path = output_cor_path
-            )
+va.Desc.corr(dataset = base,
+             attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
+             response = None,
+             corr_type = 'goodmans_g',
+             output_dir = cons.bivar_corr_dir
+             )
 
 # generate the correlation tests
-va.var_corr(dataset = base,
-            attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
-            response = None,
-            corr_type = 'somers_d',
-            path = output_cor_path
-            )
+va.Desc.corr(dataset = base,
+             attrs = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare'],
+             response = None,
+             corr_type = 'somers_d',
+             output_dir = cons.bivar_corr_dir
+             )
 
 """
 ######################
@@ -186,27 +169,27 @@ va.var_corr(dataset = base,
 #-- Swarm Plots --#
 ###################
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['Age'],
                  cat_var = ['cat_survived']
                  )
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['Fare'],
                  cat_var = ['cat_survived']
                  )
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['FamSize'],
                  cat_var = ['cat_survived']
                  )
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['Parch'],
                  cat_var = ['cat_survived']
                  )
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['SibSp'],
                  cat_var = ['cat_survived']
                  )
@@ -215,27 +198,27 @@ va.vis_swarmplot(dataset = base,
 #-- Boxplots --#
 ################
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['Age'],
                cat_var = ['cat_survived']
                )
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['Fare'],
                cat_var = ['cat_survived']
                )
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['FamSize'],
                cat_var = ['cat_survived']
                )
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['Parch'],
                cat_var = ['cat_survived']
                )
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['SibSp'],
                cat_var = ['cat_survived']
                )
@@ -244,27 +227,27 @@ va.vis_boxplot(dataset = base,
 #-- Violin Plots --#
 ####################
 
-va.vis_violin(dataset = base,
+va.Vis.violin(dataset = base,
               num_var = ['Age'],
               cat_var = ['cat_survived']
               )
 
-va.vis_violin(dataset = base,
+va.Vis.violin(dataset = base,
               num_var = ['Fare'],
               cat_var = ['cat_survived']
               )
 
-va.vis_violin(dataset = base,
+va.Vis.violin(dataset = base,
               num_var = ['FamSize'],
               cat_var = ['cat_survived']
               )
 
-va.vis_violin(dataset = base,
+va.Vis.violin(dataset = base,
               num_var = ['Parch'],
               cat_var = ['cat_survived']
               )
 
-va.vis_violin(dataset = base,
+va.Vis.violin(dataset = base,
               num_var = ['SibSp'],
               cat_var = ['cat_survived']
               )
@@ -273,17 +256,17 @@ va.vis_violin(dataset = base,
 #-- Count Plots --#
 ###################
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['cat_pclass'],
              hue_var = ['cat_survived']
              )
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['Sex'],
              hue_var = ['cat_survived']
              )
 
-va.vis_count(dataset = base,
+va.Vis.count(dataset = base,
              cat_var = ['Embarked'],
              hue_var = ['cat_survived']
              )
@@ -292,103 +275,92 @@ va.vis_count(dataset = base,
 #-- Gains Charts --#
 ####################
 
-# define the output path for the descript statistics
-output_gains_path = report_dir + 'bivariate_analysis\\measure_gains\\'
-
 #-- Age --#
 
 # gains charts
-va.measure_gains(dataset = base,
+va.MeasureGains.analysis(dataset = base,
                  attr = 'Age',
                  target = 'Survived',
                  bin_split = 'equal_width',
                  n_bins = 4,
                  title = 'Survival Rates by Age',
-                 path = output_gains_path
+                 path = cons.bivar_gains_dir
                  )
 
 #-- Class --#
 
 # gains charts
-va.measure_gains(dataset = base,
-                 attr = 'Pclass',
-                 target = 'Survived',
-                 bin_split = 'value',
-                 title = 'Survival Rates by Class',
-                 path = output_gains_path
-                 )
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'Pclass',
+                         target = 'Survived',
+                         bin_split = 'value',
+                         title = 'Survival Rates by Class',
+                         path = cons.bivar_gains_dir
+                         )
 
 #-- Sibblings and Spouses --#
 
-va.measure_gains(dataset = base,
-                 attr = 'SibSp',
-                 target = 'Survived',
-                 bin_split = 'value',
-                 title = 'Survival Rates by SibSp',
-                 path = output_gains_path
-                 )
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'SibSp',
+                         target = 'Survived',
+                         bin_split = 'value',
+                         title = 'Survival Rates by SibSp',
+                         path = cons.bivar_gains_dir
+                         )
 
 #-- Parent and Child --#
 
-va.measure_gains(dataset = base,
-                 attr = 'Parch',
-                 target = 'Survived',
-                 bin_split = 'value',
-                 title = 'Survival Rates by Parch',
-                 path = output_gains_path
-                 )
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'Parch',
+                         target = 'Survived',
+                         bin_split = 'value',
+                         title = 'Survival Rates by Parch',
+                         path = cons.bivar_gains_dir
+                         )
 
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'Age',
+                         target = 'Fare',
+                         bin_split = 'equal_size',
+                         n_bins = 5,
+                         title = 'Fare Rates by Age',
+                         path = cons.bivar_gains_dir
+                         )
 
-
-
-
-
-
-
-
-va.measure_gains(dataset = base,
-                 attr = 'Age',
-                 target = 'Fare',
-                 bin_split = 'equal_size',
-                 n_bins = 5,
-                 title = 'Fare Rates by Age',
-                 path = output_gains_path
-                 )
-
-va.measure_gains(dataset = base,
-                 attr = 'Pclass',
-                 target = 'Fare',
-                 bin_split = 'value',
-                 title = 'Fare Rates by Class',
-                 path = output_gains_path
-                 )
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'Pclass',
+                         target = 'Fare',
+                         bin_split = 'value',
+                         title = 'Fare Rates by Class',
+                         path = cons.bivar_gains_dir
+                         )
 
 #-- Target: Age --#
 
-va.measure_gains(dataset = base,
-                 attr = 'Pclass',
-                 target = 'Age',
-                 bin_split = 'value',
-                 title = 'Age Relativity by Class',
-                 path = output_gains_path
-                 )
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'Pclass',
+                         target = 'Age',
+                         bin_split = 'value',
+                         title = 'Age Relativity by Class',
+                         path = cons.bivar_gains_dir
+                         )
+    
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'SibSp',
+                         target = 'Age',
+                         bin_split = 'value',
+                         title = 'Age Relativity by SibSp',
+                         path = cons.bivar_gains_dir
+                         )
 
-va.measure_gains(dataset = base,
-                 attr = 'SibSp',
-                 target = 'Age',
-                 bin_split = 'value',
-                 title = 'Age Relativity by SibSp',
-                 path = output_gains_path
-                 )
 
-
-va.measure_gains(dataset = base,
-                 attr = 'Parch',
-                 target = 'Age',
-                 bin_split = 'value',
-                 title = 'Age Relativity by Parch',
-                 path = output_gains_path
-                 )
+va.MeasureGains.analysis(dataset = base,
+                         attr = 'Parch',
+                         target = 'Age',
+                         bin_split = 'value',
+                         title = 'Age Relativity by Parch',
+                         path = cons.bivar_gains_dir
+                         )
 
 """
 ###########################
@@ -409,31 +381,31 @@ This section of the script performs a multivariate analysis
 #-- Scatter Plots --#
 #####################
 
-va.vis_scatter(dataset = base, 
+va.Vis.scatter(dataset = base, 
                res_var = ['Fare'],
                pred_var = ['Age'],
                hue_var = ['cat_survived']
                )
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['Fare'],
                  cat_var = ['cat_pclass'],
                  hue_var = ['cat_survived']
                  )
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['FamSize'],
                cat_var = ['cat_survived'],
                hue_var = ['Sex']
                )
 
-va.vis_boxplot(dataset = base,
+va.Vis.boxplot(dataset = base,
                num_var = ['Age'],
                cat_var = ['cat_survived'],
                hue_var = ['Sex']
                )
 
-va.vis_swarmplot(dataset = base,
+va.Vis.swarmplot(dataset = base,
                  num_var = ['Age'],
                  cat_var = ['cat_survived'],
                  hue_var = ['Sex']
@@ -443,7 +415,7 @@ va.vis_swarmplot(dataset = base,
 #-- Strip Plots --#
 ####################
 
-va.vis_stripplot(dataset = base,
+va.Vis.stripplot(dataset = base,
                  num_var = ['Age'],
                  cat_var = ['cat_survived'],
                  hue_var = ['Sex']
@@ -453,7 +425,7 @@ va.vis_stripplot(dataset = base,
 #-- Point Plots --#
 ###################
 
-va.vis_pointplot(dataset = base,
+va.Vis.pointplot(dataset = base,
                  num_var = ['Age'],
                  cat_var = ['cat_survived'],
                  hue_var = ['Sex'],
@@ -464,7 +436,7 @@ va.vis_pointplot(dataset = base,
 #-- Violin Plots --#
 ####################
 
-va.vis_violin(dataset = base,
+va.Vis.violin(dataset = base,
               num_var = ['Age'],
               cat_var = ['cat_survived'],
               hue_var = ['cat_pclass'],

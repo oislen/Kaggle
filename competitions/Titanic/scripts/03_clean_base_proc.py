@@ -16,11 +16,10 @@ print('Loading libraries and data ...')
 # load in relevant libraries
 import pandas as pd
 import numpy as np
+import cons
 
 # load in data
-input_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-base_name = 'base.csv'
-base = pd.read_csv(input_dir + base_name, sep = '|')
+base = pd.read_csv(cons.base_data_fpath, sep = '|')
 
 # create an empty dataframe to hold the processed data
 proc = pd.DataFrame()
@@ -301,12 +300,8 @@ proc['Dataset'] = base['Dataset']
 
 print('Outputting cleaned base file ...')
 
-# define the output location and filename
-output_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-output_filename = 'base_clean.csv'
-
 # output the dataset
-proc.to_csv(output_dir + output_filename,
+proc.to_csv(cons.base_clean_data_fpath,
             sep = '|',
             encoding = 'utf-8',
             header = True,

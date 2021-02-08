@@ -16,16 +16,13 @@ print('Loading in libraries and data ...')
 # load in relevant libraries
 import pandas as pd
 from sklearn import ensemble
+import cons
 
 # load cusotm functions
-import sys
-sys.path.append('C:/Users/User/Documents/Data_Analytics/Python/value_analysis')
 import value_analysis as va
 
 # load in data
-input_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-base_name = 'base_clean_2.csv'
-base = pd.read_csv(input_dir + base_name, 
+base = pd.read_csv(cons.base_clean_2_data_fpath, 
                    sep = '|'
                    )
 
@@ -95,13 +92,13 @@ X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = engin,
 gbm = ensemble.GradientBoostingClassifier(random_state = 123)
 
 # determine the feature importance
-feat_imp = va.TREE_feat_imp(model = gbm,
+feat_imp = va.tree_feat_imp(model = gbm,
                             y_train = y_train,
                             X_train = X_train
                             )
 
 # extract out the important features 
-best_feat = feat_imp['Predictor'][feat_imp['Importance'] > 1].tolist()
+best_feat = feat_imp.index[feat_imp['Importance'] > 1].tolist()
 
 # add in additional variables to enable the interaction effects
 add_vars = ['Pclass', 'Embarked', 'FamSize', 'SibSp']
@@ -122,12 +119,8 @@ final_data = pd.concat(objs = [base[['PassengerId', 'Dataset', 'Survived']], bes
 
 print('Outputting data ...')
 
-# define the output location and filename
-output_dir = 'C:\\Users\\User\\Documents\\Kaggle\\Titanic\\data\\attempt_3\\'
-output_filename = 'base_engin.csv'
-
 # output the dataset
-final_data.to_csv(output_dir + output_filename,
+final_data.to_csv(cons.base_engin_data_fpath,
                   sep = '|',
                   encoding = 'utf-8',
                   header = True,
