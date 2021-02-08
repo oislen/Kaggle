@@ -9,6 +9,8 @@ Created on Mon Feb  8 17:20:45 2021
 import os
 import sys
 
+#-- Filepath Constants --#
+
 # set programme constants
 comp_name = 'titanic'
 download_data = True
@@ -54,3 +56,73 @@ pred_data_fpath = os.path.join(data_dir, pred_data_fname)
 # append utilities directory to path
 for p in [utilities_dir, va_dir]:
     sys.path.append(p)
+    
+#-- Cleaning Constants --#
+
+# the title of a person indicates the person status
+title_map = {'Mr':'Mr', 
+             'Miss':'Ms', 
+             'Mrs':'Mrs', 
+             'Master':'Master',
+             'Dr':'Dr',
+             'Rev':'Rev',
+             'Col':'Col',
+             'Major':'Major',
+             'Ms':'Ms',
+             'Mlle':'Ms',
+             'Capt':'Capt',
+             'Don':'Mr',
+             'Jonkheer':'Jonkheer',
+             'Sir':'Sir',
+             'Lady':'Lady',
+             'Mme':'Mrs',
+             'Dona':'Mrs',
+             'theCountess':'Countess'
+             }
+
+    
+# create a map for the title values
+priv_map = {'Mr':'Mr', 
+            'Ms':'Ms', 
+            'Mrs':'Mrs', 
+            'Master':'Priv',
+            'Dr':'Priv',
+            'Rev':'Priv',
+            'Col':'Priv',
+            'Major':'Priv',
+            'Capt':'Priv',
+            'Jonkheer':'Priv',
+            'Sir':'Priv',
+            'Lady':'Priv',
+            'Countess':'Priv'
+            }
+
+# create cabin map
+cab_map = {'A':'A', 'B':'B', 'BB':'B', 'BBB':'B', 'BBBB':'B', 'C':'C', 
+           'CC':'C', 'CCC':'C', 'D':'D', 'DD':'D', 'E':'E', 'EE':'E',
+           'F':'F', 'FG':'F', 'FE':'F', 'G':'G', 'T':'T'
+           }
+
+# create embarked map
+embarked_map = {'S':1, 'C':2, 'Q':3}
+
+# create class map
+class_map = {1:3, 2:2, 3:1}
+    
+# save the parametre features to tune as a dictionary
+train_age_gbm_params = {'loss':['lad'],
+                        'learning_rate':[1.0, 0.9, 0.8],
+                        'n_estimators':[50, 100, 200],
+                        'max_depth':[1, 3, 5],
+                        'max_features':[None, 'sqrt', 'log2'],
+                        'presort':[True]
+                        }
+
+# save the parametre features to tune as a dictionary
+test_age_gbm_params = {'loss':['lad'],
+                       'learning_rate':[1.0, 0.9, 0.8],
+                       'n_estimators':[50, 100, 200],
+                       'max_depth':[1, 3, 5],
+                       'max_features':[None, 'sqrt', 'log2'],
+                       'presort':[True]
+                       }
