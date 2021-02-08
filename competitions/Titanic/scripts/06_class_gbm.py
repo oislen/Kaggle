@@ -100,13 +100,13 @@ y_valid['Survived_pred'] = gbm.predict(X_valid)
 
 # genrate the regression metrics
 with pd.option_context('display.max_columns', None):
-    print(va.metrics(y_obs = y_valid['Survived'], 
-                     y_pred = y_valid['Survived_pred'], 
-                     target_type = 'class'
-                     ))
+    print(va.perf_metrics(y_obs = y_valid['Survived'], 
+                          y_pred = y_valid['Survived_pred'], 
+                          target_type = 'class'
+                          ))
 
 # create a ROC curve
-va.vis_roc_curve(obs = 'Survived', preds = 'Survived_pred', dataset = y_valid)
+va.Vis.roc_curve(obs = 'Survived', preds = 'Survived_pred', dataset = y_valid)
 
 # predict for the test set
 base_test['Survived'] = gbm.predict(base_test[X_valid.columns])
