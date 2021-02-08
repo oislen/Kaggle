@@ -3,8 +3,6 @@ competitions/HousePrices/data
 competitions/HousePrices/report
 competitions/Titanic/data
 competitions/Titanic/report
-competitions/IEEE-CIS_Fraud_Detection/*.csv
-competitions/IEEE-CIS_Fraud_Detection/report
 competitions/Predict_Future_Sales/data
 competitions/Predict_Future_Sales/report
 competitions/Predict_Future_Sales/models
