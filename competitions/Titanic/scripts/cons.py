@@ -126,3 +126,15 @@ test_age_gbm_params = {'loss':['lad'],
                        'max_features':[None, 'sqrt', 'log2'],
                        'presort':[True]
                        }
+
+# save the parametre features to tune as a dictionary
+model_gbm_params = {'loss':['deviance', 'exponential'],
+                    'subsample':[1, 0.9, 0.8],
+                    'learning_rate':[1.0, 0.9, 0.8],
+                    'min_samples_split':[2, 3, 4],
+                    'min_samples_leaf':[1, 2, 3],
+                    'n_estimators':[25, 50, 75],
+                    'max_depth':[1, 3, 5],
+                    'max_features':['auto', 'sqrt', 'log2'],
+                    'presort':[True]
+                    }
