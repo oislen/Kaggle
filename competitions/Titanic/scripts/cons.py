@@ -59,6 +59,12 @@ for p in [utilities_dir, va_dir]:
     
 #-- Cleaning Constants --#
 
+# set base columns
+sub_cols = ['PassengerId', 'Survived', 'Pclass', 'Age',
+            'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 
+            'Mr', 'Mrs', 'Ms', 'Priv', 'male',
+            'Embarked', 'Dataset']
+
 # the title of a person indicates the person status
 title_map = {'Mr':'Mr', 
              'Miss':'Ms', 
