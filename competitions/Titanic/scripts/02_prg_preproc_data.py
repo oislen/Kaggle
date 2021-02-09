@@ -37,15 +37,19 @@ def prg_preproc_data():
         
     """
     
+    print('~~~~~ Running base data generator ...')
+    
     # generate base data
     gen_base_data(train_fpath = cons.train_data_fpath,
                   test_fpath = cons.test_data_fpath,
                   base_fpath = cons.base_data_fpath
                   )
     
+    print('~~~~~ Running base data cleaner ...')
+    
     # generate clean base data
-    clean_base_data(cons.base_data_fpath,
-                    cons.base_clean_data_fpath
+    clean_base_data(base_fpath = cons.base_data_fpath,
+                    base_clean_fpath = cons.base_clean_data_fpath
                     )
     
     # generate clean base age
