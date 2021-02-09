@@ -8,7 +8,6 @@ Created on Sun Nov  4 21:46:26 2018
 # load in relevant libraries
 import pandas as pd
 from sklearn import ensemble
-import cons
 
 # load cusotm functions
 import value_analysis as va
