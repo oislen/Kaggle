@@ -48,133 +48,120 @@ def clean_base_data(base_fpath,
     # load in data
     base = pd.read_csv(base_fpath, sep = '|')
     
-    # create an empty dataframe to hold the processed data
-    proc = pd.DataFrame()
-    
-    print('Working on passengerid ...')
-    
-    # transfer thpassenger id attribute
-    proc['PassengerId'] = base['PassengerId']
-
-    print('Working on survived ...')
-    
-    # transfer the target survived attribute
-    proc['Survived'] = base['Survived']
-    
+    # create a copy of the base data
+    proc = base.copy(deep = True)
+   
     print('Working on pclass ...')
     
     # transfer the person's class attribute
-    proc['Pclass'] = base['Pclass'].map(cons.class_map).astype(int)
+    proc['Pclass'] = proc['Pclass'].map(cons.class_map).astype(int)
 
-    print('Working on name ...')
+    print('Extracting title ...')
 
     # split name on , to extract the surname and title / firstname
-    base['surname'] = base.Name.str.split(pat = ',', expand = True)[0]
-    title_firstname = base.Name.str.split(pat = ',', expand = True)[1]
+    name_split = proc['Name'].str.split(pat = ',', expand = True)
+    #surname = name_split[0]
+    title_firstname = name_split[1]
     
     # split on . to extract title and first name
-    base['title'] = title_firstname.str.split(pat = '.', expand = True)[0].str.replace(pat = ' ', repl = '')
-    base['firstname'] = title_firstname.str.split(pat = '.', expand = True)[1]
+    title_split = title_firstname.str.split(pat = '.', expand = True)
+    title = title_split[0].str.replace(pat = ' ', repl = '')
+    #firstname = title_split[1]
     
     # map the title vlaues
-    base['title'] = base['title'].map(cons.title_map)
+    title_map = title.map(cons.title_map)
 
     # map the title vlaues
-    base['status'] = base['title'].map(cons.priv_map)
+    status_map = title_map.map(cons.priv_map)
     
     # generate dummy variables for the titles
-    dummy = pd.get_dummies(base['status'])
-    dummy = dummy.drop(columns = ['Mr'])
-    proc = pd.concat(objs = [proc, dummy], axis = 1)
+    dummy = pd.get_dummies(status_map)
+    concat_objs = [proc, dummy]
+    proc = pd.concat(objs = concat_objs, axis = 1)
     
     print('Working on sex ...')
     
     # map the title vlaues
-    proc['male'] = (base['Sex'] == 'male').astype(int)
-
-    print('Working on age ...')
-    
-    # transfer the age attribute
-    proc['Age'] = base['Age']
-
-    print('Working on SibSp ...')
-    
-    # transfer the sibbling spouse attribute
-    proc['SibSp'] = base['SibSp']
-
-    print('Working on Parch ...')
-    
-    # transfer the parent child attribute
-    proc['Parch'] = base['Parch']
-
-    print('Working on ticket ...')
-    
-    # extract the ticket prefic
-    base['Ticket_Prefix'] = base['Ticket'].str.extract(pat = '^(.*) ')
-    
-    # extract the ticket number
-    base['Ticket_Number'] = base['Ticket'].str.extract(pat = '(\d+)$').astype(float)
-    
-    # fill in the empty ticket prefix with the correct value
-    base['Ticket_Prefix'][base['Ticket_Number'].isnull()] = 'LINE'
-    
-    # clean the ticket prefix so that / . and spaces are removed
-    base['Ticket_Prefix'] = base['Ticket_Prefix'].str.replace(pat = '([ ./\d]*)', repl = '')
-
-    proc['Ticket_Number'] = base['Ticket_Number'].fillna(-1).astype(int)
-
-    print('Working on fare ...')
-    
-    # calculate the mean fare for people with similar data points
-    mean_fare = base.Fare[(base.Pclass == 3) & (base.Sex == 'male') & (base.Age > 50) & (base.Age < 70) & (base.title == 'Mr') & (base.Embarked == 'S') & (base.Parch == 0) & (base.SibSp == 0)].mean()
-    
-    proc['Fare'] = base['Fare'].fillna(mean_fare)
-
-    print('Working on cabin ...')
-    
-    # extract the cabin numbers
-    base['Cabin_Numbers'] = base['Cabin'].str.replace(pat = '([A-Za-z ])', repl = '')
-    base['Cabin_Numbers'][base['Cabin_Numbers'] == ''] = np.nan
-    
-    
-    # extract the cabin letters
-    base['Cabin_Letters'] = base['Cabin'].str.replace(pat = '([\d* ])', repl = '')
-
-    base['Cabin_Letters'] = base['Cabin_Letters'].map(cons.cab_map)
-    
-    proc = pd.concat(objs = [proc, 
-                             pd.get_dummies(data = base['Cabin_Letters'],
-                                            prefix = 'Cabin_Letters'
-                                            )
-                             ],
-                     axis = 1
-                     )
+    proc['male'] = (proc['Sex'] == 'male').astype(int)
 
     print('Working on embarked ...')
     
+    # calculate mode embarked 
+    mode_embarked = proc['Embarked'].value_counts().index[0]
+    
     # fill the missing values with southampton 
-    base['Embarked'] = base['Embarked'].fillna('S')
+    proc['Embarked'] = proc['Embarked'].fillna(mode_embarked)
     
     # map the embarked locations in order of there destinations
-    proc['Embarked'] = base['Embarked'].map(cons.embarked_map).astype(int)
+    proc['Embarked'] = proc['Embarked'].map(cons.embarked_map).astype(int)
     
-    proc['FamSize'] = base['FamSize']
+    print('Working on fare ...')
 
-    proc['Alone'] = base['Alone']
-
-    print('Working on dataset ...')
+    # create fare filters
+    pclass_filt = (proc['Pclass'] == 3)
+    sex_filt = (proc['Sex'] == 'male')
+    age_filt = (proc['Age'] > 50) & (proc['Age'] < 70)
+    title_filt = (proc['Mr'] == 1)
+    embarked_filt = (proc['Embarked'] == 'S')
+    parch_filt = (proc['Parch'] == 0)
+    sibsp_filt = (proc['SibSp'] == 0)
+    mean_fare_filt = pclass_filt & sex_filt & age_filt & title_filt & embarked_filt & parch_filt & sibsp_filt
     
-    # transfer the dataset attribute
-    proc['Dataset'] = base['Dataset']
+    # calculate the mean fare for people with similar data points
+    mean_fare = proc.Fare[mean_fare_filt].mean()
+    
+    # fill in mean value
+    proc['Fare'] = proc['Fare'].fillna(mean_fare)
+    
+    if False:
+        
+        print('Working on cabin ...')
+        
+        # extract the cabin numbers
+        base['Cabin_Numbers'] = base['Cabin'].str.replace(pat = '([A-Za-z ])', repl = '')
+        base['Cabin_Numbers'][base['Cabin_Numbers'] == ''] = np.nan
+        
+        
+        # extract the cabin letters
+        base['Cabin_Letters'] = base['Cabin'].str.replace(pat = '([\d* ])', repl = '')
+    
+        base['Cabin_Letters'] = base['Cabin_Letters'].map(cons.cab_map)
+        
+        proc = pd.concat(objs = [proc, 
+                                 pd.get_dummies(data = base['Cabin_Letters'],
+                                                prefix = 'Cabin_Letters'
+                                                )
+                                 ],
+                         axis = 1
+                         )
+    
+        print('Working on ticket ...')
+        
+        # extract the ticket prefic
+        ticket_prefix = base['Ticket'].str.extract(pat = '^(.*) ', expand = False)
+        
+        # extract the ticket number
+        ticket_num = base['Ticket'].str.extract(pat = '(\d+)$', expand = False).astype(float)
+        
+        # fill in the empty ticket prefix with the correct value
+        ticket_prefix[ticket_num.isnull()] = 'LINE'
+        
+        # clean the ticket prefix so that / . and spaces are removed
+        ticket_prefix = ticket_prefix.str.replace(pat = '([ ./\d]*)', repl = '')
+    
+        proc['Ticket_Number'] = ticket_num.fillna(-1).astype(int)
 
     print('Outputting cleaned base file ...')
     
+    # subet output columns
+    proc_sub = proc[cons.sub_cols]
+    
     # output the dataset
-    proc.to_csv(base_clean_fpath,
-                sep = '|',
-                encoding = 'utf-8',
-                header = True,
-                index = False
-                )
+    proc_sub.to_csv(base_clean_fpath,
+                    sep = '|',
+                    encoding = 'utf-8',
+                    header = True,
+                    index = False
+                    )
 
     return 0
