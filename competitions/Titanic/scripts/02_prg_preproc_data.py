@@ -8,7 +8,6 @@ Created on Tue Feb  9 09:49:33 2021
 import cons
 from utilities.gen_base_data import gen_base_data
 from utilities.clean_base_data import clean_base_data
-from utilities.clean_base_age import clean_base_age
 from utilities.feat_engineer import feat_engineer
 
 def prg_preproc_data():
@@ -52,10 +51,7 @@ def prg_preproc_data():
                     base_clean_fpath = cons.base_clean_data_fpath
                     )
     
-    # generate clean base age
-    clean_base_age(base_clean_fpath = cons.base_clean_data_fpath,
-                   base_clean_2_fpath = cons.base_clean_2_data_fpath
-                   )
+    print('~~~~~ Running feature engineer ...')
     
     # engineer new features
     feat_engineer(base_clean_2_fpath = cons.base_clean_2_data_fpath,
