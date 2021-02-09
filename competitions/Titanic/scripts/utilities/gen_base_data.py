@@ -8,7 +8,6 @@ Created on Sat Nov  3 10:42:39 2018
 # load in libraries
 import pandas as pd
 import numpy as np
-import cons 
 
 def gen_base_data(train_fpath,
                   test_fpath,
@@ -55,15 +54,11 @@ def gen_base_data(train_fpath,
     """
 
     # load in data
-    train = pd.read_csv(train_fpath, sep = ',')
-    test = pd.read_csv(test_fpath, sep = ',')
+    train = pd.read_csv(train_fpath)
+    test = pd.read_csv(test_fpath)
 
     print('Concatenating files ...')
-    
-    # note the training set as an extra column, the target survived
-    train.columns
-    test.columns
-    
+
     # create a 'Survived' column in test
     test['Survived'] = np.nan
     
@@ -71,8 +66,14 @@ def gen_base_data(train_fpath,
     train['Dataset'] = 'train'
     test['Dataset'] = 'test'
     
+    # create list of objects to concatenate
+    concat_objs = [train, test]
+    
     # row bind the datasets
-    base = pd.concat(objs = [train, test], axis = 0, sort = False)
+    base = pd.concat(objs = concat_objs, 
+                     axis = 0, 
+                     sort = False
+                     )
     
     print('Engineering new features ...')
     
