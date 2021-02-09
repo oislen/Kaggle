@@ -9,6 +9,7 @@ Created on Sat Nov  3 15:52:22 2018
 import pandas as pd
 import numpy as np
 import cons
+from utilities.clean_base_age import clean_base_age
 
 def clean_base_data(base_fpath,
                     base_clean_fpath
@@ -98,17 +99,17 @@ def clean_base_data(base_fpath,
     print('Working on fare ...')
 
     # create fare filters
-    pclass_filt = (proc['Pclass'] == 3)
+    pclass_filt = (proc['Pclass'] == 1)
     sex_filt = (proc['Sex'] == 'male')
     age_filt = (proc['Age'] > 50) & (proc['Age'] < 70)
     title_filt = (proc['Mr'] == 1)
-    embarked_filt = (proc['Embarked'] == 'S')
+    embarked_filt = (proc['Embarked'] == 1)
     parch_filt = (proc['Parch'] == 0)
     sibsp_filt = (proc['SibSp'] == 0)
     mean_fare_filt = pclass_filt & sex_filt & age_filt & title_filt & embarked_filt & parch_filt & sibsp_filt
     
     # calculate the mean fare for people with similar data points
-    mean_fare = proc.Fare[mean_fare_filt].mean()
+    mean_fare = np.round(proc.loc[mean_fare_filt, 'Fare'].mean(skipna = True), 2)
     
     # fill in mean value
     proc['Fare'] = proc['Fare'].fillna(mean_fare)
@@ -150,6 +151,12 @@ def clean_base_data(base_fpath,
         ticket_prefix = ticket_prefix.str.replace(pat = '([ ./\d]*)', repl = '')
     
         proc['Ticket_Number'] = ticket_num.fillna(-1).astype(int)
+
+    
+    print('Filling in missing age values ...')
+    
+    # generate clean base age
+    proc = clean_base_age(base = proc)
 
     print('Outputting cleaned base file ...')
     
