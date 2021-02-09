@@ -178,9 +178,3 @@ def clean_base_data(base_fpath,
                 )
 
     return 0
-
-if __name__ == '__main__':
-    
-    clean_base_data(cons.base_data_fpath,
-                    cons.base_clean_data_fpath
-                    )

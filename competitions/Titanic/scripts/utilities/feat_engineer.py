@@ -131,9 +131,3 @@ def feat_engineer(base_clean_2_fpath,
                       )
     
     return 0
-
-if __name__ == '__main__':
-    
-    feat_engineer(base_clean_2_fpath = cons.base_clean_2_data_fpath,
-                  base_engin_fpath = cons.base_engin_data_fpath
-                  )

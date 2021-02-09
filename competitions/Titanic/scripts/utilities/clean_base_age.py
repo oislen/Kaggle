@@ -199,9 +199,3 @@ def clean_base_age(base_clean_fpath,
                 )
     
     return 0 
-
-if __name__ == '__main__':
-    
-    clean_base_age(base_clean_fpath = cons.base_clean_data_fpath,
-                   base_clean_2_fpath = cons.base_clean_2_data_fpath
-                   )

@@ -93,12 +93,3 @@ def gen_base_data(train_fpath,
                    )
     
     return 0
-
-
-if __name__ == '__main__':
-    
-    gen_base_data(train_fpath = cons.train_data_fpath,
-                  test_fpath = cons.test_data_fpath,
-                  base_fpath = cons.base_data_fpath
-                  )
-    
