@@ -106,6 +106,13 @@ priv_map = {'Mr':'Mr',
             'Countess':'Priv'
             }
 
+# create ordinal mapping for title
+title_ord_map = {'Mr':1,
+                 'Ms':2,
+                 'Mrs':3,
+                 'Priv':4
+                 }
+
 # create cabin map
 cab_map = {'A':'A', 'B':'B', 'BB':'B', 'BBB':'B', 'BBBB':'B', 'C':'C', 
            'CC':'C', 'CCC':'C', 'D':'D', 'DD':'D', 'E':'E', 'EE':'E',
@@ -119,21 +126,11 @@ embarked_map = {'S':1, 'C':2, 'Q':3}
 class_map = {1:3, 2:2, 3:1}
     
 # save the parametre features to tune as a dictionary
-train_age_gbm_params = {'loss':['lad'],
-                        'learning_rate':[1.0, 0.9, 0.8],
-                        'n_estimators':[50, 100, 200],
-                        'max_depth':[1, 3, 5],
-                        'max_features':[None, 'sqrt', 'log2'],
-                        'presort':[True]
-                        }
-
-# save the parametre features to tune as a dictionary
 test_age_gbm_params = {'loss':['lad'],
                        'learning_rate':[1.0, 0.9, 0.8],
-                       'n_estimators':[50, 100, 200],
+                       'n_estimators':[50, 100],
                        'max_depth':[1, 3, 5],
-                       'max_features':[None, 'sqrt', 'log2'],
-                       'presort':[True]
+                       'max_features':['sqrt', 'log2']
                        }
 
 # save the parametre features to tune as a dictionary
