@@ -76,7 +76,8 @@ def class_gm(base_engin_fpath,
                                          params = cons.model_gbm_params, 
                                          X_train = X_train, 
                                          y_train = y_train,
-                                         scoring = 'accuracy'
+                                         scoring = 'accuracy',
+                                         verbose = 3
                                          )
     
     # extract the best parameters
@@ -89,13 +90,11 @@ def class_gm(base_engin_fpath,
                                               min_samples_split = best_params['min_samples_split'],
                                               min_samples_leaf = best_params['min_samples_leaf'],
                                               max_depth = best_params['max_depth'],
-                                              max_features = best_params['max_features'],
                                               n_estimators = best_params['n_estimators'],
-                                              presort = best_params['presort'],
                                               random_state = 123
                                               )
     
-    # fit the best model
+    # fit the model given best parameters for validation
     gbm.fit(X_train, 
             y_train.values.ravel()
             )
@@ -104,14 +103,33 @@ def class_gm(base_engin_fpath,
     y_valid['Survived_pred'] = gbm.predict(X_valid)
     
     # genrate the regression metrics
-    with pd.option_context('display.max_columns', None):
-        print(va.perf_metrics(y_obs = y_valid['Survived'], 
-                              y_pred = y_valid['Survived_pred'], 
-                              target_type = 'class'
-                              ))
+    print(va.perf_metrics(y_obs = y_valid['Survived'], 
+                          y_pred = y_valid['Survived_pred'], 
+                          target_type = 'class'
+                          ))
     
     # create a ROC curve
-    va.Vis.roc_curve(obs = 'Survived', preds = 'Survived_pred', dataset = y_valid)
+    va.Vis.roc_curve(obs = 'Survived', 
+                     preds = 'Survived_pred', 
+                     dataset = y_valid
+                     )
+  
+    
+    # randomly split the dataset
+    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = base_train,
+                                                                    y = ['Survived'],
+                                                                    X = base_train.columns.drop(['PassengerId', 'Dataset', 'Survived']),
+                                                                    train_size = 1,
+                                                                    test_size = 0,
+                                                                    random_split = False,
+                                                                    sample_target = 'Survived',
+                                                                    sample_type = 'over'
+                                                                    )
+    
+    # refit model to all training data
+    gbm.fit(X_train, 
+            y_train.values.ravel()
+            )
     
     # predict for the test set
     base_test['Survived'] = gbm.predict(base_test[X_valid.columns])
