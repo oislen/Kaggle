@@ -8,8 +8,6 @@ Created on Sun Nov  4 21:46:26 2018
 # load in relevant libraries
 import pandas as pd
 from sklearn import ensemble
-
-# load cusotm functions
 import value_analysis as va
 
 def feat_engineer(base_clean_2_fpath,
@@ -54,8 +52,13 @@ def feat_engineer(base_clean_2_fpath,
 
     print('Deriving interaction terms ...')
     
+    # define id columns
+    id_cols = ['PassengerId', 'Dataset', 'Survived']
+    
     # extract the columns to create interaction terms for
-    int_cols = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'FamSize']
+    int_cols = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'FamSize',
+                'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male'
+                ]
     
     # create interaction terms
     int_data = va.derive_variables(dataset = base,
@@ -64,31 +67,17 @@ def feat_engineer(base_clean_2_fpath,
                                    )
     
     # create the engineered data by concatenating the base data with the interaction data
-    engin = pd.concat(objs = [base, int_data],
+    sub_cols = id_cols + int_cols
+    engin = pd.concat(objs = [base[sub_cols], int_data],
                       axis = 1
                       )
 
-    print('Standardising data ...')
-    
-    # define the columns to standardise
-    stand_cols = int_data.columns.tolist()
-    
-    # standardise data to interval [0, 1]
-    stand = va.standardise_variables(dataset = int_data,
-                                     attr = stand_cols,
-                                     stand_type = 'range',
-                                     stand_range = [0, 1]
-                                     )
-    
-    # update the processed data
-    engin[stand_cols] = stand
-
-    print('Performing feature importance ...')
+    print('Performing feature importance on all terms ...')
     
     # randomly split the dataset
     X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = engin,
                                                                     y = ['Survived'],
-                                                                    X = engin.columns.drop(['PassengerId', 'Dataset', 'Survived', 'Ticket_Number']),
+                                                                    X = engin.columns.drop(['PassengerId', 'Dataset', 'Survived']),
                                                                     train_size = 0.8,
                                                                     test_size = 0.2,
                                                                     random_split = True,
@@ -105,19 +94,35 @@ def feat_engineer(base_clean_2_fpath,
                                 X_train = X_train
                                 )
     
+    # consider only interaction terms
+    int_feat_imp_filt = pd.Series(feat_imp.index).str.contains('_x_').tolist()
+    
+    # filter out non interaction terms from feat_imp
+    feat_imp_sub = feat_imp.loc[int_feat_imp_filt, :]
+    
     # extract out the important features 
-    best_feat = feat_imp.index[feat_imp['Importance'] > 1].tolist()
+    top_int_feat = feat_imp_sub.index[feat_imp_sub['Importance'] > 5].tolist()
     
     # add in additional variables to enable the interaction effects
-    add_vars = ['Pclass', 'Embarked', 'FamSize', 'SibSp']
-    
-    # subset the best data
-    best_data = engin[best_feat + add_vars]
+    out_vars = id_cols + int_cols + top_int_feat
     
     # create the final dataset
-    final_data = pd.concat(objs = [base[['PassengerId', 'Dataset', 'Survived']], best_data],
-                           axis = 1
-                           )
+    final_data = engin[out_vars]
+
+    print('Standardising data ...')
+    
+    # define the columns to standardise
+    stand_cols = int_cols + top_int_feat
+    
+    # standardise data to interval [0, 1]
+    stand = va.standardise_variables(dataset = final_data,
+                                     attr = stand_cols,
+                                     stand_type = 'range',
+                                     stand_range = [0, 1]
+                                     )
+    
+    # update the processed data
+    final_data[stand_cols] = stand
 
     print('Outputting data ...')
     
