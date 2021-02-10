@@ -20,7 +20,12 @@ def age_nafill_mod(base_train,
                    test_size = 0.2,
                    random_split = True,
                    sample_target = None,
-                   scoring = 'neg_mean_squared_error'
+                   scoring = 'neg_mean_squared_error',
+                   cv = 10,
+                   n_jobs = -1,
+                   refit = True,
+                   return_mod = True,
+                   verbose = 0
                    ):
     
     """
@@ -99,27 +104,41 @@ def age_nafill_mod(base_train,
                                          params = params, 
                                          X_train = X_train, 
                                          y_train = y_train,
-                                         scoring = scoring
+                                         scoring = scoring,
+                                         return_mod = return_mod,
+                                         cv = cv,
+                                         n_jobs = n_jobs,
+                                         refit = refit,
+                                         verbose = verbose
                                          )
     
-    # extract the best parameters
-    best_params = mod_tuning.loc[0, 'params']
-    
-    # initiate the best model
-    gbm = ensemble.GradientBoostingRegressor(learning_rate = best_params['learning_rate'],
-                                             loss = best_params['loss'],
-                                             max_depth = best_params['max_depth'],
-                                             max_features = best_params['max_features'],
-                                             n_estimators = best_params['n_estimators'],
-                                             presort = best_params['presort'],
-                                             random_state = 123
-                                             )
-    
-    # fit the best model
-    gbm.fit(X_train, 
-            y_train.values.ravel()
-            )
-    
+    if refit == False or return_mod == False:
+        
+        # extract out the model tuning results
+        mod_tuning_df = mod_tuning['tune_df']
+        
+        # extract the best parameters
+        best_params = mod_tuning_df.loc[0, 'params']
+        
+        # initiate the best model
+        gbm = ensemble.GradientBoostingRegressor(learning_rate = best_params['learning_rate'],
+                                                 loss = best_params['loss'],
+                                                 max_depth = best_params['max_depth'],
+                                                 max_features = best_params['max_features'],
+                                                 n_estimators = best_params['n_estimators'],
+                                                 random_state = 123
+                                                 )
+        
+        # fit the best model
+        gbm.fit(X_train, 
+                y_train.values.ravel()
+                )
+        
+    else:
+        
+        # extract out the model of best fit
+        gbm = mod_tuning['best_estimator']
+        
     # classify the validation set
     y_valid['Age_pred'] = gbm.predict(X_valid)
     
@@ -135,8 +154,26 @@ def age_nafill_mod(base_train,
                             dataset = y_valid
                             )
     
+    # plot predicted age
+    va.Vis.hist(dataset = y_valid,
+                num_var = ['Age_pred'],
+                title = 'Histogram of Predicted Age - Validation Set'
+                )
+    
+    # refit model to all training data
+            # fit the best model
+    gbm.fit(base_train[X_col], 
+            base_train[y_col].values.ravel()
+            )
+
     # predict for the base_test set
-    base_test['Age'] = gbm.predict(base_test[X_valid.columns])
+    base_test['Age'] = gbm.predict(base_test[X_col])
+    
+    # plot predicted age
+    va.Vis.hist(dataset = base_test,
+                num_var = ['Age'],
+                title = 'Histogram of Predicted Age - Test Set'
+                )
     
     # re-concatenate the base training and base test to update base data
     base = pd.concat(objs = [base_train, base_test],
