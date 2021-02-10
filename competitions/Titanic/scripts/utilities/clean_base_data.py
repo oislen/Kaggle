@@ -75,6 +75,9 @@ def clean_base_data(base_fpath,
     # map the title vlaues
     status_map = title_map.map(cons.priv_map)
     
+    # create title ordinal var
+    proc['Title_Ord'] = status_map.map(cons.title_ord_map)
+    
     # generate dummy variables for the titles
     dummy = pd.get_dummies(status_map)
     concat_objs = [proc, dummy]
@@ -83,7 +86,7 @@ def clean_base_data(base_fpath,
     print('Working on sex ...')
     
     # map the title vlaues
-    proc['male'] = (proc['Sex'] == 'male').astype(int)
+    proc['Male'] = (proc['Sex'] == 'male').astype(int)
 
     print('Working on embarked ...')
     
@@ -113,6 +116,9 @@ def clean_base_data(base_fpath,
     
     # fill in mean value
     proc['Fare'] = proc['Fare'].fillna(mean_fare)
+    
+    # cut up Fare
+    proc['Fare_Ord'] = pd.qcut(proc['Fare'], q = 4, labels = [1, 2, 3, 4]).astype(int)
     
     if False:
         
@@ -152,7 +158,6 @@ def clean_base_data(base_fpath,
     
         proc['Ticket_Number'] = ticket_num.fillna(-1).astype(int)
 
-    
     print('Filling in missing age values ...')
     
     # generate clean base age
