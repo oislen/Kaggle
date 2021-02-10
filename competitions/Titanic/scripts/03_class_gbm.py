@@ -7,9 +7,9 @@ Created on Sun Nov  4 22:19:35 2018
 
 # load in relevant libraries
 import pandas as pd
-from sklearn import ensemble
+from utilities.fit_mod import fit_mod
 import cons
-import value_analysis as va
+import model_cons
 
 def class_gm(base_engin_fpath,
              pred_fpath
@@ -54,92 +54,61 @@ def class_gm(base_engin_fpath,
     # split the data based on the original dataset
     base_train = base[base.Dataset == 'train']
     base_test = base[base.Dataset == 'test']
-
-    print('Classifying for Survived ...')
     
-    # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = base_train,
-                                                                    y = ['Survived'],
-                                                                    X = base_train.columns.drop(['PassengerId', 'Dataset', 'Survived']),
-                                                                    train_size = 0.8,
-                                                                    test_size = 0.2,
-                                                                    random_split = True,
-                                                                    sample_target = 'Survived',
-                                                                    sample_type = 'over'
-                                                                    )
     
-    # initiate gbm
-    gbm = ensemble.GradientBoostingClassifier(random_state = 123)
+    # extract out model and params
+    sur_dict = model_cons.sur_dict
     
-    # tune gbm model
-    mod_tuning = va.tune_hyperparameters(model = gbm, 
-                                         params = cons.model_gbm_params, 
-                                         X_train = X_train, 
-                                         y_train = y_train,
-                                         scoring = 'accuracy',
-                                         verbose = 3
-                                         )
+    # set model constants
+    y_col = ['Survived']
+    X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked']
+    model = sur_dict['gbm']['model']
+    params = sur_dict['gbm']['params']
+    target_type = 'class'
+    random_state = 123
+    train_size = 0.8
+    test_size = 0.2
+    random_split = True
+    sample_target = 'Survived'
+    sample_type = 'over'
+    scoring = 'accuracy'
+    refit = True
+    return_mod = True
+    verbose = 3
+    cv = 10
+    n_jobs = -1
     
-    # extract the best parameters
-    best_params = mod_tuning.loc[0, 'params']
+    # fit model
+    base_out = fit_mod(base_train = base_train,
+                       base_test = base_test,
+                       y_col = y_col,
+                       X_col = X_col,
+                       model = model,
+                       params = params,
+                       target_type = target_type,
+                       random_state = random_state,
+                       train_size = train_size,
+                       test_size = test_size,
+                       random_split = random_split,
+                       sample_target = sample_target,
+                       sample_type = sample_type,
+                       scoring = scoring,
+                       cv = cv,
+                       n_jobs = n_jobs,
+                       refit = refit,
+                       return_mod = return_mod,
+                       verbose = verbose
+                       )
     
-    # initiate the best model
-    gbm = ensemble.GradientBoostingClassifier(learning_rate = best_params['learning_rate'],
-                                              loss = best_params['loss'],
-                                              subsample = best_params['subsample'],
-                                              min_samples_split = best_params['min_samples_split'],
-                                              min_samples_leaf = best_params['min_samples_leaf'],
-                                              max_depth = best_params['max_depth'],
-                                              n_estimators = best_params['n_estimators'],
-                                              random_state = 123
-                                              )
-    
-    # fit the model given best parameters for validation
-    gbm.fit(X_train, 
-            y_train.values.ravel()
-            )
-    
-    # classify the validation set
-    y_valid['Survived_pred'] = gbm.predict(X_valid)
-    
-    # genrate the regression metrics
-    print(va.perf_metrics(y_obs = y_valid['Survived'], 
-                          y_pred = y_valid['Survived_pred'], 
-                          target_type = 'class'
-                          ))
-    
-    # create a ROC curve
-    va.Vis.roc_curve(obs = 'Survived', 
-                     preds = 'Survived_pred', 
-                     dataset = y_valid
-                     )
-  
-    
-    # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = base_train,
-                                                                    y = ['Survived'],
-                                                                    X = base_train.columns.drop(['PassengerId', 'Dataset', 'Survived']),
-                                                                    train_size = 1,
-                                                                    test_size = 0,
-                                                                    random_split = False,
-                                                                    sample_target = 'Survived',
-                                                                    sample_type = 'over'
-                                                                    )
-    
-    # refit model to all training data
-    gbm.fit(X_train, 
-            y_train.values.ravel()
-            )
-    
-    # predict for the test set
-    base_test['Survived'] = gbm.predict(base_test[X_valid.columns])
+    # extract out test data
+    base_test = base_out.loc[base_out['Dataset'] == 'test', :]
     
     print('Outputting classifictions ...')
     
     # create the test classification dataset
     predictions = pd.DataFrame()
     predictions['Survived'] = base_test['Survived'] .astype(int)
-    predictions['PassengerId'] = base_test.index + 1
+    predictions['PassengerId'] = base_test['PassengerId']
     predictions = predictions[['PassengerId', 'Survived']]
     
     # output the dataset
