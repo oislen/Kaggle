@@ -65,7 +65,7 @@ for p in [utilities_dir, va_dir]:
 # set base columns
 sub_cols = ['PassengerId', 'Survived', 'Pclass', 'Age',
             'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 
-            'Mr', 'Mrs', 'Ms', 'Priv', 'male',
+            'Mr', 'Mrs', 'Ms', 'Priv', 'Male',
             'Embarked', 'Dataset']
 
 # the title of a person indicates the person status
@@ -124,21 +124,4 @@ embarked_map = {'S':1, 'C':2, 'Q':3}
 
 # create class map
 class_map = {1:3, 2:2, 3:1}
-    
-# save the parametre features to tune as a dictionary
-test_age_gbm_params = {'loss':['lad'],
-                       'learning_rate':[1.0, 0.9, 0.8],
-                       'n_estimators':[50, 100],
-                       'max_depth':[1, 3, 5],
-                       'max_features':['sqrt', 'log2']
-                       }
 
-# save the parametre features to tune as a dictionary
-model_gbm_params = {'loss':['deviance', 'exponential'],
-                    'subsample':[1, 0.9, 0.8],
-                    'learning_rate':[1.0, 0.9, 0.8],
-                    'min_samples_split':[2, 3, 4],
-                    'min_samples_leaf':[1, 2, 3],
-                    'n_estimators':[25, 50],
-                    'max_depth':[1, 3, 5]
-                    }
