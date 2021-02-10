@@ -57,7 +57,7 @@ def feat_engineer(base_clean_2_fpath,
     
     # extract the columns to create interaction terms for
     int_cols = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'FamSize',
-                'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male'
+                'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male'
                 ]
     
     # create interaction terms
