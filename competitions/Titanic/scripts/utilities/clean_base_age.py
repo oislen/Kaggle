@@ -7,6 +7,7 @@ Created on Sun Nov  4 19:18:53 2018
 
 # load in relevant libraries
 import cons
+import value_analysis as va
 from utilities.age_nafill_mod import age_nafill_mod
 
 def clean_base_age(base):
@@ -37,64 +38,58 @@ def clean_base_age(base):
 
     """
     
+    # plot age distribution before imputing
+    va.Vis.hist(dataset = base,
+                num_var = ['Age'],
+                title = 'Histogram of Age - Pre Imputation'
+                )
+    
     # create null age indicator
-    base['age_null_ind'] = base['Age'].isnull()
+    base['null_age'] = base.Age.isnull()
     
-    # check data types
-    base.dtypes
-    
-    # split the data based on the original dataset
-    base_train = base[base.Dataset == 'train']
-    base_test = base[base.Dataset == 'test']
-
     # split the training data on whether age is missing or not
-    train = base_train[base_train.Age.notnull()]
-    test = base_train[base_train.Age.isnull()]
+    base_train = base[base.Age.notnull()]
+    base_test = base[base.Age.isnull()]
     
     # set model constants
     y_col = ['Age']
-    X_col =  ['Survived', 'Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male', 'Embarked']
-    params = cons.train_age_gbm_params
+    X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked']
+    params = cons.test_age_gbm_params
     random_state = 123
     train_size = 0.8
     test_size = 0.2
     random_split = True
     sample_target = None
     scoring = 'neg_mean_squared_error'
+    refit = True
+    return_mod = True
+    verbose = 3
+    cv = 10
+    n_jobs = -1
     
     # run age na fill model
-    base_train = age_nafill_mod(base_train = train,
-                                base_test = test,
-                                y_col = y_col,
-                                X_col = X_col,
-                                params = params,
-                                random_state = random_state,
-                                train_size = train_size,
-                                test_size = test_size,
-                                random_split = random_split,
-                                sample_target = sample_target,
-                                scoring = scoring
-                                )
-    
-    # set model constants
-    X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male', 'Embarked']
-    params = cons.test_age_gbm_params
-    
-    # run age na fill model
-    base = age_nafill_mod(base_train = base_train,
-                          base_test = base_test,
-                          y_col = y_col,
-                          X_col = X_col,
-                          params = params,
-                          random_state = random_state,
-                          train_size = train_size,
-                          test_size = test_size,
-                          random_split = random_split,
-                          sample_target = sample_target,
-                          scoring = scoring
-                          )
+    base_out = age_nafill_mod(base_train = base_train,
+                              base_test = base_test,
+                              y_col = y_col,
+                              X_col = X_col,
+                              params = params,
+                              random_state = random_state,
+                              train_size = train_size,
+                              test_size = test_size,
+                              random_split = random_split,
+                              sample_target = sample_target,
+                              scoring = scoring,
+                              refit = refit,
+                              cv = cv,
+                              n_jobs = n_jobs,
+                              return_mod = return_mod,
+                              verbose = verbose
+                              )
 
-    # drop missing age indicator
-    base = base.drop(columns = ['age_null_ind'])
+    # plot age distribution after imputing
+    va.Vis.hist(dataset = base_out,
+                num_var = ['Age'],
+                title = 'Histogram of Age - Post Imputation'
+                )
     
-    return base
+    return base_out
