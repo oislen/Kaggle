@@ -8,6 +8,9 @@ Created on Mon Feb  8 17:20:45 2021
 # load libraries
 import os
 import sys
+import pandas as pd
+
+pd.set_option('display.max_columns', 20)
 
 #-- Filepath Constants --#
 
@@ -139,8 +142,6 @@ model_gbm_params = {'loss':['deviance', 'exponential'],
                     'learning_rate':[1.0, 0.9, 0.8],
                     'min_samples_split':[2, 3, 4],
                     'min_samples_leaf':[1, 2, 3],
-                    'n_estimators':[25, 50, 75],
-                    'max_depth':[1, 3, 5],
-                    'max_features':['auto', 'sqrt', 'log2'],
-                    'presort':[True]
+                    'n_estimators':[25, 50],
+                    'max_depth':[1, 3, 5]
                     }
