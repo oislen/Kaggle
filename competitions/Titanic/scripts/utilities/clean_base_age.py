@@ -6,9 +6,9 @@ Created on Sun Nov  4 19:18:53 2018
 """
 
 # load in relevant libraries
-import cons
 import value_analysis as va
-from utilities.age_nafill_mod import age_nafill_mod
+from utilities.fit_mod import fit_mod
+import model_cons as model_cons
 
 def clean_base_age(base):
         
@@ -51,10 +51,15 @@ def clean_base_age(base):
     base_train = base[base.Age.notnull()]
     base_test = base[base.Age.isnull()]
     
+    # extract out model and params
+    age_dict = model_cons.age_dict
+    
     # set model constants
     y_col = ['Age']
     X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked']
-    params = cons.test_age_gbm_params
+    model = age_dict['gbm']['model']
+    params = age_dict['gbm']['params']
+    target_type = 'reg'
     random_state = 123
     train_size = 0.8
     test_size = 0.2
@@ -68,23 +73,25 @@ def clean_base_age(base):
     n_jobs = -1
     
     # run age na fill model
-    base_out = age_nafill_mod(base_train = base_train,
-                              base_test = base_test,
-                              y_col = y_col,
-                              X_col = X_col,
-                              params = params,
-                              random_state = random_state,
-                              train_size = train_size,
-                              test_size = test_size,
-                              random_split = random_split,
-                              sample_target = sample_target,
-                              scoring = scoring,
-                              refit = refit,
-                              cv = cv,
-                              n_jobs = n_jobs,
-                              return_mod = return_mod,
-                              verbose = verbose
-                              )
+    base_out = fit_mod(base_train = base_train,
+                       base_test = base_test,
+                       y_col = y_col,
+                       X_col = X_col,
+                       model = model,
+                       params = params,
+                       target_type = target_type,
+                       random_state = random_state,
+                       train_size = train_size,
+                       test_size = test_size,
+                       random_split = random_split,
+                       sample_target = sample_target,
+                       scoring = scoring,
+                       refit = refit,
+                       cv = cv,
+                       n_jobs = n_jobs,
+                       return_mod = return_mod,
+                       verbose = verbose
+                       )
 
     # plot age distribution after imputing
     va.Vis.hist(dataset = base_out,
