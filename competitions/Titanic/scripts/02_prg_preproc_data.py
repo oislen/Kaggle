@@ -5,6 +5,7 @@ Created on Tue Feb  9 09:49:33 2021
 @author: oislen
 """
 
+# load in relevant libraries
 import cons
 from utilities.gen_base_data import gen_base_data
 from utilities.clean_base_data import clean_base_data
@@ -54,7 +55,7 @@ def prg_preproc_data():
     print('~~~~~ Running feature engineer ...')
     
     # engineer new features
-    feat_engineer(base_clean_2_fpath = cons.base_clean_2_data_fpath,
+    feat_engineer(base_clean_2_fpath = cons.base_clean_data_fpath,
                   base_engin_fpath = cons.base_engin_data_fpath
                   )
     
