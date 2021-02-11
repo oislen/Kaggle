@@ -29,10 +29,12 @@ titanic_comp_dir = os.path.join(root_dir, 'competitions\\Titanic')
 scripts_dir = os.path.join(titanic_comp_dir, 'scripts')
 data_dir = os.path.join(titanic_comp_dir, 'data')
 report_dir = os.path.join(titanic_comp_dir, 'report')
+preds_dir = os.path.join(data_dir, 'preds')
 univar_stats_dir = os.path.join(report_dir, 'univariate_analysis\\descriptive_stats')
 bivar_assoc_dir = os.path.join(report_dir, 'bivariate_analysis\\association_tests')
 bivar_corr_dir = os.path.join(report_dir, 'bivariate_analysis\\correlation_tests')
 bivar_gains_dir = os.path.join(report_dir, 'bivariate_analysis\\measure_gains')
+model_results_dir = os.path.join(report_dir, 'model_results')
 
 # define filenames
 zip_data_fname = '{}.zip'.format(comp_name)
@@ -43,7 +45,7 @@ base_data_fname = 'base.csv'
 base_clean_data_fname = 'base_clean.csv'
 base_clean_2_data_fname = 'base_clean_2.csv'
 base_engin_fname = 'base_engin.csv'
-pred_data_fname = 'preds.csv'
+pred_data_fname = '{}_preds.csv'
 
 # create file paths
 zip_data_fpath = os.path.join(data_dir, zip_data_fname)
@@ -54,7 +56,7 @@ base_data_fpath = os.path.join(data_dir, base_data_fname)
 base_clean_data_fpath = os.path.join(data_dir, base_clean_data_fname)
 base_clean_2_data_fpath = os.path.join(data_dir, base_clean_2_data_fname)
 base_engin_data_fpath = os.path.join(data_dir, base_engin_fname)
-pred_data_fpath = os.path.join(data_dir, pred_data_fname)
+pred_data_fpath = os.path.join(preds_dir, pred_data_fname)
 
 # append utilities directory to path
 for p in [utilities_dir, va_dir]:
@@ -63,10 +65,23 @@ for p in [utilities_dir, va_dir]:
 #-- Cleaning Constants --#
 
 # set base columns
-sub_cols = ['PassengerId', 'Survived', 'Pclass', 'Age',
-            'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 
-            'Mr', 'Mrs', 'Ms', 'Priv', 'Male',
-            'Embarked_Ord', 'Dataset']
+sub_cols = ['PassengerId', 
+            'Survived', 
+            'Pclass', 
+            'Age',
+            'SibSp', 
+            'Parch', 
+            'FamSize', 
+            'Fare', 
+            'Alone', 
+            'Mr', 
+            'Mrs', 
+            'Ms', 
+            'Priv', 
+            'Male',
+            'Embarked_Ord', 
+            'Dataset'
+            ]
 
 # the title of a person indicates the person status
 title_map = {'Mr':'Mr', 
