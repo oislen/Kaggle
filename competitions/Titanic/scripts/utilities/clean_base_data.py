@@ -51,36 +51,25 @@ def clean_base_data(base_fpath,
     
     # create a copy of the base data
     proc = base.copy(deep = True)
-   
-    print('Working on pclass ...')
-    
-    # transfer the person's class attribute
-    proc['Pclass'] = proc['Pclass'].map(cons.class_map).astype(int)
 
     print('Extracting title ...')
 
-    # split name on , to extract the surname and title / firstname
-    name_split = proc['Name'].str.split(pat = ',', expand = True)
-    #surname = name_split[0]
-    title_firstname = name_split[1]
-    
-    # split on . to extract title and first name
-    title_split = title_firstname.str.split(pat = '.', expand = True)
-    title = title_split[0].str.replace(pat = ' ', repl = '')
-    #firstname = title_split[1]
+    # extract out title
+    proc['Title'] = proc['Name'].str.extract(' ([A-Za-z]+)\.', expand = False)
     
     # map the title vlaues
-    title_map = title.map(cons.title_map)
+    proc['Title'] = proc['Title'].map(cons.title_map).map(cons.priv_map)
 
-    # map the title vlaues
-    status_map = title_map.map(cons.priv_map)
-    
     # create title ordinal var
-    proc['Title_Ord'] = status_map.map(cons.title_ord_map)
+    proc['Title_Ord'] = proc['Title'].map(cons.title_ord_map)
     
     # generate dummy variables for the titles
-    dummy = pd.get_dummies(status_map)
+    dummy = pd.get_dummies(proc['Title'])
+    
+    # create list of dummy and proc data for concatenation
     concat_objs = [proc, dummy]
+    
+    # concatenate data together
     proc = pd.concat(objs = concat_objs, axis = 1)
     
     print('Working on sex ...')
@@ -97,7 +86,33 @@ def clean_base_data(base_fpath,
     proc['Embarked'] = proc['Embarked'].fillna(mode_embarked)
     
     # map the embarked locations in order of there destinations
-    proc['Embarked'] = proc['Embarked'].map(cons.embarked_map).astype(int)
+    proc['Embarked_Ord'] = proc['Embarked'].map(cons.embarked_map).astype(int)
+    
+    print('Working on family size ...')
+        
+    # create a family size attribute
+    proc['FamSize'] = proc['Parch'] + proc['SibSp'] + 1
+    
+    # determine biggest family size
+    max_famsize = proc['FamSize'].max()
+    
+    # define the bins to cut family size into
+    famsize_bins = [1, 2, 3, 5, max_famsize + 1]
+    
+    # define labels to cut family size into
+    famsize_labels = ['Alone', 'SmallF', 'MedF', 'LargeF']
+    
+    # cut family size into bins
+    proc['FamSize_Cat'] = pd.cut(proc['FamSize'], bins = famsize_bins, right = False, labels = famsize_labels)
+    
+    # generate dummy variables for the titles
+    dummy = pd.get_dummies(proc['FamSize_Cat'])
+    
+    # create list of dummy and proc data for concatenation
+    concat_objs = [proc, dummy]
+    
+    # concatenate data together
+    proc = pd.concat(objs = concat_objs, axis = 1)
     
     print('Working on fare ...')
 
@@ -106,7 +121,7 @@ def clean_base_data(base_fpath,
     sex_filt = (proc['Sex'] == 'male')
     age_filt = (proc['Age'] > 50) & (proc['Age'] < 70)
     title_filt = (proc['Mr'] == 1)
-    embarked_filt = (proc['Embarked'] == 1)
+    embarked_filt = (proc['Embarked'] == 'S')
     parch_filt = (proc['Parch'] == 0)
     sibsp_filt = (proc['SibSp'] == 0)
     mean_fare_filt = pclass_filt & sex_filt & age_filt & title_filt & embarked_filt & parch_filt & sibsp_filt
@@ -120,49 +135,51 @@ def clean_base_data(base_fpath,
     # cut up Fare
     proc['Fare_Ord'] = pd.qcut(proc['Fare'], q = 4, labels = [1, 2, 3, 4]).astype(int)
     
-    if False:
-        
-        print('Working on cabin ...')
-        
-        # extract the cabin numbers
-        base['Cabin_Numbers'] = base['Cabin'].str.replace(pat = '([A-Za-z ])', repl = '')
-        base['Cabin_Numbers'][base['Cabin_Numbers'] == ''] = np.nan
-        
-        
-        # extract the cabin letters
-        base['Cabin_Letters'] = base['Cabin'].str.replace(pat = '([\d* ])', repl = '')
+    # log transform fare
+    proc['Fare_Log'] = proc['Fare'].apply(lambda x: np.log(x + 1))
     
-        base['Cabin_Letters'] = base['Cabin_Letters'].map(cons.cab_map)
-        
-        proc = pd.concat(objs = [proc, 
-                                 pd.get_dummies(data = base['Cabin_Letters'],
-                                                prefix = 'Cabin_Letters'
-                                                )
-                                 ],
-                         axis = 1
-                         )
+    print('Working on cabin ...')
+
+    # extract the cabin letters
+    proc['Cabin_Letters'] = proc['Cabin'].str.replace(pat = '([\d* ])', repl = '').map(cons.cab_map).fillna('X')
+
+    # generate dummy variables for the titles
+    dummy = pd.get_dummies(proc['Cabin_Letters'], prefix = 'Cabin')
     
-        print('Working on ticket ...')
-        
-        # extract the ticket prefic
-        ticket_prefix = base['Ticket'].str.extract(pat = '^(.*) ', expand = False)
-        
-        # extract the ticket number
-        ticket_num = base['Ticket'].str.extract(pat = '(\d+)$', expand = False).astype(float)
-        
-        # fill in the empty ticket prefix with the correct value
-        ticket_prefix[ticket_num.isnull()] = 'LINE'
-        
-        # clean the ticket prefix so that / . and spaces are removed
-        ticket_prefix = ticket_prefix.str.replace(pat = '([ ./\d]*)', repl = '')
+    # create list of dummy and proc data for concatenation
+    concat_objs = [proc, dummy]
     
-        proc['Ticket_Number'] = ticket_num.fillna(-1).astype(int)
+    # concatenate data together
+    proc = pd.concat(objs = concat_objs, axis = 1)
+   
+    print('Working on ticket ...')
+    
+    # extract the ticket prefic
+    ticket_prefix = base['Ticket'].str.extract(pat = '^(.*) ', expand = False)
+    
+    # keep only letters and remove spaces and symbols
+    ticket_prefix = ticket_prefix.str.replace(pat = '/|\.| ', repl = '')
+    
+    # fill in X for missing tickes prefixes
+    proc['Ticket_Prefix'] = ticket_prefix.fillna('X')
+    
+    # generate dummy variables for the titles
+    dummy = pd.get_dummies(proc['Ticket_Prefix'], prefix = 'Ticket_Prefix')
+    
+    # create list of dummy and proc data for concatenation
+    concat_objs = [proc, dummy]
+    
+    # concatenate data together
+    proc = pd.concat(objs = concat_objs, axis = 1)
 
     print('Filling in missing age values ...')
     
     # generate clean base age
     proc = clean_base_age(base = proc)
-
+    
+    # bin age into 5 categories
+    proc['Age_Ord'] = pd.cut(proc['Age'], bins = 5, labels = [1, 2, 3, 4, 5]).astype(int)
+    
     print('Outputting cleaned base file ...')
     
     # subet output columns
