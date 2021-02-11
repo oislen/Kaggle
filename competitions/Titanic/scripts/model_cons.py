@@ -22,7 +22,7 @@ age_rf_mod = ensemble.RandomForestRegressor(random_state = random_state)
 # create parameters
 age_gbm_params = {'loss':['lad'], 'learning_rate':[1.0, 0.9, 0.8], 'n_estimators':[50, 100], 'max_depth':[1, 3, 5], 'max_features':['sqrt', 'log2']}
 sur_gbm_params = {'loss':['deviance', 'exponential'], 'subsample':[1, 0.9, 0.8], 'learning_rate':[1.0, 0.9, 0.8], 'min_samples_split':[2, 3, 4], 'min_samples_leaf':[1, 2, 3], 'n_estimators':[25, 50], 'max_depth':[1, 3, 5]}
-age_rf_params = {'criterion':['mse', 'mae'], 'n_estimators':[100], 'min_samples_splitint ':[2, 3], 'max_features':['auto', 'sqrt', 'log2'], 'n_jobs':[-1]}
+age_rf_params = {'criterion':['mse', 'mae'], 'n_estimators':[100], 'min_samples_split':[2, 3], 'max_features':['auto', 'sqrt', 'log2'], 'n_jobs':[-1]}
 
 # create model and param dictionaries
 age_gbm_dict = {'model':age_gbm_mod, 'params':age_gbm_params}
