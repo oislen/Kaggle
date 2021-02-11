@@ -66,7 +66,7 @@ for p in [utilities_dir, va_dir]:
 sub_cols = ['PassengerId', 'Survived', 'Pclass', 'Age',
             'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 
             'Mr', 'Mrs', 'Ms', 'Priv', 'Male',
-            'Embarked', 'Dataset']
+            'Embarked_Ord', 'Dataset']
 
 # the title of a person indicates the person status
 title_map = {'Mr':'Mr', 
@@ -121,7 +121,4 @@ cab_map = {'A':'A', 'B':'B', 'BB':'B', 'BBB':'B', 'BBBB':'B', 'C':'C',
 
 # create embarked map
 embarked_map = {'S':1, 'C':2, 'Q':3}
-
-# create class map
-class_map = {1:3, 2:2, 3:1}
 
