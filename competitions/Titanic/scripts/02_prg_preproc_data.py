@@ -39,24 +39,37 @@ def prg_preproc_data():
     
     print('~~~~~ Running base data generator ...')
     
+    # extract file paths from cons.py
+    train_fpath = cons.train_data_fpath
+    test_fpath = cons.test_data_fpath
+    base_fpath = cons.base_data_fpath
+    
     # generate base data
-    gen_base_data(train_fpath = cons.train_data_fpath,
-                  test_fpath = cons.test_data_fpath,
-                  base_fpath = cons.base_data_fpath
+    gen_base_data(train_fpath = train_fpath,
+                  test_fpath = test_fpath,
+                  base_fpath = base_fpath
                   )
     
     print('~~~~~ Running base data cleaner ...')
     
+    # extract file paths from cons.py
+    base_fpath = cons.base_data_fpath
+    base_clean_fpath = cons.base_clean_data_fpath
+    
     # generate clean base data
-    clean_base_data(base_fpath = cons.base_data_fpath,
-                    base_clean_fpath = cons.base_clean_data_fpath
+    clean_base_data(base_fpath = base_fpath,
+                    base_clean_fpath = base_clean_fpath
                     )
     
     print('~~~~~ Running feature engineer ...')
     
+    # extract file paths from cons.py
+    base_clean_2_fpath = cons.base_clean_data_fpath
+    base_engin_fpath = cons.base_engin_data_fpath
+    
     # engineer new features
-    feat_engineer(base_clean_2_fpath = cons.base_clean_data_fpath,
-                  base_engin_fpath = cons.base_engin_data_fpath
+    feat_engineer(base_clean_2_fpath = base_clean_2_fpath,
+                  base_engin_fpath = base_engin_fpath
                   )
     
     return 0
