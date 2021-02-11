@@ -9,27 +9,31 @@ Created on Tue Feb  9 15:10:47 2021
 import pandas as pd
 import cons
 import value_analysis as va
+import os
+import joblib
 
-def fit_mod(base_train,
-            base_test,
-            y_col,
-            X_col,
-            model,
-            params,
-            target_type = 'reg',
-            random_state = 123,
-            train_size = 0.8,
-            test_size = 0.2,
-            random_split = True,
-            sample_target = None,
-            sample_type = 'over',
-            scoring = 'neg_mean_squared_error',
-            cv = 10,
-            n_jobs = -1,
-            refit = True,
-            return_mod = True,
-            verbose = 0
-            ):
+def fit_sur_mod(base_train,
+                base_test,
+                y_col,
+                X_col,
+                model_name,
+                model,
+                params,
+                target_type = 'class',
+                random_state = 123,
+                train_size = 0.8,
+                test_size = 0.2,
+                random_split = True,
+                sample_target = None,
+                sample_type = 'over',
+                scoring = 'neg_mean_squared_error',
+                cv = 10,
+                n_jobs = -1,
+                refit = True,
+                return_mod = True,
+                report_dir = None,
+                verbose = 0
+                ):
     
     """
     
@@ -41,24 +45,25 @@ def fit_mod(base_train,
     
     Defaults
     
-    fit_mod(base_train,
-            base_test,
-            y_col,
-            X_col,
-            model,
-            params,
-            random_state = 123,
-            train_size = 0.8,
-            test_size = 0.2,
-            random_split = True,
-            sample_target = None,
-            scoring = 'neg_mean_squared_error',
-            cv = 10,
-            n_jobs = -1,
-            refit = True,
-            return_mod = True,
-            verbose = 0
-            )
+    fit_sur_mod(base_train,
+                base_test,
+                y_col,
+                X_col,
+                model_name,
+                model,
+                params,
+                random_state = 123,
+                train_size = 0.8,
+                test_size = 0.2,
+                random_split = True,
+                sample_target = None,
+                scoring = 'neg_mean_squared_error',
+                cv = 10,
+                n_jobs = -1,
+                refit = True,
+                return_mod = True,
+                verbose = 0
+                )
     
     Parameters
     
@@ -80,23 +85,23 @@ def fit_mod(base_train,
     
     Example
  
-    fit_mod(base_train = train,
-            base_test = test,
-            y_col = ['Age'],
-            X_col = ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male', 'Embarked'],
-            params = cons.test_age_gbm_params,
-            random_state = 123,
-            train_size = 0.8,
-            test_size = 0.2,
-            random_split = True,
-            sample_target = None,
-            scoring = 'neg_mean_squared_error',
-            cv = 10,
-            n_jobs = -1,
-            refit = True,
-            return_mod = True,
-            verbose = 0
-            )
+    fit_sur_mod(base_train = train,
+                base_test = test,
+                y_col = ['Age'],
+                X_col = ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male', 'Embarked'],
+                params = cons.test_age_gbm_params,
+                random_state = 123,
+                train_size = 0.8,
+                test_size = 0.2,
+                random_split = True,
+                sample_target = None,
+                scoring = 'neg_mean_squared_error',
+                cv = 10,
+                n_jobs = -1,
+                refit = True,
+                return_mod = True,
+                verbose = 0
+                )
     
     """
     
@@ -105,6 +110,18 @@ def fit_mod(base_train,
     
     # create predicted column name
     pred_col = '{}_pred'.format(tar_col)
+    
+    # define the histogram of valid predictions filename
+    hist_train_tar_fname = '{}_hist_train_tar.png'.format(model_name)
+    
+    # create count plot of classifications
+    va.Vis.hist(dataset = base_train,
+                 num_var = [tar_col],
+                 output_dir = report_dir,
+                 output_fname = hist_train_tar_fname
+                 )
+    
+    print('splitting data into training and validation sets ...')
     
     # randomly split the dataset
     X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = base_train,
@@ -116,6 +133,8 @@ def fit_mod(base_train,
                                                                     sample_target = sample_target,
                                                                     sample_type = sample_type
                                                                     )
+    
+    print('running hyperparameter tuning ...')
     
     # tune gbm model
     mod_tuning = va.tune_hyperparameters(model = model, 
@@ -129,106 +148,90 @@ def fit_mod(base_train,
                                          refit = refit,
                                          verbose = verbose
                                          )
+
+    # extract out the model tuning results
+    mod_tuning_df = mod_tuning['tune_df']
     
-    # if not refitting or retunring the best model
-    if refit == False or return_mod == False:
-        
-        """
-        # extract out the model tuning results
-        mod_tuning_df = mod_tuning['tune_df']
-        
-        # extract the best parameters
-        best_params = mod_tuning_df.loc[0, 'params']
-        
-        # initiate the best model
-        gbm = ensemble.GradientBoostingRegressor(learning_rate = best_params['learning_rate'],
-                                                 loss = best_params['loss'],
-                                                 max_depth = best_params['max_depth'],
-                                                 max_features = best_params['max_features'],
-                                                 n_estimators = best_params['n_estimators'],
-                                                 random_state = 123
-                                                 )
-        
-        # fit the best model
-        gbm.fit(X_train, 
-                y_train.values.ravel()
-                )
-        """
-       
-        raise ValueError('wrong inputs')
-        
-    # otherwise
-    else:
-        
-        # extract out the model of best fit
-        gbm = mod_tuning['best_estimator']
-        
+    # define the filename
+    hyperparam_fname = '{}_hyperparam_tuning.csv'.format(model_name)
+    
+    # save the tuning results
+    mod_tuning_df.to_csv(os.path.join(report_dir, hyperparam_fname),
+                         index = False
+                         )
+
+    # extract out the model of best fit
+    gbm = mod_tuning['best_estimator']
+    
+    # define the filename
+    best_model_fname = '{}_best_model.pkl'.format(model_name)
+    
+    # pickle the best model
+    joblib.dump(gbm, os.path.join(report_dir, best_model_fname))
+    
+    print('predicting for validation set ...')
+    
     # classify the validation set
     y_valid[pred_col] = gbm.predict(X_valid)
     
-    # genrate the regression metrics
-    va.perf_metrics(y_obs = y_valid[tar_col], 
-                    y_pred = y_valid[pred_col], 
-                    target_type = target_type
-                    )
+    print('evaluating validation predictions ...')
     
-    if target_type == 'class':
-        
-        # randomly split the dataset
-        X_valid_emp, X_train, y_valid_emp, y_train = va.train_test_split_sample(dataset = base_train,
-                                                                                y = y_col,
-                                                                                X = X_col,
-                                                                                train_size = 1,
-                                                                                test_size = 0,
-                                                                                random_split = False,
-                                                                                sample_target = sample_target,
-                                                                                sample_type = sample_type
-                                                                                )
-        
-        # refit model to all training data
-        gbm.fit(X_train[X_col], 
-                y_train[y_col].values.ravel()
+    # define the histogram of valid predictions filename
+    hist_valid_preds_fname = '{}_hist_valid_preds.png'.format(model_name)
+    
+    # create count plot of classifications
+    va.Vis.hist(dataset = y_valid,
+                num_var = [pred_col],
+                output_dir = report_dir,
+                output_fname = hist_valid_preds_fname
                 )
-        
-    else :
-        
-        # refit model to all training data
-        gbm.fit(base_train[X_col], 
-                base_train[y_col].values.ravel()
-                )
+    
+    # definte the metrics filename
+    metrics_fname = '{}_perf_metrics.csv'.format(model_name)
+    
+    # genrate the regression metrics
+    val_metrics = va.perf_metrics(y_obs = y_valid[tar_col], 
+                                  y_pred = y_valid[pred_col], 
+                                  target_type = target_type,
+                                  output_dir = report_dir,
+                                  output_fname = metrics_fname
+                                  )
+    
+    # print the validation metrics
+    print(val_metrics)
+    
+    # define the roc filename
+    roc_fname = '{}_roc_curve.png'.format(model_name)
+    
+    # create a ROC curve
+    va.Vis.roc_curve(obs = tar_col, 
+                     preds = pred_col, 
+                     dataset = y_valid,
+                     output_dir = report_dir,
+                     output_fname = roc_fname
+                     )
+    
+    print('refitting to all training data ...')
+    
+    # refit model to all training data
+    gbm.fit(base_train[X_col], 
+            base_train[y_col].values.ravel()
+            )
+
+    print('predicting for test set ...')
 
     # predict for the base_test set
     base_test[tar_col] = gbm.predict(base_test[X_col])
     
-    # if running regression
-    if target_type == 'reg':
-            
-        # create prediction, observation and residual plots
-        va.Vis.preds_obs_resids(obs = tar_col,
-                                preds = pred_col,
-                                dataset = y_valid
-                                )
-        
-        # plot predicted age
-        va.Vis.hist(dataset = y_valid,
-                    num_var = [pred_col],
-                    title = 'Histogram of Predicted {} - Validation Set'.format(tar_col)
-                    )
-        
-        # plot predicted age
-        va.Vis.hist(dataset = base_test,
-                    num_var = [tar_col],
-                    title = 'Histogram of Predicted {} - Test Set'.format(tar_col)
-                    )
+    # define the histogram of valid predictions filename
+    hist_test_preds_fname = '{}_hist_test_preds.png'.format(model_name)
     
-    # otherwise if classification
-    elif target_type == 'class':
-        
-        # create a ROC curve
-        va.Vis.roc_curve(obs = tar_col, 
-                         preds = pred_col, 
-                         dataset = y_valid
-                         )
+    # create count plot of classifications
+    va.Vis.hist(dataset = base_test,
+                num_var = [tar_col],
+                output_dir = report_dir,
+                output_fname = hist_test_preds_fname
+                )
     
     # re-concatenate the base training and base test to update base data
     base = pd.concat(objs = [base_train, base_test],
