@@ -74,14 +74,6 @@ def gen_base_data(train_fpath,
                      axis = 0, 
                      sort = False
                      )
-    
-    print('Engineering new features ...')
-    
-    # create a family size attribute
-    base['FamSize'] = base['Parch'] + base['SibSp']
-    
-    # create an alone attribute
-    base['Alone'] = (base['FamSize'] == 0).astype(int)
 
     print('Outputting base file ...')
     
