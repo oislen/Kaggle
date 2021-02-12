@@ -140,30 +140,10 @@ def fit_age_mod(base_train,
                     target_type = target_type
                     )
     
-    if target_type == 'class':
-        
-        # randomly split the dataset
-        X_valid_emp, X_train, y_valid_emp, y_train = va.train_test_split_sample(dataset = base_train,
-                                                                                y = y_col,
-                                                                                X = X_col,
-                                                                                train_size = 1,
-                                                                                test_size = 0,
-                                                                                random_split = False,
-                                                                                sample_target = sample_target,
-                                                                                sample_type = sample_type
-                                                                                )
-        
-        # refit model to all training data
-        gbm.fit(X_train[X_col], 
-                y_train[y_col].values.ravel()
-                )
-        
-    else :
-        
-        # refit model to all training data
-        gbm.fit(base_train[X_col], 
-                base_train[y_col].values.ravel()
-                )
+    # refit model to all training data
+    gbm.fit(base_train[X_col], 
+            base_train[y_col].values.ravel()
+            )
 
     # predict for the base_test set
     base_test[tar_col] = gbm.predict(base_test[X_col])
@@ -188,16 +168,7 @@ def fit_age_mod(base_train,
                     num_var = [tar_col],
                     title = 'Histogram of Predicted {} - Test Set'.format(tar_col)
                     )
-    
-    # otherwise if classification
-    elif target_type == 'class':
-        
-        # create a ROC curve
-        va.Vis.roc_curve(obs = tar_col, 
-                         preds = pred_col, 
-                         dataset = y_valid
-                         )
-    
+
     # re-concatenate the base training and base test to update base data
     base = pd.concat(objs = [base_train, base_test],
                      axis = 0
