@@ -77,6 +77,16 @@ best_model_fpath = os.path.join(model_results_dir, best_model_fname)
 for p in [utilities_dir, va_dir]:
     sys.path.append(p)
 
+######################
+#-- Plot Constants --#
+######################
+
+plot_size_width = 12
+plot_size_height = 8
+plot_title_size = 25
+plot_axis_text_size = 20
+plot_label_size = 'x-large'
+
 ##########################
 #-- Cleaning Constants --#
 ##########################
