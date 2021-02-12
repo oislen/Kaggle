@@ -72,6 +72,17 @@ def clean_base_data(base_fpath,
     # concatenate data together
     proc = pd.concat(objs = concat_objs, axis = 1)
     
+    print('Working on pclass ...')
+    
+    # generate dummy variables for the titles
+    dummy = pd.get_dummies(proc['Pclass'], prefix = 'Pclass')
+    
+    # create list of dummy and proc data for concatenation
+    concat_objs = [proc, dummy]
+    
+    # concatenate data together
+    proc = pd.concat(objs = concat_objs, axis = 1)
+    
     print('Working on sex ...')
     
     # map the title vlaues
@@ -183,7 +194,7 @@ def clean_base_data(base_fpath,
     print('Outputting cleaned base file ...')
     
     # subet output columns
-    proc_sub = proc[cons.sub_cols]
+    proc_sub = proc.drop(columns = cons.drop_cols)
     
     # output the dataset
     proc_sub.to_csv(base_clean_fpath,
