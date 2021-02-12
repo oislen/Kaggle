@@ -8,6 +8,7 @@ Created on Sun Nov  4 21:46:26 2018
 # load in relevant libraries
 import pandas as pd
 from sklearn import ensemble
+import cons
 import value_analysis as va
 
 def feat_engineer(base_clean_2_fpath,
@@ -52,44 +53,38 @@ def feat_engineer(base_clean_2_fpath,
 
     print('Deriving interaction terms ...')
     
-    # define id columns
-    id_cols = ['PassengerId', 'Dataset', 'Survived']
+    # extract out the base columns
+    base_cols = base.columns.tolist()
     
-    # extract the columns to create interaction terms for
-    int_cols = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked_Ord', 'FamSize',
-                'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male'
-                ]
+    # extract out the integer columns
+    attr_cols = [col for col in base_cols if col not in cons.id_cols]
     
     # create interaction terms
     int_data = va.derive_variables(dataset = base,
-                                   attr = int_cols,
+                                   attr = attr_cols,
                                    var_type = 'interaction'
                                    )
     
     # create the engineered data by concatenating the base data with the interaction data
-    sub_cols = id_cols + int_cols
-    engin = pd.concat(objs = [base[sub_cols], int_data],
+    engin = pd.concat(objs = [base[base_cols], int_data],
                       axis = 1
                       )
 
     print('Performing feature importance on all terms ...')
     
-    # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = engin,
-                                                                    y = ['Survived'],
-                                                                    X = engin.columns.drop(['PassengerId', 'Dataset', 'Survived']),
-                                                                    train_size = 0.8,
-                                                                    test_size = 0.2,
-                                                                    random_split = True,
-                                                                    sample_target = 'Survived',
-                                                                    sample_type = 'over'
-                                                                    )
+    # create a list of all predictors
+    pred_cols = attr_cols + int_data.columns.tolist()
     
-    # create a gbm model
-    gbm = ensemble.GradientBoostingClassifier(random_state = 123)
+    # extract training data
+    y_train = engin.loc[engin['Dataset'] == 'train', 'Survived']
+    X_train = engin.loc[engin['Dataset'] == 'train', pred_cols]
+    
+    # create a tree model
+    #gbc = ensemble.GradientBoostingClassifier(random_state = 123)
+    rfc = ensemble.RandomForestClassifier(random_state = 123)
     
     # determine the feature importance
-    feat_imp = va.tree_feat_imp(model = gbm,
+    feat_imp = va.tree_feat_imp(model = rfc,
                                 y_train = y_train,
                                 X_train = X_train
                                 )
@@ -101,10 +96,10 @@ def feat_engineer(base_clean_2_fpath,
     feat_imp_sub = feat_imp.loc[int_feat_imp_filt, :]
     
     # extract out the important features 
-    top_int_feat = feat_imp_sub.index[feat_imp_sub['Importance'] > 5].tolist()
+    top_int_feat = feat_imp_sub.index[feat_imp_sub['Importance'] > 1.5].tolist()
     
     # add in additional variables to enable the interaction effects
-    out_vars = id_cols + int_cols + top_int_feat
+    out_vars = base_cols + top_int_feat
     
     # create the final dataset
     final_data = engin[out_vars]
@@ -112,7 +107,7 @@ def feat_engineer(base_clean_2_fpath,
     print('Standardising data ...')
     
     # define the columns to standardise
-    stand_cols = int_cols + top_int_feat
+    stand_cols = attr_cols + top_int_feat
     
     # standardise data to interval [0, 1]
     stand = va.standardise_variables(dataset = final_data,
