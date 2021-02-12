@@ -9,7 +9,7 @@ Created on Sat Nov  3 15:52:22 2018
 import pandas as pd
 import numpy as np
 import cons
-from utilities.clean_base_age import clean_base_age
+from preproc.clean_base_age import clean_base_age
 
 def clean_base_data(base_fpath,
                     base_clean_fpath
