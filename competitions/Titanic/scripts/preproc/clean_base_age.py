@@ -6,7 +6,7 @@ Created on Sun Nov  4 19:18:53 2018
 """
 
 # load in relevant libraries
-import value_analysis as va
+from graph.hist import hist
 from model.fit_age_mod import fit_age_mod
 import cons as cons
 
@@ -39,10 +39,10 @@ def clean_base_age(base):
     """
     
     # plot age distribution before imputing
-    va.Vis.hist(dataset = base,
-                num_var = ['Age'],
-                title = 'Histogram of Age - Pre Imputation'
-                )
+    hist(dataset = base,
+         num_var = ['Age'],
+         title = 'Histogram of Age - Pre Imputation'
+         )
     
     # split the training data on whether age is missing or not
     base_train = base[base.Age.notnull()]
@@ -89,9 +89,9 @@ def clean_base_age(base):
                            )
 
     # plot age distribution after imputing
-    va.Vis.hist(dataset = base_out,
-                num_var = ['Age'],
-                title = 'Histogram of Age - Post Imputation'
-                )
+    hist(dataset = base_out,
+         num_var = ['Age'],
+         title = 'Histogram of Age - Post Imputation'
+         )
     
     return base_out

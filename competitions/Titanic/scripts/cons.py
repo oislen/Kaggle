@@ -27,7 +27,6 @@ del_zip = True
 # set directories
 git_dir = 'C:\\Users\\User\\Documents\\GitHub'
 root_dir = os.path.join(git_dir, 'Kaggle')
-va_dir = os.path.join(git_dir, 'value_analysis')
 utilities_dir = os.path.join(root_dir, 'utilities')
 titanic_comp_dir = os.path.join(root_dir, 'competitions\\Titanic')
 scripts_dir = os.path.join(titanic_comp_dir, 'scripts')
@@ -74,7 +73,7 @@ hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
 best_model_fpath = os.path.join(model_results_dir, best_model_fname)
 
 # append utilities directory to path
-for p in [utilities_dir, va_dir]:
+for p in [utilities_dir,]:
     sys.path.append(p)
 
 ######################

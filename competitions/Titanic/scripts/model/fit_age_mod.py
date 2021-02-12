@@ -8,7 +8,11 @@ Created on Tue Feb  9 15:10:47 2021
 # load in relevant libraries
 import pandas as pd
 import cons
-import value_analysis as va
+from utilities.train_test_split_sample import train_test_split_sample
+from utilities.tune_hyperparameters import tune_hyperparameters
+from utilities.perf_metrics import perf_metrics
+from graph.preds_obs_resids import preds_obs_resids
+from graph.hist import hist
 
 def fit_age_mod(base_train,
                 base_test,
@@ -106,27 +110,27 @@ def fit_age_mod(base_train,
     pred_col = '{}_pred'.format(tar_col)
     
     # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = base_train,
-                                                                    y = y_col,
-                                                                    X = X_col,
-                                                                    train_size = train_size,
-                                                                    test_size = test_size,
-                                                                    random_split = random_split,
-                                                                    sample_target = sample_target,
-                                                                    sample_type = sample_type
-                                                                    )
+    X_valid, X_train, y_valid, y_train = train_test_split_sample(dataset = base_train,
+                                                                 y = y_col,
+                                                                 X = X_col,
+                                                                 train_size = train_size,
+                                                                 test_size = test_size,
+                                                                 random_split = random_split,
+                                                                 sample_target = sample_target,
+                                                                 sample_type = sample_type
+                                                                 )
     
     # tune gbm model
-    mod_tuning = va.tune_hyperparameters(model = model, 
-                                         params = params, 
-                                         X_train = X_train, 
-                                         y_train = y_train,
-                                         scoring = scoring,
-                                         cv = cv,
-                                         n_jobs = n_jobs,
-                                         refit = refit,
-                                         verbose = verbose
-                                         )
+    mod_tuning = tune_hyperparameters(model = model, 
+                                      params = params, 
+                                      X_train = X_train, 
+                                      y_train = y_train,
+                                      scoring = scoring,
+                                      cv = cv,
+                                      n_jobs = n_jobs,
+                                      refit = refit,
+                                      verbose = verbose
+                                      )
 
     # extract out the model of best fit
     gbm = mod_tuning['best_estimator']
@@ -135,10 +139,10 @@ def fit_age_mod(base_train,
     y_valid[pred_col] = gbm.predict(X_valid)
     
     # genrate the regression metrics
-    va.perf_metrics(y_obs = y_valid[tar_col], 
-                    y_pred = y_valid[pred_col], 
-                    target_type = target_type
-                    )
+    perf_metrics(y_obs = y_valid[tar_col], 
+                 y_pred = y_valid[pred_col], 
+                 target_type = target_type
+                 )
     
     # refit model to all training data
     gbm.fit(base_train[X_col], 
@@ -152,22 +156,22 @@ def fit_age_mod(base_train,
     if target_type == 'reg':
             
         # create prediction, observation and residual plots
-        va.Vis.preds_obs_resids(obs = tar_col,
-                                preds = pred_col,
-                                dataset = y_valid
-                                )
+        preds_obs_resids(obs = tar_col,
+                         preds = pred_col,
+                         dataset = y_valid
+                         )
         
         # plot predicted age
-        va.Vis.hist(dataset = y_valid,
-                    num_var = [pred_col],
-                    title = 'Histogram of Predicted {} - Validation Set'.format(tar_col)
-                    )
+        hist(dataset = y_valid,
+             num_var = [pred_col],
+             title = 'Histogram of Predicted {} - Validation Set'.format(tar_col)
+             )
         
         # plot predicted age
-        va.Vis.hist(dataset = base_test,
-                    num_var = [tar_col],
-                    title = 'Histogram of Predicted {} - Test Set'.format(tar_col)
-                    )
+        hist(dataset = base_test,
+             num_var = [tar_col],
+             title = 'Histogram of Predicted {} - Test Set'.format(tar_col)
+             )
 
     # re-concatenate the base training and base test to update base data
     base = pd.concat(objs = [base_train, base_test],

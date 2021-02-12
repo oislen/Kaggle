@@ -9,7 +9,9 @@ Created on Sun Nov  4 21:46:26 2018
 import pandas as pd
 from sklearn import ensemble
 import cons
-import value_analysis as va
+from utilities.derive_variables import derive_variables
+from utilities.tree_feat_imp import tree_feat_imp
+from utilities.standardise_variables import standardise_variables
 
 def feat_engineer(base_clean_2_fpath,
                   base_engin_fpath
@@ -60,10 +62,10 @@ def feat_engineer(base_clean_2_fpath,
     attr_cols = [col for col in base_cols if col not in cons.id_cols]
     
     # create interaction terms
-    int_data = va.derive_variables(dataset = base,
-                                   attr = attr_cols,
-                                   var_type = 'interaction'
-                                   )
+    int_data = derive_variables(dataset = base,
+                                attr = attr_cols,
+                                var_type = 'interaction'
+                                )
     
     # create the engineered data by concatenating the base data with the interaction data
     engin = pd.concat(objs = [base[base_cols], int_data],
@@ -84,10 +86,10 @@ def feat_engineer(base_clean_2_fpath,
     rfc = ensemble.RandomForestClassifier(random_state = 123)
     
     # determine the feature importance
-    feat_imp = va.tree_feat_imp(model = rfc,
-                                y_train = y_train,
-                                X_train = X_train
-                                )
+    feat_imp = tree_feat_imp(model = rfc,
+                             y_train = y_train,
+                             X_train = X_train
+                             )
     
     # consider only interaction terms
     int_feat_imp_filt = pd.Series(feat_imp.index).str.contains('_x_').tolist()
@@ -110,11 +112,11 @@ def feat_engineer(base_clean_2_fpath,
     stand_cols = attr_cols + top_int_feat
     
     # standardise data to interval [0, 1]
-    stand = va.standardise_variables(dataset = final_data,
-                                     attr = stand_cols,
-                                     stand_type = 'range',
-                                     stand_range = [0, 1]
-                                     )
+    stand = standardise_variables(dataset = final_data,
+                                  attr = stand_cols,
+                                  stand_type = 'range',
+                                  stand_range = [0, 1]
+                                  )
     
     # update the processed data
     final_data[stand_cols] = stand

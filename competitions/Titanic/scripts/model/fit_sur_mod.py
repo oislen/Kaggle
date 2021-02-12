@@ -8,9 +8,15 @@ Created on Tue Feb  9 15:10:47 2021
 # load in relevant libraries
 import pandas as pd
 import cons
-import value_analysis as va
 import joblib
-from vis_feat_imp import vis_feat_imp
+from utilities.train_test_split_sample import train_test_split_sample
+from utilities.tune_hyperparameters import tune_hyperparameters
+from utilities.perf_metrics import perf_metrics
+from graph.hist import hist
+from graph.vis_feat_imp import vis_feat_imp
+from graph.learning_curve import learning_curve
+from graph.roc_curve import roc_curve
+
 
 def fit_sur_mod(base_train,
                 base_test,
@@ -114,38 +120,38 @@ def fit_sur_mod(base_train,
     
     
     # create count plot of classifications
-    va.Vis.hist(dataset = base_train,
-                 num_var = [tar_col],
-                 output_dir = cons.model_results_dir.format(model_name),
-                 output_fname = cons.hist_train_tar_fname.format(model_name)
-                 )
+    hist(dataset = base_train,
+         num_var = [tar_col],
+         output_dir = cons.model_results_dir.format(model_name),
+         output_fname = cons.hist_train_tar_fname.format(model_name)
+         )
     
     print('splitting data into training and validation sets ...')
     
     # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = base_train,
-                                                                    y = y_col,
-                                                                    X = X_col,
-                                                                    train_size = train_size,
-                                                                    test_size = test_size,
-                                                                    random_split = random_split,
-                                                                    sample_target = sample_target,
-                                                                    sample_type = sample_type
-                                                                    )
+    X_valid, X_train, y_valid, y_train = train_test_split_sample(dataset = base_train,
+                                                                 y = y_col,
+                                                                 X = X_col,
+                                                                 train_size = train_size,
+                                                                 test_size = test_size,
+                                                                 random_split = random_split,
+                                                                 sample_target = sample_target,
+                                                                 sample_type = sample_type
+                                                                 )
     
     print('running hyperparameter tuning ...')
     
     # tune gbm model
-    mod_tuning = va.tune_hyperparameters(model = model, 
-                                         params = params, 
-                                         X_train = X_train, 
-                                         y_train = y_train,
-                                         scoring = scoring,
-                                         cv = cv,
-                                         n_jobs = n_jobs,
-                                         refit = refit,
-                                         verbose = verbose
-                                         )
+    mod_tuning = tune_hyperparameters(model = model, 
+                                      params = params, 
+                                      X_train = X_train, 
+                                      y_train = y_train,
+                                      scoring = scoring,
+                                      cv = cv,
+                                      n_jobs = n_jobs,
+                                      refit = refit,
+                                      verbose = verbose
+                                      )
 
     # extract out the model tuning results
     mod_tuning_df = mod_tuning['tune_df']
@@ -162,14 +168,14 @@ def fit_sur_mod(base_train,
     joblib.dump(best_model, cons.best_model_fpath.format(model_name, model_name))
     
     # create learning curve
-    va.Vis.learning_curve(model = best_model,
-                          X_train = X_train,
-                          y_train = y_train,
-                          scoring = 'accuracy',
-                          title = 'Learning Curve: {}'.format(model_name.upper()),
-                          output_dir = cons.model_results_dir.format(model_name),
-                          output_fname = cons.learning_curve_fnamt.format(model_name)
-                          )
+    learning_curve(model = best_model,
+                   X_train = X_train,
+                   y_train = y_train,
+                   scoring = 'accuracy',
+                   title = 'Learning Curve: {}'.format(model_name.upper()),
+                   output_dir = cons.model_results_dir.format(model_name),
+                   output_fname = cons.learning_curve_fnamt.format(model_name)
+                   )
     
     if model_name in ['rfc', 'abc', 'etc', 'gbc']:
         
@@ -187,30 +193,30 @@ def fit_sur_mod(base_train,
         print('evaluating validation predictions ...')
         
         # create count plot of classifications
-        va.Vis.hist(dataset = y_valid,
-                    num_var = [pred_col],
-                    output_dir = cons.model_results_dir.format(model_name),
-                    output_fname = cons.hist_valid_preds_fname.format(model_name)
-                    )
+        hist(dataset = y_valid,
+             num_var = [pred_col],
+             output_dir = cons.model_results_dir.format(model_name),
+             output_fname = cons.hist_valid_preds_fname.format(model_name)
+             )
     
         # genrate the regression metrics
-        val_metrics = va.perf_metrics(y_obs = y_valid[tar_col], 
-                                      y_pred = y_valid[pred_col], 
-                                      target_type = target_type,
-                                      output_dir = cons.model_results_dir.format(model_name),
-                                      output_fname = cons.metrics_fname.format(model_name)
-                                      )
+        val_metrics = perf_metrics(y_obs = y_valid[tar_col], 
+                                   y_pred = y_valid[pred_col], 
+                                   target_type = target_type,
+                                   output_dir = cons.model_results_dir.format(model_name),
+                                   output_fname = cons.metrics_fname.format(model_name)
+                                   )
         
         # print the validation metrics
         print(val_metrics)
         
         # create a ROC curve
-        va.Vis.roc_curve(obs = tar_col, 
-                         preds = pred_col, 
-                         dataset = y_valid,
-                         output_dir = cons.model_results_dir.format(model_name),
-                         output_fname = cons.roc_fname.format(model_name)
-                         )
+        roc_curve(obs = tar_col, 
+                  preds = pred_col, 
+                  dataset = y_valid,
+                  output_dir = cons.model_results_dir.format(model_name),
+                  output_fname = cons.roc_fname.format(model_name)
+                  )
         
     print('refitting to all training data ...')
     
@@ -225,11 +231,11 @@ def fit_sur_mod(base_train,
     base_test[tar_col] = best_model.predict(base_test[X_col])
     
     # create count plot of classifications
-    va.Vis.hist(dataset = base_test,
-                num_var = [tar_col],
-                output_dir = cons.model_results_dir.format(model_name),
-                output_fname = cons.hist_test_preds_fname.format(model_name)
-                )
+    hist(dataset = base_test,
+         num_var = [tar_col],
+         output_dir = cons.model_results_dir.format(model_name),
+         output_fname = cons.hist_test_preds_fname.format(model_name)
+         )
     
     # re-concatenate the base training and base test to update base data
     base = pd.concat(objs = [base_train, base_test],
