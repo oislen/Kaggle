@@ -7,9 +7,9 @@ Created on Tue Feb  9 09:49:33 2021
 
 # load in relevant libraries
 import cons
-from utilities.gen_base_data import gen_base_data
-from utilities.clean_base_data import clean_base_data
-from utilities.feat_engineer import feat_engineer
+from preproc.gen_base_data import gen_base_data
+from preproc.clean_base_data import clean_base_data
+from preproc.feat_engineer import feat_engineer
 
 def prg_preproc_data():
     
