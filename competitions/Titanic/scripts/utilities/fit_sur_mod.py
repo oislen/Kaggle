@@ -11,6 +11,7 @@ import cons
 import value_analysis as va
 import os
 import joblib
+from vis_feat_imp import vis_feat_imp
 
 def fit_sur_mod(base_train,
                 base_test,
@@ -142,7 +143,6 @@ def fit_sur_mod(base_train,
                                          X_train = X_train, 
                                          y_train = y_train,
                                          scoring = scoring,
-                                         return_mod = return_mod,
                                          cv = cv,
                                          n_jobs = n_jobs,
                                          refit = refit,
@@ -155,24 +155,48 @@ def fit_sur_mod(base_train,
     # define the filename
     hyperparam_fname = '{}_hyperparam_tuning.csv'.format(model_name)
     
+    # definte the output file path
+    hyper_param_fpath = os.path.join(report_dir, hyperparam_fname)
+    
     # save the tuning results
-    mod_tuning_df.to_csv(os.path.join(report_dir, hyperparam_fname),
+    mod_tuning_df.to_csv(hyper_param_fpath,
                          index = False
                          )
 
     # extract out the model of best fit
-    gbm = mod_tuning['best_estimator']
+    best_model = mod_tuning['best_estimator']
     
     # define the filename
     best_model_fname = '{}_best_model.pkl'.format(model_name)
     
-    # pickle the best model
-    joblib.dump(gbm, os.path.join(report_dir, best_model_fname))
+    # model file path
+    best_model_fpath = os.path.join(report_dir, best_model_fname)
     
+    # pickle the best model
+    joblib.dump(best_model, best_model_fpath)
+    
+    # definte the filename
+    learning_curve_fnamt = '{}_learning_curve.png'.format(model_name)
+    
+    # create learning curve
+    va.Vis.learning_curve(model = best_model,
+                          X_train = X_train,
+                          y_train = y_train,
+                          scoring = 'accuracy',
+                          title = 'Learning Curve: {}'.format(model_name.upper()),
+                          output_dir = report_dir,
+                          output_fname = learning_curve_fnamt
+                          )
+    
+    if model_name in ['rfc', 'abc', 'etc', 'gbc']:
+        
+        # plot feature importance
+        vis_feat_imp(name = model_name, model = best_model, X_train = X_train)
+        
     print('predicting for validation set ...')
     
     # classify the validation set
-    y_valid[pred_col] = gbm.predict(X_valid)
+    y_valid[pred_col] = best_model.predict(X_valid)
     
     print('evaluating validation predictions ...')
     
@@ -214,14 +238,14 @@ def fit_sur_mod(base_train,
     print('refitting to all training data ...')
     
     # refit model to all training data
-    gbm.fit(base_train[X_col], 
-            base_train[y_col].values.ravel()
-            )
+    best_model.fit(base_train[X_col], 
+                   base_train[y_col].values.ravel()
+                   )
 
     print('predicting for test set ...')
 
     # predict for the base_test set
-    base_test[tar_col] = gbm.predict(base_test[X_col])
+    base_test[tar_col] = best_model.predict(base_test[X_col])
     
     # define the histogram of valid predictions filename
     hist_test_preds_fname = '{}_hist_test_preds.png'.format(model_name)
