@@ -27,7 +27,6 @@ def fit_age_mod(base_train,
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
-                return_mod = True,
                 verbose = 0
                 ):
     
@@ -123,46 +122,15 @@ def fit_age_mod(base_train,
                                          X_train = X_train, 
                                          y_train = y_train,
                                          scoring = scoring,
-                                         return_mod = return_mod,
                                          cv = cv,
                                          n_jobs = n_jobs,
                                          refit = refit,
                                          verbose = verbose
                                          )
+
+    # extract out the model of best fit
+    gbm = mod_tuning['best_estimator']
     
-    # if not refitting or retunring the best model
-    if refit == False or return_mod == False:
-        
-        """
-        # extract out the model tuning results
-        mod_tuning_df = mod_tuning['tune_df']
-        
-        # extract the best parameters
-        best_params = mod_tuning_df.loc[0, 'params']
-        
-        # initiate the best model
-        gbm = ensemble.GradientBoostingRegressor(learning_rate = best_params['learning_rate'],
-                                                 loss = best_params['loss'],
-                                                 max_depth = best_params['max_depth'],
-                                                 max_features = best_params['max_features'],
-                                                 n_estimators = best_params['n_estimators'],
-                                                 random_state = 123
-                                                 )
-        
-        # fit the best model
-        gbm.fit(X_train, 
-                y_train.values.ravel()
-                )
-        """
-       
-        raise ValueError('wrong inputs')
-        
-    # otherwise
-    else:
-        
-        # extract out the model of best fit
-        gbm = mod_tuning['best_estimator']
-        
     # classify the validation set
     y_valid[pred_col] = gbm.predict(X_valid)
     
