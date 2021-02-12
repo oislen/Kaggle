@@ -83,7 +83,8 @@ def class_model(base_engin_fpath,
         verbose = 3
         cv = 10
         n_jobs = -1
-        report_dir = os.path.join(cons.model_results_dir, model_name)
+        
+        report_dir = cons.model_results_dir.format(model_name)
         
         if os.path.exists(report_dir) == False:
             os.makedirs(report_dir)
@@ -108,7 +109,6 @@ def class_model(base_engin_fpath,
                                n_jobs = n_jobs,
                                refit = refit,
                                return_mod = return_mod,
-                               report_dir = report_dir,
                                verbose = verbose
                                )
         
