@@ -7,8 +7,8 @@ Created on Sun Nov  4 19:18:53 2018
 
 # load in relevant libraries
 import value_analysis as va
-from utilities.fit_age_mod import fit_age_mod
-import model_cons as model_cons
+from model.fit_age_mod import fit_age_mod
+import cons as cons
 
 def clean_base_age(base):
         
@@ -44,21 +44,18 @@ def clean_base_age(base):
                 title = 'Histogram of Age - Pre Imputation'
                 )
     
-    # create null age indicator
-    base['null_age'] = base.Age.isnull()
-    
     # split the training data on whether age is missing or not
     base_train = base[base.Age.notnull()]
     base_test = base[base.Age.isnull()]
     
     # extract out model and params
-    age_dict = model_cons.age_dict
+    age_dict = cons.age_dict
     
     # set model constants
     y_col = ['Age']
     X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
-    model = age_dict['rf']['model']
-    params = age_dict['rf']['params']
+    model = age_dict['rfr']['model']
+    params = age_dict['rfr']['params']
     target_type = 'reg'
     random_state = 123
     train_size = 0.8
@@ -67,7 +64,6 @@ def clean_base_age(base):
     sample_target = None
     scoring = 'neg_mean_squared_error'
     refit = True
-    return_mod = True
     verbose = 3
     cv = 10
     n_jobs = -1
@@ -89,7 +85,6 @@ def clean_base_age(base):
                            refit = refit,
                            cv = cv,
                            n_jobs = n_jobs,
-                           return_mod = return_mod,
                            verbose = verbose
                            )
 
