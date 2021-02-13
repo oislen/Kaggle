@@ -164,9 +164,6 @@ def fit_sur_mod(base_train,
     # extract out the model of best fit
     best_model = mod_tuning['best_estimator']
     
-    # pickle the best model
-    joblib.dump(best_model, cons.best_model_fpath.format(model_name, model_name))
-    
     # create learning curve
     learning_curve(model = best_model,
                    X_train = X_train,
@@ -225,6 +222,9 @@ def fit_sur_mod(base_train,
                    base_train[y_col].values.ravel()
                    )
 
+    # pickle the best model
+    joblib.dump(best_model, cons.best_model_fpath.format(model_name))
+    
     print('predicting for test set ...')
 
     # predict for the base_test set
