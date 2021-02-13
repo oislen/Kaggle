@@ -124,7 +124,7 @@ sur_dict = {}
 random_state = 123
 
 y_col = ['Survived']
-X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
+X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare_Log', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
 
 #-- Age --#
 
@@ -148,11 +148,12 @@ sur_rfc_mod = ensemble.RandomForestClassifier(random_state = random_state)
 sur_dtc_mod = tree.DecisionTreeClassifier(random_state = random_state)
 sur_abc_mod = ensemble.AdaBoostClassifier(base_estimator = sur_dtc_mod, random_state = random_state)
 sur_etc_mod = ensemble.ExtraTreesClassifier(random_state = random_state)
-sur_svc_mod = svm.SVC(random_state = random_state)
+sur_svc_mod = svm.SVC(probability = True, random_state = random_state)
 
 # create survival parameters
 sur_gbc_params = {'loss' : ["deviance"], 'n_estimators' : [100, 200, 300], 'learning_rate': [0.1, 0.05, 0.01], 'max_depth': [4, 8], 'min_samples_leaf': [100, 150], 'max_features': [0.3, 0.1]}
 sur_rfc_params ={"max_depth": [None], "max_features": [1, 3, 10],  "min_samples_split": [2, 3, 10], "min_samples_leaf": [1, 3, 10], "bootstrap": [False], "n_estimators" :[100, 300], "criterion": ["gini"]}
+#sur_rfc_params ={"max_depth": [None], "max_features": [10],  "min_samples_split": [2, 3], "min_samples_leaf": [1, 3], "bootstrap": [False], "n_estimators" :[100], "criterion": ["gini"]}
 sur_dtc_parmas = {'criterion':['gini', 'entropy'], 'splitter':['best', 'random'],'min_samples_split':[2, 3]}
 sur_abc_params = {"base_estimator__criterion" : ["gini", "entropy"], "base_estimator__splitter" :   ["best", "random"], "algorithm" : ["SAMME","SAMME.R"], "n_estimators" :[1,2], "learning_rate":  [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3,1.5]}
 sur_etc_params = {"max_depth": [None], "max_features": [1, 3, 10], "min_samples_split": [2, 3, 10], "min_samples_leaf": [1, 3, 10], "bootstrap": [False], "n_estimators" :[100,300], "criterion": ["gini"]}
