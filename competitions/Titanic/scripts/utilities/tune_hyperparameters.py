@@ -87,7 +87,7 @@ def tune_hyperparameters(model,
                         )
     
     # Fit using grid search.
-    grid.fit(X_train, y_train.values.ravel())
+    grid.fit(X_train, y_train)
     
     # extract out the relevant information
     params = grid.cv_results_['params']
