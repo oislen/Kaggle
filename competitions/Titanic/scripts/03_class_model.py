@@ -7,9 +7,8 @@ Created on Sun Nov  4 22:19:35 2018
 
 # load in relevant libraries
 import pandas as pd
-from utilities.fit_sur_mod import fit_sur_mod
+from model.fit_sur_mod import fit_sur_mod
 import cons
-import model_cons
 import os
 
 def class_model(base_engin_fpath,
@@ -57,8 +56,8 @@ def class_model(base_engin_fpath,
     base_test = base[base.Dataset == 'test']
     
     # extract out model and params
-    sur_dict = model_cons.sur_dict
- 
+    sur_dict = cons.sur_dict
+    
     # iterate over each model and evaluate it
     for model_name in sur_dict.keys():
         
@@ -67,7 +66,7 @@ def class_model(base_engin_fpath,
         # set model constants
         #model_name = 'rfc'
         y_col = cons.y_col
-        X_col =  cons.X_col
+        X_col =  base.columns.drop(cons.id_cols).tolist()
         model = sur_dict[model_name]['model']
         params = sur_dict[model_name]['params']
         target_type = 'class'
