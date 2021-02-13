@@ -17,10 +17,9 @@ def load_class_preds(model_keys,
     """
     
     pred_col = 'Survived'
-    preds_df = pd.DataFrame({join_col:range(892, 1310)})
-    
+
     # loop through the model keys
-    for key in model_keys:
+    for idx, key in enumerate(model_keys):
         
         model_pred_data_fpath = pred_data_fpath.format(key)
         
@@ -33,7 +32,13 @@ def load_class_preds(model_keys,
         # rename the predictions column
         model_preds_df = model_preds_df.rename(columns = {pred_col:new_pred_col})
         
-        # join to the output dataframe
-        preds_df = pd.merge(left = preds_df, right = model_preds_df, on = join_col)
+        if idx == 0:
+            
+            preds_df = model_preds_df
+            
+        else:
+            
+            # join to the output dataframe
+            preds_df = pd.merge(left = preds_df, right = model_preds_df, on = join_col)
     
     return preds_df
