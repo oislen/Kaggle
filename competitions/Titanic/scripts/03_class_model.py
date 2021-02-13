@@ -66,8 +66,8 @@ def class_model(base_engin_fpath,
         
         # set model constants
         #model_name = 'rfc'
-        y_col = ['Survived']
-        X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
+        y_col = cons.y_col
+        X_col =  cons.X_col
         model = sur_dict[model_name]['model']
         params = sur_dict[model_name]['params']
         target_type = 'class'
