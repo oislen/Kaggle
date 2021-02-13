@@ -93,23 +93,23 @@ def learning_curve(model,
     seed = 123
     
     # Create feature matrix and target vector
-    X, y = X_train, y_train
+    #X, y = X_train, y_train
     
     # random mise x and y
-    rand_idx = np.random.choice(a = range(X.shape[0]), 
-                                size = X.shape[0], 
-                                replace = True
-                                )
+    #rand_idx = np.random.choice(a = range(X.shape[0]), 
+    #                            size = X.shape[0], 
+    #                            replace = True
+    #                            )
     
-    X = X.iloc[rand_idx, :]
-    y = y.iloc[rand_idx, :]
+    #X = X.iloc[rand_idx, :]
+    #y = y.iloc[rand_idx, :]
     
     #if target_type == 'class':
 
     # Create CV training and test scores for various training set sizes
     train_sizes, train_scores, test_scores = lc(estimator = model, 
-                                                X = X, 
-                                                y = y, 
+                                                X = X_train, 
+                                                y = y_train, 
                                                 cv = cv,
                                                 scoring=scoring, 
                                                 n_jobs = n_jobs, 
