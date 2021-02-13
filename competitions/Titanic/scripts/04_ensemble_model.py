@@ -54,6 +54,18 @@ corr_mat(dataset = preds_df,
 # find majority vote
 preds_df['major_vote'] = preds_df.mode(numeric_only = True, axis = 1)
 
+
+# output predictions
+maj_vote = preds_df[[id_col, 'major_vote']].rename(columns = {'major_vote':'Survived'})
+
+# write predictions
+maj_vote.to_csv(model_pred_data_fpath.format('mvc'),
+                sep = ',',
+                encoding = 'utf-8',
+                header = True,
+                index = False
+                )
+
 #-- Voting Classifier --#
 
 # load in the engineered data
@@ -82,13 +94,46 @@ votingC = ensemble.VotingClassifier(estimators=estimators,
                                     n_jobs = 4
                                     )
 
+# definte the predictor columns
+X_col = base.columns.drop(cons.id_cols).tolist()
+
 # fit voting classifer
-votingC = votingC.fit(X = base_train[cons.X_col], 
-                      y = base_train[cons.y_col]
+votingC = votingC.fit(X = base_train[X_col], 
+                      y = base_train[cons.y_col[0]]
                       )
 
 # make test set predictions
-preds_df['Survived'] = votingC.predict(base_test)
+preds_df['Survived'] = votingC.predict(base_test[X_col]).astype(int)
+
+# make test set predictions
+model = class_models_dict['rfc']
+#t = model.estimators_[0].tree_
+#t.impurity
+
+#print(model.get_params())
+#base_train[X_col].tail(10).to_csv('train2.csv')
+#base_test[X_col].tail(10).to_csv('test2.csv')
+#model.fit(X = base_train[X_col],  y = base_train[cons.y_col])
+
+preds_df['rfc2_Survived'] = model.predict(base_test[X_col]).astype(int)
+
+#preds_df[['rfc_Survived', 'rfc2_Survived']].tail(10)
+#filt = preds_df['rfc_Survived'] != preds_df['rfc2_Survived']
+#errors = preds_df.loc[filt, [id_col, 'rfc_Survived', 'rfc2_Survived']]
+#error_pass = errors['PassengerId'].head(1)
+
+#model.decision_path(base_test.loc[base_test['PassengerId'].isin(error_pass), X_col])
+
 
 # output predictions
 results = preds_df[[id_col, 'Survived']]
+
+print(pd.crosstab(index = preds_df['major_vote'], columns = preds_df['Survived'] ))
+
+# write predictions
+results.to_csv(model_pred_data_fpath.format('evc'),
+               sep = ',',
+               encoding = 'utf-8',
+               header = True,
+               index = False
+               )
