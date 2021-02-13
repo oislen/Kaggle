@@ -33,6 +33,7 @@ scripts_dir = os.path.join(titanic_comp_dir, 'scripts')
 data_dir = os.path.join(titanic_comp_dir, 'data')
 report_dir = os.path.join(titanic_comp_dir, 'report')
 preds_dir = os.path.join(data_dir, 'preds')
+models_dir = os.path.join(data_dir, 'models')
 univar_stats_dir = os.path.join(report_dir, 'univariate_analysis\\descriptive_stats')
 bivar_assoc_dir = os.path.join(report_dir, 'bivariate_analysis\\association_tests')
 bivar_corr_dir = os.path.join(report_dir, 'bivariate_analysis\\correlation_tests')
@@ -68,9 +69,9 @@ base_clean_data_fpath = os.path.join(data_dir, base_clean_data_fname)
 base_clean_2_data_fpath = os.path.join(data_dir, base_clean_2_data_fname)
 base_engin_data_fpath = os.path.join(data_dir, base_engin_fname)
 pred_data_fpath = os.path.join(preds_dir, pred_data_fname)
+best_model_fpath = os.path.join(models_dir, best_model_fname)
 
 hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
-best_model_fpath = os.path.join(model_results_dir, best_model_fname)
 
 # append utilities directory to path
 for p in [utilities_dir,]:
@@ -121,6 +122,9 @@ sur_dict = {}
 
 # set random state for models
 random_state = 123
+
+y_col = ['Survived']
+X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
 
 #-- Age --#
 
