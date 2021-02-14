@@ -11,7 +11,6 @@ import cons
 import joblib
 from utilities.train_test_split_sample import train_test_split_sample
 from utilities.tune_hyperparameters import tune_hyperparameters
-from sklearn.model_selection import GridSearchCV
 from utilities.perf_metrics import perf_metrics
 from graph.hist import hist
 from graph.vis_feat_imp import vis_feat_imp
@@ -139,12 +138,7 @@ def fit_sur_mod(base_train,
                                                                  sample_target = sample_target,
                                                                  sample_type = sample_type
                                                                  )
-    
-    #X_valid = pd.DataFrame()
-    #X_train = base_train[X_col]
-    #y_valid = pd.DataFrame()
-    #y_train = base_train[y_col]
-    
+
     print('running hyperparameter tuning ...')
     
     # tune gbm model
@@ -158,12 +152,7 @@ def fit_sur_mod(base_train,
                                       refit = refit,
                                       verbose = verbose
                                       )
-    
-    #gscv = GridSearchCV(model, param_grid = params, cv = 5, scoring="accuracy", n_jobs = -1, verbose = 1)
-    
-    #gscv.fit(X_train, y_train)
-    
-    #best_model = gscv.best_estimator_
+
     
     # extract out the model tuning results
     mod_tuning_df = mod_tuning['tune_df']
@@ -236,17 +225,7 @@ def fit_sur_mod(base_train,
 
     # pickle the best model
     joblib.dump(best_model, cons.best_model_fpath.format(model_name))
-    #t = best_model.estimators_[0].tree_
-    #t.feature
-    
-    #print(best_model.get_params())
-    
-    #base_train[X_col].tail(10).to_csv('train1.csv')
-    #base_test[X_col].tail(10).to_csv('test1.csv')
-    #print('predicting for test set ...')
-    
-    
-    
+
     # predict for the base_test set
     base_test[tar_col] = best_model.predict(base_test[X_col])
     
