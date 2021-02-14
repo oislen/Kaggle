@@ -82,11 +82,10 @@ def feat_engineer(base_clean_2_fpath,
     X_train = engin.loc[engin['Dataset'] == 'train', pred_cols]
     
     # create a tree model
-    #gbc = ensemble.GradientBoostingClassifier(random_state = 123)
-    rfc = ensemble.RandomForestClassifier(random_state = 123)
+    model = cons.sur_rfc_mod
     
     # determine the feature importance
-    feat_imp = tree_feat_imp(model = rfc,
+    feat_imp = tree_feat_imp(model = model,
                              y_train = y_train,
                              X_train = X_train
                              )
@@ -95,10 +94,10 @@ def feat_engineer(base_clean_2_fpath,
     int_feat_imp_filt = pd.Series(feat_imp.index).str.contains('_x_').tolist()
     
     # filter out non interaction terms from feat_imp
-    feat_imp_sub = feat_imp.loc[int_feat_imp_filt, :]
+    feat_imp_sub = feat_imp.loc[int_feat_imp_filt, :].reset_index()
     
     # extract out the important features 
-    top_int_feat = feat_imp_sub.index[feat_imp_sub['Importance'] > 1.5].tolist()
+    top_int_feat = feat_imp_sub['Predictor'].head(10).tolist()
     
     # add in additional variables to enable the interaction effects
     out_vars = base_cols + top_int_feat
