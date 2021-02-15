@@ -74,11 +74,8 @@ def class_model(base_engin_fpath,
         train_size = 0.8
         test_size = 0.2
         random_split = True
-        sample_target = None
-        sample_type = 'over'
         scoring = 'accuracy'
         refit = True
-        return_mod = True
         verbose = 3
         cv = 10
         n_jobs = -1
@@ -101,13 +98,10 @@ def class_model(base_engin_fpath,
                                train_size = train_size,
                                test_size = test_size,
                                random_split = random_split,
-                               sample_target = sample_target,
-                               sample_type = sample_type,
                                scoring = scoring,
                                cv = cv,
                                n_jobs = n_jobs,
                                refit = refit,
-                               return_mod = return_mod,
                                verbose = verbose
                                )
         
