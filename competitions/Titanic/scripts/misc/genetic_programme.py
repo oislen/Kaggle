@@ -13,121 +13,82 @@ sys.path.append(scripts_dir)
 import cons
 import numpy as np
 import pandas as pd
+import pickle
+from sklearn.metrics import accuracy_score
 
+from helper_funcs.GP_deap import GP_deap
+from helper_funcs.MungeData import MungeData
+from helper_funcs.CleanData import CleanData
+from helper_funcs.GeneticFunction import GeneticFunction
+from helper_funcs.Outputs import Outputs
+from helper_funcs import Coef 
 
-def Outputs(data):
-    output = np.round(1.-(1./(1.+np.exp(-data))))
-    return output
+# load data for your genetic algorithm
+train = pd.read_csv(cons.train_data_fpath)
+test = pd.read_csv(cons.test_data_fpath)
 
+#-- Training GP --#
 
-def GeneticFunction(data):
-    
-    gen_f = ((np.minimum( ((((0.058823499828577 + data["Sex"]) - np.cos((data["Pclass"] / 2.0))) * 2.0)),  0.885868) * 2.0) +
-            np.maximum( ((data["SibSp"] - 2.409090042114258)),  ( -(np.minimum( (data["Sex"]),  (np.sin(data["Parch"]))) * data["Pclass"]))) +
-            (0.138462007045746 * ((np.minimum( (data["Sex"]),  (((data["Parch"] / 2.0) / 2.0))) * data["Age"]) - data["Cabin"])) +
-            np.minimum( ((np.sin((data["Parch"] * ((data["Fare"] - 0.720430016517639) * 2.0))) * 2.0)),  ((data["SibSp"] / 2.0))) +
-            np.maximum( (np.minimum( ( -np.cos(data["Embarked"])),  (0.138462007045746))),  (np.sin(((data["Cabin"] - data["Fare"]) * 2.0)))) +
-            -np.minimum( ((((data["Age"] * data["Parch"]) * data["Embarked"]) + data["Parch"])),  (np.sin(data["Pclass"]))) +
-            np.minimum( (data["Sex"]),  ((np.sin( -(data["Fare"] * np.cos((data["Fare"] * 1.630429983139038)))) / 2.0))) +
-            np.minimum( ((0.230145)),  (np.sin(np.minimum( (((67.0 / 2.0) * np.sin(data["Fare"]))),  (0.31830988618379069))))) +
-            np.sin((np.sin(data["Cabin"]) * (np.sin((12.6275)) * np.maximum( (data["Age"]),  (data["Fare"]))))) +
-            np.sin(((np.minimum( (data["Fare"]),  ((data["Cabin"] * data["Embarked"]))) / 2.0) *  -data["Fare"])) +
-            np.minimum( (((2.675679922103882 * data["SibSp"]) * np.sin(((96) * np.sin(data["Cabin"]))))),  (data["Parch"])) +
-            np.sin(np.sin((np.maximum( (np.minimum( (data["Age"]),  (data["Cabin"]))),  ((data["Fare"] * 0.31830988618379069))) * data["Cabin"]))) +
-            np.maximum( (np.sin(((12.4148) * (data["Age"] / 2.0)))),  (np.sin((-3.0 * data["Cabin"])))) +
-            (np.minimum( (np.sin((((np.sin(((data["Fare"] * 2.0) * 2.0)) * 2.0) * 2.0) * 2.0))),  (data["SibSp"])) / 2.0) +
-            ((data["Sex"] - data["SibSp"]) * (np.cos(((data["Embarked"] - 0.730768978595734) + data["Age"])) / 2.0)) +
-            ((np.sin(data["Cabin"]) / 2.0) - (np.cos(np.minimum( (data["Age"]),  (data["Embarked"]))) * np.sin(data["Embarked"]))) +
-            np.minimum( (0.31830988618379069),  ((data["Sex"] * (2.212120056152344 * (0.720430016517639 - np.sin((data["Age"] * 2.0))))))) +
-            (np.minimum( (np.cos(data["Fare"])),  (np.maximum( (np.sin(data["Age"])),  (data["Parch"])))) * np.cos((data["Fare"] / 2.0))) +
-            np.sin((data["Parch"] * np.minimum( ((data["Age"] - 1.5707963267948966)),  ((np.cos((data["Pclass"] * 2.0)) / 2.0))))) +
-            (data["Parch"] * (np.sin(((data["Fare"] * (0.623655974864960 * data["Age"])) * 2.0)) / 2.0)) +
-            (0.31830988618379069 * np.cos(np.maximum( ((0.602940976619720 * data["Fare"])),  ((np.sin(0.720430016517639) * data["Age"]))))) +
-            (np.minimum( ((data["SibSp"] / 2.0)),  (np.sin(((data["Pclass"] - data["Fare"]) * data["SibSp"])))) * data["SibSp"]) +
-            np.tanh((data["Sex"] * np.sin((5.199999809265137 * np.sin((data["Cabin"] * np.cos(data["Fare"]))))))) +
-            (np.minimum( (data["Parch"]),  (data["Sex"])) * np.cos(np.maximum( ((np.cos(data["Parch"]) + data["Age"])),  (3.1415926535897931)))) +
-            (np.minimum( (np.tanh(((data["Cabin"] / 2.0) + data["Parch"]))),  ((data["Sex"] + np.cos(data["Age"])))) / 2.0) +
-            (np.sin((np.sin(data["Sex"]) * (np.sin((data["Age"] * data["Pclass"])) * data["Pclass"]))) / 2.0) +
-            (data["Sex"] * (np.cos(((data["Sex"] + data["Fare"]) * ((8.48635) * (63)))) / 2.0)) +
-            np.minimum( (data["Sex"]),  ((np.cos((data["Age"] * np.tanh(np.sin(np.cos(data["Fare"]))))) / 2.0))) +
-            (np.tanh(np.tanh( -np.cos((np.maximum( (np.cos(data["Fare"])),  (0.094339601695538)) * data["Age"])))) / 2.0) +
-            (np.tanh(np.cos((np.cos(data["Age"]) + (data["Age"] + np.minimum( (data["Fare"]),  (data["Age"])))))) / 2.0) +
-            (np.tanh(np.cos((data["Age"] * ((-2.0 + np.sin(data["SibSp"])) + data["Fare"])))) / 2.0) +
-            (np.minimum( (((281) - data["Fare"])),  (np.sin((np.maximum( ((176)),  (data["Fare"])) * data["SibSp"])))) * 2.0) +
-            np.sin(((np.maximum( (data["Embarked"]),  (data["Age"])) * 2.0) * (((785) * 3.1415926535897931) * data["Age"]))) +
-            np.minimum( (data["Sex"]),  (np.sin( -(np.minimum( ((data["Cabin"] / 2.0)),  (data["SibSp"])) * (data["Fare"] / 2.0))))) +
-            np.sin(np.sin((data["Cabin"] * (data["Embarked"] + (np.tanh( -data["Age"]) + data["Fare"]))))) +
-            (np.cos(np.cos(data["Fare"])) * (np.sin((data["Embarked"] - ((734) * data["Fare"]))) / 2.0)) +
-            ((np.minimum( (data["SibSp"]),  (np.cos(data["Fare"]))) * np.cos(data["SibSp"])) * np.sin((data["Age"] / 2.0))) +
-            (np.sin((np.sin((data["SibSp"] * np.cos((data["Fare"] * 2.0)))) + (data["Cabin"] * 2.0))) / 2.0) +
-            (((data["Sex"] * data["SibSp"]) * np.sin(np.sin( -(data["Fare"] * data["Cabin"])))) * 2.0) +
-            (np.sin((data["SibSp"] * ((((5.428569793701172 + 67.0) * 2.0) / 2.0) * data["Age"]))) / 2.0) +
-            (data["Pclass"] * (np.sin(((data["Embarked"] * data["Cabin"]) * (data["Age"] - (1.07241)))) / 2.0)) +
-            (np.cos((((( -data["SibSp"] + data["Age"]) + data["Parch"]) * data["Embarked"]) / 2.0)) / 2.0) +
-            (0.31830988618379069 * np.sin(((data["Age"] * ((data["Embarked"] * np.sin(data["Fare"])) * 2.0)) * 2.0))) +
-            ((np.minimum( ((data["Age"] * 0.058823499828577)),  (data["Sex"])) - 0.63661977236758138) * np.tanh(np.sin(data["Pclass"]))) +
-            -np.minimum( ((np.cos(((727) * ((data["Fare"] + data["Parch"]) * 2.0))) / 2.0)),  (data["Fare"])) +
-            (np.minimum( (np.cos(data["Fare"])),  (data["SibSp"])) * np.minimum( (np.sin(data["Parch"])),  (np.cos((data["Embarked"] * 2.0))))) +
-            (np.minimum( (((data["Fare"] / 2.0) - 2.675679922103882)),  (0.138462007045746)) * np.sin((1.5707963267948966 * data["Age"]))) +
-            np.minimum( ((0.0821533)),  (((np.sin(data["Fare"]) + data["Embarked"]) - np.cos((data["Age"] * (9.89287)))))))
+pass_id_train = train["PassengerId"] # copy it before deleting it in the MungeData step
+survived_train = train["Survived"] # copy it before deleting it in the MungeData step
+pass_id_test = test["PassengerId"] # copy it before deleting it in the MungeData step
 
-    return gen_f
+evolved_train = MungeData(train)
+evolved_test = MungeData(test)
 
+# Starts the genetic function. Remember this can have a huge comp. effort depending on the value you set 
+# above in HOWMANYITERS
+GeneticFunctionObject = GP_deap(evolved_train)
+# optional, save our genetic function for later, good idea if computation took ages
+with open(cons.gf_fpath,"wb") as file:
+    pickle.dump(GeneticFunction,file)
 
-def MungeData(data):
-    # Sex
-    data.drop(['Ticket', 'Name'], inplace=True, axis=1)
-    data.Sex.fillna('0', inplace=True)
-    data.loc[data.Sex != 'male', 'Sex'] = 0
-    data.loc[data.Sex == 'male', 'Sex'] = 1
-    # Cabin
-    data.Cabin.fillna('0', inplace=True)
-    data.loc[data.Cabin.str[0] == 'A', 'Cabin'] = 1
-    data.loc[data.Cabin.str[0] == 'B', 'Cabin'] = 2
-    data.loc[data.Cabin.str[0] == 'C', 'Cabin'] = 3
-    data.loc[data.Cabin.str[0] == 'D', 'Cabin'] = 4
-    data.loc[data.Cabin.str[0] == 'E', 'Cabin'] = 5
-    data.loc[data.Cabin.str[0] == 'F', 'Cabin'] = 6
-    data.loc[data.Cabin.str[0] == 'G', 'Cabin'] = 7
-    data.loc[data.Cabin.str[0] == 'T', 'Cabin'] = 8
-    # Embarked
-    data.loc[data.Embarked == 'C', 'Embarked'] = 1
-    data.loc[data.Embarked == 'Q', 'Embarked'] = 2
-    data.loc[data.Embarked == 'S', 'Embarked'] = 3
-    data.Embarked.fillna(0, inplace=True)
-    data.fillna(-1, inplace=True)
-    return data.astype(float)
+# drop PassengerId because we will not use it
+train_nparray = evolved_train.drop(columns = ["PassengerId","Survived"]).values.tolist() 
 
+trainPredictions = Outputs(np.array([GeneticFunctionObject(*x) for x in train_nparray]))
+print("Your gp fitting score based on training set (Remember, Kaggle/Test set score will be different):")
+print(accuracy_score(survived_train.astype(int),trainPredictions.astype(int)))
+pd_train = pd.DataFrame({'PassengerId': pass_id_train.astype(int),
+                        'Predicted': trainPredictions.astype(int),
+                        'Survived': survived_train.astype(int)})
 
-if __name__ == "__main__":
-    
-    # load in training and test data
-    train = pd.read_csv(cons.train_data_fpath)
-    test = pd.read_csv(cons.test_data_fpath)
-    
-    # prep data
-    mungedtrain = MungeData(train)
-    
-    # make training predictions
-    trainPredictions = Outputs(GeneticFunction(mungedtrain))
-    
-    # create training frame
-    pdtrain = pd.DataFrame({'PassengerId': mungedtrain.PassengerId.astype(int),
-                            'Predicted': trainPredictions.astype(int),
-                            'Survived': mungedtrain.Survived.astype(int)})
-    
-    # check results
-    pd.crosstab(index = pdtrain['Predicted'], columns = pdtrain['Survived'])
-    
-    # prep test set
-    mungedtest = MungeData(test)
-    
-    # generate predictions
-    testPredictions = Outputs(GeneticFunction(mungedtest))
-    
-    # make submission file
-    pdtest = pd.DataFrame({'PassengerId': mungedtest.PassengerId.astype(int),
-                            'Survived': testPredictions.astype(int)})
-    
-    # write submission file
-    pdtest.to_csv(cons.pred_data_fpath.format('gpc'), index=False)
+# Test set submission
+# drop PassengerId because we will not use it
+evoled_test = evolved_test.drop(["PassengerId"],axis=1) 
+test_nparray = evolved_test.values.tolist()
+testPredictions = Outputs(np.array([GeneticFunctionObject(*x) for x in test_nparray]))
+pd_test = pd.DataFrame({'PassengerId': pass_id_test.astype(int),
+                        'Survived': testPredictions.astype(int)})
+pd_test['Survived'].value_counts()
+
+#-- PreFitted Model --#
+
+# prep data
+cleanedTrain = CleanData(train)
+cleanedTest = CleanData(test)
+
+# run a check on the Training dataset. See section "Programm your own gen. algorithm" below on how to 
+# construct your own genetic algorithm
+thisArray = Coef.BIG.copy()
+# make training predictions
+trainPredictions = Outputs(GeneticFunction(cleanedTrain,thisArray[0],thisArray[1],thisArray[2],thisArray[3],thisArray[4],thisArray[5],thisArray[6],thisArray[7],thisArray[8],thisArray[9],thisArray[10],thisArray[11],thisArray[12],thisArray[13],thisArray[14],thisArray[15],thisArray[16],thisArray[17],thisArray[18],thisArray[19],thisArray[20],thisArray[21],thisArray[22],thisArray[23],thisArray[24],thisArray[25],thisArray[26],thisArray[27],thisArray[28],thisArray[29],thisArray[30],thisArray[31],thisArray[32],thisArray[33],thisArray[34],thisArray[35],thisArray[36],thisArray[37],thisArray[38]))
+pdcheck = pd.DataFrame({'Survived': trainPredictions.astype(int)})
+ret = pdcheck.Survived.where(pdcheck["Survived"].values==cleanedTrain["Survived"].values).notna()
+t,f = ret.value_counts()
+score = 100/(t+f)*t
+print("Training set score for prefitted gp model: ",score)
+# create training frame
+pdtrain = pd.DataFrame({'PassengerId': cleanedTrain.PassengerId.astype(int),
+                        'Predicted': trainPredictions.astype(int),
+                        'Survived': cleanedTrain.Survived.astype(int)})
+# check results
+pd.crosstab(index = pdtrain['Predicted'], columns = pdtrain['Survived'])
+
+# generate predictions
+testPredictions = Outputs(GeneticFunction(cleanedTest,thisArray[0],thisArray[1],thisArray[2],thisArray[3],thisArray[4],thisArray[5],thisArray[6],thisArray[7],thisArray[8],thisArray[9],thisArray[10],thisArray[11],thisArray[12],thisArray[13],thisArray[14],thisArray[15],thisArray[16],thisArray[17],thisArray[18],thisArray[19],thisArray[20],thisArray[21],thisArray[22],thisArray[23],thisArray[24],thisArray[25],thisArray[26],thisArray[27],thisArray[28],thisArray[29],thisArray[30],thisArray[31],thisArray[32],thisArray[33],thisArray[34],thisArray[35],thisArray[36],thisArray[37],thisArray[38]))
+# make submission file
+pdtest = pd.DataFrame({'PassengerId': cleanedTest.PassengerId.astype(int),
+                        'Survived': testPredictions.astype(int)})
+# write submission file
+pdtest.to_csv(cons.pred_data_fpath.format('gpc'), index=False)
