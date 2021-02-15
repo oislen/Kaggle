@@ -76,6 +76,7 @@ best_model_fpath = os.path.join(models_dir, best_model_fname)
 gf_fpath = os.path.join(models_dir, gf_fname)
 
 hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
+perf_metrics_fpath = os.path.join(model_results_dir, metrics_fname)
 
 # append utilities directory to path
 for p in [utilities_dir,]:
