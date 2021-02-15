@@ -12,6 +12,7 @@ from sklearn import ensemble
 from graph.corr_mat import corr_mat
 from ensemble.load_class_preds import load_class_preds
 from ensemble.load_class_models import load_class_models
+from ensemble.comp_valid_perf_metrics import comp_valid_perf_metrics
 
 def ensemble_model():
     
@@ -55,10 +56,18 @@ def ensemble_model():
              attrs = model_pred_cols,
              method = 'spearman'
              )
+        
+    # load performance metrics
+    perf_metrics = comp_valid_perf_metrics(model_keys = sur_dict, 
+                                           perf_metrics_fpath = cons.perf_metrics_fpath
+                                           )
+    
+    print(perf_metrics)
+    
+    #-- Voting Classifier --#
     
     # find majority vote
     preds_df['major_vote'] = preds_df.mode(numeric_only = True, axis = 1)
-    
     
     # output predictions
     maj_vote = preds_df[[id_col, 'major_vote']].rename(columns = {'major_vote':'Survived'})
@@ -70,8 +79,6 @@ def ensemble_model():
                     header = True,
                     index = False
                     )
-    
-    #-- Voting Classifier --#
     
     # load in the engineered data
     base_engin_fpath = cons.base_engin_data_fpath
