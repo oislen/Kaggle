@@ -9,7 +9,7 @@ Created on Tue Feb  9 15:10:47 2021
 import pandas as pd
 import cons
 import joblib
-from utilities.train_test_split_sample import train_test_split_sample
+from sklearn.model_selection import train_test_split
 from utilities.tune_hyperparameters import tune_hyperparameters
 from utilities.perf_metrics import perf_metrics
 from graph.hist import hist
@@ -30,13 +30,10 @@ def fit_sur_mod(base_train,
                 train_size = 0.8,
                 test_size = 0.2,
                 random_split = True,
-                sample_target = None,
-                sample_type = 'over',
                 scoring = 'neg_mean_squared_error',
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
-                return_mod = True,
                 verbose = 0
                 ):
     
@@ -61,12 +58,10 @@ def fit_sur_mod(base_train,
                 train_size = 0.8,
                 test_size = 0.2,
                 random_split = True,
-                sample_target = None,
                 scoring = 'neg_mean_squared_error',
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
-                return_mod = True,
                 verbose = 0
                 )
     
@@ -81,7 +76,6 @@ def fit_sur_mod(base_train,
     train_size - Float, the proportion of data to have in training set, default is 0.8
     test_size - Float, the proportion of data to have in the testing set, default is 0.2
     random_split - Boolean, whether to randomise the data before splitting, default is True
-    sample_target - String, whether to sample the target attribute, default is None
     scoring - String, the type of scoring to perform on gbm model, default is 'neg_mean_squared_error'
     
     Returns
@@ -99,12 +93,10 @@ def fit_sur_mod(base_train,
                 train_size = 0.8,
                 test_size = 0.2,
                 random_split = True,
-                sample_target = None,
                 scoring = 'neg_mean_squared_error',
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
-                return_mod = True,
                 verbose = 0
                 )
     
@@ -128,16 +120,14 @@ def fit_sur_mod(base_train,
     
     print('splitting data into training and validation sets ...')
     
-    # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = train_test_split_sample(dataset = base_train,
-                                                                 y = y_col,
-                                                                 X = X_col,
-                                                                 train_size = train_size,
-                                                                 test_size = test_size,
-                                                                 random_split = random_split,
-                                                                 sample_target = sample_target,
-                                                                 sample_type = sample_type
-                                                                 )
+    # split the training data
+    X_train, X_valid, y_train, y_valid = train_test_split(base_train[X_col], 
+                                                          base_train[y_col], 
+                                                          train_size = train_size,
+                                                          test_size = test_size, 
+                                                          shuffle = random_split,
+                                                          random_state = cons.random_state
+                                                          )
 
     print('running hyperparameter tuning ...')
     
