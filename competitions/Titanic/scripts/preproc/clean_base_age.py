@@ -61,7 +61,6 @@ def clean_base_age(base):
     train_size = 0.8
     test_size = 0.2
     random_split = True
-    sample_target = None
     scoring = 'neg_mean_squared_error'
     refit = True
     verbose = 3
@@ -80,7 +79,6 @@ def clean_base_age(base):
                            train_size = train_size,
                            test_size = test_size,
                            random_split = random_split,
-                           sample_target = sample_target,
                            scoring = scoring,
                            refit = refit,
                            cv = cv,
