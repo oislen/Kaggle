@@ -45,6 +45,7 @@ zip_data_fname = '{}.zip'.format(comp_name)
 sample_sub_data_fname = 'gender_submission.csv'
 test_data_fname = 'test.csv'
 train_data_fname = 'train.csv'
+ground_truth_fname = 'ground_truth.csv'
 base_data_fname = 'base.csv'
 base_clean_data_fname = 'base_clean.csv'
 base_clean_2_data_fname = 'base_clean_2.csv'
@@ -65,6 +66,7 @@ zip_data_fpath = os.path.join(data_dir, zip_data_fname)
 sample_sub_data_fpath = os.path.join(data_dir, sample_sub_data_fname)
 test_data_fpath = os.path.join(data_dir, test_data_fname)
 train_data_fpath = os.path.join(data_dir, train_data_fname)
+ground_truth_fpath = os.path.join(data_dir, ground_truth_fname)
 base_data_fpath = os.path.join(data_dir, base_data_fname)
 base_clean_data_fpath = os.path.join(data_dir, base_clean_data_fname)
 base_clean_2_data_fpath = os.path.join(data_dir, base_clean_2_data_fname)
@@ -78,6 +80,9 @@ hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
 # append utilities directory to path
 for p in [utilities_dir,]:
     sys.path.append(p)
+
+# set ground truth url
+url = "https://github.com/thisisjasonjafari/my-datascientise-handcode/raw/master/005-datavisualization/titanic.csv"
 
 ######################
 #-- Plot Constants --#
