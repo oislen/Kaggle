@@ -9,8 +9,7 @@ Created on Tue Feb  9 15:10:47 2021
 import pandas as pd
 import cons
 import joblib
-from sklearn.model_selection import train_test_split
-from utilities.tune_hyperparameters import tune_hyperparameters
+from sklearn.model_selection import train_test_split, GridSearchCV
 from utilities.perf_metrics import perf_metrics
 from graph.hist import hist
 from graph.vis_feat_imp import vis_feat_imp
@@ -130,30 +129,24 @@ def fit_sur_mod(base_train,
                                                           )
 
     print('running hyperparameter tuning ...')
-    
-    # tune gbm model
-    mod_tuning = tune_hyperparameters(model = model, 
-                                      params = params, 
-                                      X_train = X_train, 
-                                      y_train = y_train[y_col[0]],
-                                      scoring = scoring,
-                                      cv = cv,
-                                      n_jobs = n_jobs,
-                                      refit = refit,
-                                      verbose = verbose
-                                      )
 
+    # create grid search cross validation object
+    mod_tuning = GridSearchCV(estimator = model,
+                              param_grid = params, 
+                              cv = cv,
+                              scoring = scoring, 
+                              n_jobs = n_jobs, 
+                              refit = refit,
+                              verbose = verbose
+                              )
     
-    # extract out the model tuning results
-    mod_tuning_df = mod_tuning['tune_df']
+    # tune model
+    mod_tuning.fit(X_train, y_train[y_col[0]])
     
-    # save the tuning results
-    mod_tuning_df.to_csv(cons.hyper_param_fpath.format(model_name, model_name),
-                         index = False
-                         )
-
     # extract out the model of best fit
-    best_model = mod_tuning['best_estimator']
+    best_model = mod_tuning.best_estimator_
+    best_params = mod_tuning.best_params_
+    best_score = mod_tuning.best_score_
     
     # create learning curve
     learning_curve(model = best_model,
@@ -207,7 +200,7 @@ def fit_sur_mod(base_train,
                   )
 
     print('refitting to all training data ...')
-    
+
     # refit model to all training data
     best_model.fit(base_train[X_col], 
                    base_train[y_col[0]]
