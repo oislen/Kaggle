@@ -10,6 +10,8 @@ import pandas as pd
 import cons
 import joblib
 from sklearn.model_selection import train_test_split, GridSearchCV
+from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import Pipeline, make_pipeline
 from utilities.perf_metrics import perf_metrics
 from graph.hist import hist
 from graph.vis_feat_imp import vis_feat_imp
@@ -129,9 +131,22 @@ def fit_sur_mod(base_train,
                                                           )
 
     print('running hyperparameter tuning ...')
-
+    
+    # create define a smote object
+    smote = SMOTE(random_state = cons.random_state)
+    
+    # create pipeline with smote and model
+    imba_pipeline = make_pipeline(smote, model)
+    
+    # extract out the full model name from the pipeline
+    full_name = imba_pipeline.steps[1][0]
+    
+    # update the parameter dictionary with the full model name
+    for key in list(params.keys()):
+        params['{}__{}'.format(full_name, key)] = params.pop(key)
+        
     # create grid search cross validation object
-    mod_tuning = GridSearchCV(estimator = model,
+    mod_tuning = GridSearchCV(estimator = imba_pipeline,
                               param_grid = params, 
                               cv = cv,
                               scoring = scoring, 
@@ -144,7 +159,8 @@ def fit_sur_mod(base_train,
     mod_tuning.fit(X_train, y_train[y_col[0]])
     
     # extract out the model of best fit
-    best_model = mod_tuning.best_estimator_
+    best_estimator = mod_tuning.best_estimator_
+    best_model = best_estimator.named_steps[full_name]
     best_params = mod_tuning.best_params_
     best_score = mod_tuning.best_score_
     
@@ -201,13 +217,15 @@ def fit_sur_mod(base_train,
 
     print('refitting to all training data ...')
 
+    final_model = make_pipeline(smote, best_model)
+    
     # refit model to all training data
-    best_model.fit(base_train[X_col], 
-                   base_train[y_col[0]]
-                   )
+    final_model.fit(base_train[X_col], 
+                    base_train[y_col[0]]
+                    )
 
     # pickle the best model
-    joblib.dump(best_model, cons.best_model_fpath.format(model_name))
+    joblib.dump(final_model, cons.best_model_fpath.format(model_name))
 
     # predict for the base_test set
     base_test[tar_col] = best_model.predict(base_test[X_col])
