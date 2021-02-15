@@ -58,6 +58,7 @@ hist_valid_preds_fname = '{}_hist_valid_preds.png'
 metrics_fname = '{}_perf_metrics.csv'
 roc_fname = '{}_roc_curve.png'
 hist_test_preds_fname = '{}_hist_test_preds.png'
+gf_fname = "geneticfunction.pickle"
 
 # create file paths
 zip_data_fpath = os.path.join(data_dir, zip_data_fname)
@@ -70,6 +71,7 @@ base_clean_2_data_fpath = os.path.join(data_dir, base_clean_2_data_fname)
 base_engin_data_fpath = os.path.join(data_dir, base_engin_fname)
 pred_data_fpath = os.path.join(preds_dir, pred_data_fname)
 best_model_fpath = os.path.join(models_dir, best_model_fname)
+gf_fpath = os.path.join(models_dir, gf_fname)
 
 hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
 
