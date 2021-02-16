@@ -134,13 +134,22 @@ embarked_map = {'S':1, 'C':2, 'Q':3}
 age_dict = {}  
 sur_dict = {}
 
-# set random state for models
+# settins for models
 random_state = 123
-
-y_col = ['Survived']
-X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare_Log', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
+train_size = 0.8
+test_size = 0.2
+random_split = True
+refit = True
+verbose = 3
+cv = 10
+n_jobs = -1
 
 #-- Age --#
+
+# define age columns
+y_col_age = ['Age']
+non_X_cols = ['PassengerId', 'Age', 'Survived']
+X_col_age = ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
 
 # create the age models
 age_gbr_mod = ensemble.GradientBoostingRegressor(random_state = random_state) 
@@ -155,6 +164,10 @@ age_dict['gbr'] = {'model':age_gbr_mod, 'params':age_gbr_params}
 age_dict['rfr'] = {'model':age_rfr_mod, 'params':age_rfr_params}
 
 #-- Survival --#
+
+# define survival columns
+y_col = ['Survived']
+X_col =  ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare_Log', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'Male', 'Embarked_Ord']
 
 # create survival models
 sur_gbc_mod = ensemble.GradientBoostingClassifier(random_state = random_state)
