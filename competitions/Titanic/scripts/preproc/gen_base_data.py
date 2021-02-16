@@ -8,6 +8,8 @@ Created on Sat Nov  3 10:42:39 2018
 # load in libraries
 import pandas as pd
 import numpy as np
+import os 
+import cons
 
 def gen_base_data(train_fpath,
                   test_fpath,
@@ -52,15 +54,30 @@ def gen_base_data(train_fpath,
                   )
     
     """
-
+    
+    print('checking inputs ...')
+    
+    # check input data types
+    str_inputs = [train_fpath, test_fpath, base_fpath]
+    if any([type(val) != str for val in str_inputs]):
+        raise ValueError('Input params [train_fpath, test_fpath, base_fpath] must be str data types')
+    # check if input file path exists
+    if os.path.exists(train_fpath) == False:
+        raise OSError('Input file path {} does not exist'.format(train_fpath))
+    # check if output file path exists
+    if os.path.exists(test_fpath) == False:
+        raise OSError('Input file path {} does not exist'.format(test_fpath))
+    
+    print('loading in data ...')
+    
     # load in data
-    train = pd.read_csv(train_fpath)
-    test = pd.read_csv(test_fpath)
+    train = pd.read_csv(train_fpath, sep = cons.sep)
+    test = pd.read_csv(test_fpath, sep = cons.sep)
 
     print('Concatenating files ...')
 
     # create a 'Survived' column in test
-    test['Survived'] = np.nan
+    test[cons.y_col[0]] = np.nan
     
     # create a dataset indicator column
     train['Dataset'] = 'train'
@@ -72,6 +89,7 @@ def gen_base_data(train_fpath,
     # row bind the datasets
     base = pd.concat(objs = concat_objs, 
                      axis = 0, 
+                     ignore_index = True,
                      sort = False
                      )
 
@@ -79,10 +97,10 @@ def gen_base_data(train_fpath,
     
     # output the dataset
     base.to_csv(base_fpath,
-                   sep = '|',
-                   encoding = 'utf-8',
-                   header = True,
-                   index = False
-                   )
+                sep = cons.sep,
+                encoding = cons.encoding,
+                header = cons.header,
+                index = cons.index
+                )
     
     return 0
