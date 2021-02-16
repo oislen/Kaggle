@@ -14,6 +14,12 @@ from sklearn import ensemble, tree, svm
 # set pandas behaviour
 pd.set_option('display.max_columns', 20)
 
+# set .csv constants
+sep = ','
+encoding = 'utf-8'
+header = True
+index = False
+
 ##########################
 #-- Filepath Constants --#
 ##########################
