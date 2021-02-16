@@ -8,8 +8,7 @@ Created on Tue Feb  9 15:10:47 2021
 # load in relevant libraries
 import pandas as pd
 import cons
-from sklearn.model_selection import train_test_split
-from utilities.tune_hyperparameters import tune_hyperparameters
+from sklearn.model_selection import train_test_split, GridSearchCV
 from utilities.perf_metrics import perf_metrics
 from graph.preds_obs_resids import preds_obs_resids
 from graph.hist import hist
@@ -20,7 +19,6 @@ def fit_age_mod(base_train,
                 X_col,
                 model,
                 params,
-                target_type = 'reg',
                 random_state = 123,
                 train_size = 0.8,
                 test_size = 0.2,
@@ -113,58 +111,65 @@ def fit_age_mod(base_train,
                                                           random_state = cons.random_state
                                                           )
 
-    # tune gbm model
-    mod_tuning = tune_hyperparameters(model = model, 
-                                      params = params, 
-                                      X_train = X_train, 
-                                      y_train = y_train,
-                                      scoring = scoring,
-                                      cv = cv,
-                                      n_jobs = n_jobs,
-                                      refit = refit,
-                                      verbose = verbose
-                                      )
-
+    # create grid search cross validation object
+    mod_tuning = GridSearchCV(estimator = model,
+                              param_grid = params, 
+                              cv = cv,
+                              scoring = scoring, 
+                              n_jobs = n_jobs, 
+                              refit = refit,
+                              verbose = verbose
+                              )
+    
+    # tune model
+    mod_tuning.fit(X_train, y_train[y_col[0]])
+    
     # extract out the model of best fit
-    gbm = mod_tuning['best_estimator']
+    model = mod_tuning.best_estimator_
+    best_params = mod_tuning.best_params_
+    best_score = mod_tuning.best_score_
+    
+    # print tuning results
+    print(best_params)
+    print(best_score)
     
     # classify the validation set
-    y_valid[pred_col] = gbm.predict(X_valid)
+    y_valid[pred_col] = model.predict(X_valid)
     
     # genrate the regression metrics
-    perf_metrics(y_obs = y_valid[tar_col], 
-                 y_pred = y_valid[pred_col], 
-                 target_type = target_type
-                 )
+    reg_perf_metrics = perf_metrics(y_obs = y_valid[tar_col], 
+                                    y_pred = y_valid[pred_col], 
+                                    target_type = 'reg'
+                                    )
+    
+    # output performance metrics
+    print(reg_perf_metrics)
     
     # refit model to all training data
-    gbm.fit(base_train[X_col], 
-            base_train[y_col].values.ravel()
-            )
+    model.fit(base_train[X_col], 
+              base_train[y_col].values.ravel()
+              )
 
     # predict for the base_test set
-    base_test[tar_col] = gbm.predict(base_test[X_col])
+    base_test[tar_col] = model.predict(base_test[X_col])
     
-    # if running regression
-    if target_type == 'reg':
-            
-        # create prediction, observation and residual plots
-        preds_obs_resids(obs = tar_col,
-                         preds = pred_col,
-                         dataset = y_valid
-                         )
-        
-        # plot predicted age
-        hist(dataset = y_valid,
-             num_var = [pred_col],
-             title = 'Histogram of Predicted {} - Validation Set'.format(tar_col)
-             )
-        
-        # plot predicted age
-        hist(dataset = base_test,
-             num_var = [tar_col],
-             title = 'Histogram of Predicted {} - Test Set'.format(tar_col)
-             )
+    # create prediction, observation and residual plots
+    preds_obs_resids(obs = tar_col,
+                     preds = pred_col,
+                     dataset = y_valid
+                     )
+    
+    # plot predicted age
+    hist(dataset = y_valid,
+         num_var = [pred_col],
+         title = 'Histogram of Predicted {} - Validation Set'.format(tar_col)
+         )
+    
+    # plot predicted age
+    hist(dataset = base_test,
+         num_var = [tar_col],
+         title = 'Histogram of Predicted {} - Test Set'.format(tar_col)
+         )
 
     # re-concatenate the base training and base test to update base data
     base = pd.concat(objs = [base_train, base_test],
