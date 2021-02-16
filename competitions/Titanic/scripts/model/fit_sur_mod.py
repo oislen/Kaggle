@@ -237,9 +237,4 @@ def fit_sur_mod(base_train,
          output_fname = cons.hist_test_preds_fname.format(model_name)
          )
     
-    # re-concatenate the base training and base test to update base data
-    base = pd.concat(objs = [base_train, base_test],
-                     axis = 0
-                     )
-    
-    return base
+    return base_test
