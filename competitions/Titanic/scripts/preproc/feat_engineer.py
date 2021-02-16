@@ -12,7 +12,7 @@ from utilities.derive_variables import derive_variables
 from utilities.tree_feat_imp import tree_feat_imp
 from utilities.standardise_variables import standardise_variables
 
-def feat_engineer(base_clean_2_fpath,
+def feat_engineer(base_clean_fpath,
                   base_engin_fpath
                   ):
     
@@ -26,13 +26,13 @@ def feat_engineer(base_clean_2_fpath,
     
     Defaults
     
-    feat_engineer(base_clean_2_fpath,
+    feat_engineer(base_clean_fpath,
                   base_engin_fpath
                   )
     
     Parameters
     
-    base_clean_2_fpath - String, the input file path to the cleaned base data
+    base_clean_fpath - String, the input file path to the cleaned base data
     base_engine_fpath - String, the output file path to write the engineered base data
     
     Returns
@@ -41,14 +41,14 @@ def feat_engineer(base_clean_2_fpath,
     
     Example
     
-    feat_engineer(base_clean_2_fpath = 'C:\\Users\\...\\base_clean_2.csv',
+    feat_engineer(base_clean_fpath = 'C:\\Users\\...\\base_clean_2.csv',
                   base_engin_fpath = 'C:\\Users\\...\\base_engin.csv'
                   )
     
     """
     
     # load in data
-    base = pd.read_csv(base_clean_2_fpath, 
+    base = pd.read_csv(base_clean_fpath, 
                        sep = cons.sep
                        )
 
