@@ -13,7 +13,10 @@ from preproc.tree_feat_imp import tree_feat_imp
 from preproc.standardise_variables import standardise_variables
 
 def feat_engineer(base_clean_fpath,
-                  base_engin_fpath
+                  base_engin_fpath,
+                  top_n_int_terms = 10,
+                  stand_range = [0, 1],
+                  stand_type = 'range'
                   ):
     
     """
@@ -27,13 +30,19 @@ def feat_engineer(base_clean_fpath,
     Defaults
     
     feat_engineer(base_clean_fpath,
-                  base_engin_fpath
+                  base_engin_fpath,
+                  top_n_int_terms = 10,
+                  stand_range = [0, 1],
+                  stand_type = 'range'
                   )
     
     Parameters
     
     base_clean_fpath - String, the input file path to the cleaned base data
     base_engine_fpath - String, the output file path to write the engineered base data
+    top_n_int_terms - Integer, the number of best interaction terms to return, default is 10
+    stand_range - List of Integers, the standardisation range to standardise all predictor variables by, default is [0, 1]
+    stand_type - String, the type of data standardisation to perform, default is 'range'
     
     Returns
     
@@ -41,11 +50,26 @@ def feat_engineer(base_clean_fpath,
     
     Example
     
-    feat_engineer(base_clean_fpath = 'C:\\Users\\...\\base_clean_2.csv',
-                  base_engin_fpath = 'C:\\Users\\...\\base_engin.csv'
+    feat_engineer(base_clean_fpath = 'C:\\Users\\...\\base_clean.csv',
+                  base_engin_fpath = 'C:\\Users\\...\\base_engin.csv',
+                  top_n_int_terms = 10,
+                  stand_range = [0, 1],
+                  stand_type = 'range'
                   )
     
     """
+    
+    print('checking inputs ...')
+    
+    # check input data types
+    str_inputs = [base_clean_fpath, base_engin_fpath]
+    if any([type(val) != str for val in str_inputs]):
+        raise ValueError('Input params [base_clean_fpath, base_engin_fpath] must be str data types')
+    # check if input file path exists
+    if os.path.exists(base_clean_fpath) == False:
+        raise OSError('Input file path {} does not exist'.format(train_fpath))
+    
+    print('Loading base data ...')
     
     # load in data
     base = pd.read_csv(base_clean_fpath, 
@@ -66,10 +90,11 @@ def feat_engineer(base_clean_fpath,
                                 var_type = 'interaction'
                                 )
     
+    # create the concatenation object list
+    concat_objs = [base[base_cols], int_data]
+    
     # create the engineered data by concatenating the base data with the interaction data
-    engin = pd.concat(objs = [base[base_cols], int_data],
-                      axis = 1
-                      )
+    engin = pd.concat(objs = concat_objs, axis = 1)
 
     print('Performing feature importance on all terms ...')
     
@@ -77,7 +102,7 @@ def feat_engineer(base_clean_fpath,
     pred_cols = attr_cols + int_data.columns.tolist()
     
     # extract training data
-    y_train = engin.loc[engin['Dataset'] == 'train', 'Survived']
+    y_train = engin.loc[engin['Dataset'] == 'train', cons.y_col[0]]
     X_train = engin.loc[engin['Dataset'] == 'train', pred_cols]
     
     # create a tree model
@@ -96,7 +121,7 @@ def feat_engineer(base_clean_fpath,
     feat_imp_sub = feat_imp.loc[int_feat_imp_filt, :].reset_index()
     
     # extract out the important features 
-    top_int_feat = feat_imp_sub['Predictor'].head(10).tolist()
+    top_int_feat = feat_imp_sub['Predictor'].head(top_n_int_terms).tolist()
     
     # add in additional variables to enable the interaction effects
     out_vars = base_cols + top_int_feat
@@ -112,8 +137,8 @@ def feat_engineer(base_clean_fpath,
     # standardise data to interval [0, 1]
     stand = standardise_variables(dataset = final_data,
                                   attr = stand_cols,
-                                  stand_type = 'range',
-                                  stand_range = [0, 1]
+                                  stand_type = stand_type,
+                                  stand_range = stand_range
                                   )
     
     # update the processed data
