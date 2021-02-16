@@ -6,6 +6,7 @@ Created on Sat Nov  3 15:52:22 2018
 """
 
 # load in relevant libraries
+import os
 import pandas as pd
 import numpy as np
 import cons
@@ -22,6 +23,37 @@ def clean_base_data(base_fpath,
     Function Overview
     
     This function cleans and processes the base data file.
+    The cleaning steps involved include:
+        1. Title
+            * Extracting Title
+            * Mapping Title
+            * Converting to Ordinal Variable
+            * Dummy Encoding Title Catagories
+        2. Pclass
+            * Dummy Encoding PClass Catagories
+        3. Sex
+            * Converting to Male Indicator Variable
+        4. Embarked
+            * Converting to Ordinal Variable
+        5. Family Size
+            * Creating Family Size attribute
+            * Binning Family Size attribute
+            * Dummy Encoding Family Size Categories
+        6. Fare
+            * Filling in missing fare with approximate value
+            * Binning Fare Attribute
+            * Convert to Ordinal Variable
+            * Log transforming fare
+        7. Cabin Letters
+            * Extracting Cabin Latters
+            * Dummy Encoding Cabin Letters Categories
+        8. Ticket Prefix
+            * Extracting Ticket Prefix
+            * Dummy Encoding Ticket Prefix Categories
+        9. Age
+            * Imputing Missing Age values with RandomForestsRegressor Model
+            * Binng Age Attribute
+            * Converting to Ordinal Variable
     
     Defaults
     
@@ -45,9 +77,21 @@ def clean_base_data(base_fpath,
                     )    
     
     """
+        
+    print('checking inputs ...')
     
+    # check input data types
+    str_inputs = [base_fpath, base_clean_fpath]
+    if any([type(val) != str for val in str_inputs]):
+        raise ValueError('Input params [train_fpath, test_fpath, base_fpath] must be str data types')
+    # check if input file path exists
+    if os.path.exists(base_fpath) == False:
+        raise OSError('Input file path {} does not exist'.format(base_fpath))
+     
+    print('Loading base data ...')
+        
     # load in data
-    base = pd.read_csv(base_fpath, sep = '|')
+    base = pd.read_csv(base_fpath, sep = cons.sep)
     
     # create a copy of the base data
     proc = base.copy(deep = True)
@@ -143,8 +187,14 @@ def clean_base_data(base_fpath,
     # fill in mean value
     proc['Fare'] = proc['Fare'].fillna(mean_fare)
     
+    # define the number of fare bins
+    n_fare_bins = 4
+    
+    # define the fare bin labels
+    fare_bin_labels = np.arange(n_fare_bins)
+    
     # cut up Fare
-    proc['Fare_Ord'] = pd.qcut(proc['Fare'], q = 4, labels = [1, 2, 3, 4]).astype(int)
+    proc['Fare_Ord'] = pd.qcut(proc['Fare'], q = n_fare_bins, labels = fare_bin_labels).astype(int)
     
     # log transform fare
     proc['Fare_Log'] = proc['Fare'].apply(lambda x: np.log(x + 1))
@@ -181,15 +231,21 @@ def clean_base_data(base_fpath,
     concat_objs = [proc, dummy]
     
     # concatenate data together
-    proc = pd.concat(objs = concat_objs, axis = 1)
+    proc = pd.concat(objs = concat_objs, axis = 1, sort = False)
 
     print('Filling in missing age values ...')
     
     # generate clean base age
     proc = clean_base_age(base = proc)
     
+    # define the number of age bins
+    n_age_bins = 5
+    
+    # define the age bin labels
+    age_bin_labels = np.arange(n_age_bins)
+    
     # bin age into 5 categories
-    proc['Age_Ord'] = pd.cut(proc['Age'], bins = 5, labels = [1, 2, 3, 4, 5]).astype(int)
+    proc['Age_Ord'] = pd.cut(proc['Age'], bins = n_age_bins, labels = age_bin_labels).astype(int)
     
     print('Outputting cleaned base file ...')
     
@@ -198,10 +254,10 @@ def clean_base_data(base_fpath,
     
     # output the dataset
     proc_sub.to_csv(base_clean_fpath,
-                    sep = '|',
-                    encoding = 'utf-8',
-                    header = True,
-                    index = False
+                    sep = cons.sep,
+                    encoding = cons.encoding,
+                    header = cons.header,
+                    index = cons.index
                     )
 
     return 0
