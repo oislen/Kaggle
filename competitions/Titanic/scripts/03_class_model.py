@@ -86,35 +86,32 @@ def class_model(base_engin_fpath,
             os.makedirs(report_dir)
         
         # fit model
-        base_out = fit_sur_mod(base_train = base_train,
-                               base_test = base_test,
-                               y_col = y_col,
-                               X_col = X_col,
-                               model_name = model_name,
-                               model = model,
-                               params = params,
-                               target_type = target_type,
-                               random_state = random_state,
-                               train_size = train_size,
-                               test_size = test_size,
-                               random_split = random_split,
-                               scoring = scoring,
-                               cv = cv,
-                               n_jobs = n_jobs,
-                               refit = refit,
-                               verbose = verbose
-                               )
-        
-        # extract out test data
-        base_test = base_out.loc[base_out['Dataset'] == 'test', :]
+        base_test = fit_sur_mod(base_train = base_train,
+                                base_test = base_test,
+                                y_col = y_col,
+                                X_col = X_col,
+                                model_name = model_name,
+                                model = model,
+                                params = params,
+                                target_type = target_type,
+                                random_state = random_state,
+                                train_size = train_size,
+                                test_size = test_size,
+                                random_split = random_split,
+                                scoring = scoring,
+                                cv = cv,
+                                n_jobs = n_jobs,
+                                refit = refit,
+                                verbose = verbose
+                                )
         
         print('Outputting classifictions ...')
         
         # create the test classification dataset
         predictions = pd.DataFrame()
-        predictions['Survived'] = base_test['Survived'] .astype(int)
+        predictions[y_col[0]] = base_test[y_col[0]] .astype(int)
         predictions['PassengerId'] = base_test['PassengerId']
-        predictions = predictions[['PassengerId', 'Survived']]
+        predictions = predictions[['PassengerId', y_col[0]]]
         
         # output the dataset
         predictions.to_csv(pred_fpath.format(model_name),
