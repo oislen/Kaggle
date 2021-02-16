@@ -143,6 +143,15 @@ def clean_base_data(base_fpath,
     # map the embarked locations in order of there destinations
     proc['Embarked_Ord'] = proc['Embarked'].map(cons.embarked_map).astype(int)
     
+    # generate dummy variables for the titles
+    dummy = pd.get_dummies(proc['Embarked'], prefix = 'Embarked')
+    
+    # create list of dummy and proc data for concatenation
+    concat_objs = [proc, dummy]
+    
+    # concatenate data together
+    proc = pd.concat(objs = concat_objs, axis = 1)
+    
     print('Working on family size ...')
         
     # create a family size attribute
@@ -235,8 +244,47 @@ def clean_base_data(base_fpath,
 
     print('Filling in missing age values ...')
     
+    # extract out model and params
+    age_dict = cons.age_dict
+    
+    # extract dataset columns
+    str_filt = proc.dtypes == 'object'
+    cat_filt = proc.dtypes == 'category'
+    str_cols = proc.dtypes[str_filt | cat_filt].index.tolist()
+    non_X_cols = cons.non_X_cols + str_cols
+    
+    # age model settings
+    y_col = cons.y_col_age
+    X_col = proc.columns.drop(non_X_cols)
+    #X_col =  cons.X_col_age
+    model = age_dict['rfr']['model']
+    params = age_dict['rfr']['params']
+    random_state = cons.random_state
+    train_size = cons.train_size
+    test_size = cons.test_size
+    random_split = cons.random_split
+    scoring = 'neg_mean_squared_error'
+    refit = cons.refit
+    verbose = cons.verbose
+    cv = cons.cv
+    n_jobs = cons.n_jobs
+    
     # generate clean base age
-    proc = clean_base_age(base = proc)
+    proc = clean_base_age(base = proc,
+                          y_col = y_col,
+                          X_col = X_col,
+                          model = model,
+                          params = params,
+                          random_state = random_state,
+                          train_size = train_size,
+                          test_size = test_size,
+                          random_split = random_split,
+                          scoring = scoring,
+                          refit = refit,
+                          verbose = verbose,
+                          cv = cv,
+                          n_jobs = n_jobs
+                          )
     
     # define the number of age bins
     n_age_bins = 5
