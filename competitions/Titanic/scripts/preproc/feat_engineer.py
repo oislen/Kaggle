@@ -7,7 +7,6 @@ Created on Sun Nov  4 21:46:26 2018
 
 # load in relevant libraries
 import pandas as pd
-from sklearn import ensemble
 import cons
 from utilities.derive_variables import derive_variables
 from utilities.tree_feat_imp import tree_feat_imp
@@ -50,7 +49,7 @@ def feat_engineer(base_clean_2_fpath,
     
     # load in data
     base = pd.read_csv(base_clean_2_fpath, 
-                       sep = '|'
+                       sep = cons.sep
                        )
 
     print('Deriving interaction terms ...')
@@ -124,10 +123,10 @@ def feat_engineer(base_clean_2_fpath,
     
     # output the dataset
     final_data.to_csv(base_engin_fpath,
-                      sep = '|',
-                      encoding = 'utf-8',
-                      header = True,
-                      index = False
+                      sep = cons.sep,
+                      encoding = cons.encoding,
+                      header = cons.header,
+                      index = cons.index
                       )
     
     return 0
