@@ -48,7 +48,7 @@ def class_model(base_engin_fpath,
     
     # load in data
     base = pd.read_csv(base_engin_fpath, 
-                       sep = '|'
+                       sep = cons.sep
                        )
     
     # split the data based on the original dataset
@@ -118,10 +118,10 @@ def class_model(base_engin_fpath,
         
         # output the dataset
         predictions.to_csv(pred_fpath.format(model_name),
-                           sep = ',',
-                           encoding = 'utf-8',
-                           header = True,
-                           index = False
+                           sep = cons.sep,
+                           encoding = cons.encoding,
+                           header = cons.header,
+                           index = cons.index
                            )
         
     return 0
