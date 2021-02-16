@@ -12,7 +12,7 @@ import joblib
 from sklearn.model_selection import train_test_split, GridSearchCV
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import make_pipeline
-from utilities.perf_metrics import perf_metrics
+from model.perf_metrics import perf_metrics
 from graph.hist import hist
 from graph.vis_feat_imp import vis_feat_imp
 from graph.learning_curve import learning_curve
