@@ -19,7 +19,7 @@ labelsize = cons.plot_label_size
 
 def hist(dataset, 
          num_var,
-         bins = None,
+         bins = 'auto',
          hist = True,
          kde = False,
          color  = 'royalblue',
@@ -101,7 +101,7 @@ def hist(dataset,
     
     References        
     
-    https://seaborn.pydata.org/generated/seaborn.distplot.html
+    https://seaborn.pydata.org/generated/seaborn.histplot.html
     
     """
     
@@ -155,16 +155,14 @@ def hist(dataset,
         plt.figure(figsize = plot_size)
         
         # create the histogram
-        sns.distplot(a = series,
-                     bins = bins,
-                     hist = hist,
-                     kde = kde,
-                     color = color,
-                     norm_hist = norm_hist,
-                     vertical  = False,
-                     hist_kws = dict(cumulative = cumulative),
-                     kde_kws = dict(cumulative = cumulative)
-                     )
+        sns.displot(data = series,
+                    bins = bins,
+                    kde = kde,
+                    color = color,
+                    cumulative = cumulative,
+                    common_norm = norm_hist,
+                    kde_kws = dict(cumulative = cumulative)
+                    )
         
         # if no title is given
         if title != None:
