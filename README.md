@@ -33,7 +33,14 @@ The code contained within this folder is responable for the [Predict Future Sale
 
 ### Titanic <a name="titanic"></a>
 
+#### Description
+
 The Titanic folder contains the code for the [Titanic - Machine Learning from Disaster competition](https://www.kaggle.com/c/titanic). The aim of the competition is simple: use machine learning to create a model that predicts which passengers survived the Titanic shipwreck. The dataset used in the competition holds passenger information such as name, age, gender and soci-economic class.
+
+#### Methodology
+
+Firstly, the raw data is cleaned and engineered for modelling. This includes, filling in missing values, dummy encoding cateogircal variables, transforming and binning numeric variables into ordinal variables and engineering new features. All resulting predictors are standardised to the interval \[0, 1\] prior to modelling. 
+Once the data has been cleaned, a variety of tree based sklearn models such as random forests and gradient boosted decision trees are fitted and validated. The minority class of the target variable is up sampled using SMOTE. Hyper parameter tuning is applied over 10 fold cross validation using accuracy as an evaluation metric. Once the optimal model has been determined, it is validated using a holdout set by plotting a ROC curve and calculating various classification metrics such as recall, precision and F1. After the optimal model has been validate with the holdout set, it is pickled and predictions are made for the test set. Finally, a majority vote ensemble classifier is generated using all of the optimal tree based sklearn models and their test set predictions.
 
 ## Environments <a name="environments"></a>
 
