@@ -6,7 +6,6 @@ Created on Tue Feb  9 15:10:47 2021
 """
 
 # load in relevant libraries
-import pandas as pd
 import cons
 import joblib
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -18,7 +17,6 @@ from graph.vis_feat_imp import vis_feat_imp
 from graph.learning_curve import learning_curve
 from graph.roc_curve import roc_curve
 
-
 def fit_sur_mod(base_train,
                 base_test,
                 y_col,
@@ -26,12 +24,11 @@ def fit_sur_mod(base_train,
                 model_name,
                 model,
                 params,
-                target_type = 'class',
                 random_state = 123,
                 train_size = 0.8,
                 test_size = 0.2,
                 random_split = True,
-                scoring = 'neg_mean_squared_error',
+                scoring = 'accuracy',
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
@@ -40,11 +37,18 @@ def fit_sur_mod(base_train,
     
     """
     
-    Fit Model Documentation
+    Fit Survival Model Documentation
     
     Function Overview
     
-    This function fits sklearn model for the Titanic compeition
+    This function fits an sklearn model for the Titanic compeition.
+    The process includes splitting the training data into training and validation (holdout) sets.
+    SMOTE is applied to syntetically up sample the minor class of survived.
+    Grid search cross validation is then applied to find the optimal parameters for the model.
+    Once the optimal model is found, the model is validated using the validation (holdout) set.
+    Learning curves, performance metrics and ROC curves are all use to evaluate the final model.
+    The final model is then refitted to the entire training set and predictions are made for the test set.
+    The final model and its predictions are saved for reproduceability and ensemble modelling.
     
     Defaults
     
@@ -72,12 +76,18 @@ def fit_sur_mod(base_train,
     base_test - DataFrame, the base testing data
     y_col - List of Strings, the target y column
     X_col - List of Strings, the predictor X columns
+    model_name - String, the name of the model to run, see model parameters in cons.py
+    model - Sklearn Model, the model to fit, see model definition in cons.py
     params - Dictionary, the gbm model parameters to tune
     random_state - Integer, the random seed to set, default is 123
     train_size - Float, the proportion of data to have in training set, default is 0.8
     test_size - Float, the proportion of data to have in the testing set, default is 0.2
     random_split - Boolean, whether to randomise the data before splitting, default is True
-    scoring - String, the type of scoring to perform on gbm model, default is 'neg_mean_squared_error'
+    scoring - String, the type of scoring to perform on gbm model, default is 'accuracy'
+    cv - Integer, the number of folds to use for cross fold validation when training the model, default is 10
+    n_jobs - Integer, the number of cores to use when processing data, default is -1 for all cores
+    refit - Boolean, whether to refit the best model following grid search cross validation hypter parameter tuning, default is True
+    verbose - Integer, whether to print verbose updates when tuning model, default is 0
     
     Returns
     
@@ -87,14 +97,14 @@ def fit_sur_mod(base_train,
  
     fit_sur_mod(base_train = train,
                 base_test = test,
-                y_col = ['Age'],
+                y_col = ['Survived'],
                 X_col = ['Pclass', 'SibSp', 'Parch', 'FamSize', 'Fare', 'Alone', 'Mr', 'Mrs', 'Ms', 'Priv', 'male', 'Embarked'],
                 params = cons.test_age_gbm_params,
                 random_state = 123,
                 train_size = 0.8,
                 test_size = 0.2,
                 random_split = True,
-                scoring = 'neg_mean_squared_error',
+                scoring = 'accuracy',
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
@@ -108,9 +118,6 @@ def fit_sur_mod(base_train,
     
     # create predicted column name
     pred_col = '{}_pred'.format(tar_col)
-    
-    # define the histogram of valid predictions filename
-    
     
     # create count plot of classifications
     hist(dataset = base_train,
@@ -164,6 +171,10 @@ def fit_sur_mod(base_train,
     best_params = mod_tuning.best_params_
     best_score = mod_tuning.best_score_
     
+    # print best parameters and best score
+    print(best_params)
+    print(best_score)
+    
     # create learning curve
     learning_curve(model = best_model,
                    X_train = X_train,
@@ -179,41 +190,38 @@ def fit_sur_mod(base_train,
         # plot feature importance
         vis_feat_imp(name = model_name, model = best_model, X_train = X_train)
        
-    # if there is a spare validation set
-    if y_valid.shape[0] > 0:
-            
-        print('predicting for validation set ...')
-        
-        # classify the validation set
-        y_valid[pred_col] = best_model.predict(X_valid)
-        
-        print('evaluating validation predictions ...')
-        
-        # create count plot of classifications
-        hist(dataset = y_valid,
-             num_var = [pred_col],
-             output_dir = cons.model_results_dir.format(model_name),
-             output_fname = cons.hist_valid_preds_fname.format(model_name)
-             )
+    print('predicting for validation set ...')
     
-        # genrate the regression metrics
-        val_metrics = perf_metrics(y_obs = y_valid[tar_col], 
-                                   y_pred = y_valid[pred_col], 
-                                   target_type = target_type,
-                                   output_dir = cons.model_results_dir.format(model_name),
-                                   output_fname = cons.metrics_fname.format(model_name)
-                                   )
-        
-        # print the validation metrics
-        print(val_metrics)
-        
-        # create a ROC curve
-        roc_curve(obs = tar_col, 
-                  preds = pred_col, 
-                  dataset = y_valid,
-                  output_dir = cons.model_results_dir.format(model_name),
-                  output_fname = cons.roc_fname.format(model_name)
-                  )
+    # classify the validation set
+    y_valid[pred_col] = best_model.predict(X_valid)
+    
+    print('evaluating validation predictions ...')
+    
+    # create count plot of classifications
+    hist(dataset = y_valid,
+         num_var = [pred_col],
+         output_dir = cons.model_results_dir.format(model_name),
+         output_fname = cons.hist_valid_preds_fname.format(model_name)
+         )
+
+    # genrate the regression metrics
+    val_metrics = perf_metrics(y_obs = y_valid[tar_col], 
+                               y_pred = y_valid[pred_col], 
+                               target_type = 'class',
+                               output_dir = cons.model_results_dir.format(model_name),
+                               output_fname = cons.metrics_fname.format(model_name)
+                               )
+    
+    # print the validation metrics
+    print(val_metrics)
+    
+    # create a ROC curve
+    roc_curve(obs = tar_col, 
+              preds = pred_col, 
+              dataset = y_valid,
+              output_dir = cons.model_results_dir.format(model_name),
+              output_fname = cons.roc_fname.format(model_name)
+              )
 
     print('refitting to all training data ...')
 
