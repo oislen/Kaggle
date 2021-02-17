@@ -6,6 +6,7 @@ Created on Sun Nov  4 21:46:26 2018
 """
 
 # load in relevant libraries
+import os
 import pandas as pd
 import cons
 from preproc.derive_variables import derive_variables
@@ -67,7 +68,7 @@ def feat_engineer(base_clean_fpath,
         raise ValueError('Input params [base_clean_fpath, base_engin_fpath] must be str data types')
     # check if input file path exists
     if os.path.exists(base_clean_fpath) == False:
-        raise OSError('Input file path {} does not exist'.format(train_fpath))
+        raise OSError('Input file path {} does not exist'.format(base_clean_fpath))
     
     print('Loading base data ...')
     
