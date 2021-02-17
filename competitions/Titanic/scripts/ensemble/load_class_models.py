@@ -13,6 +13,34 @@ def load_class_models(model_keys,
                       ):
     
     """
+    
+    Load Classification Models Documentation
+    
+    Function Overview
+    
+    This function loads in all of the best saved sklearn single classifier models.
+    
+    Defaults
+    
+    load_class_models(model_keys, 
+                      model_fpath
+                      )
+    
+    Parametes
+    
+    model_keys, Dictionary Keys, the model keys from the model parameters dictionary, see cons.py
+    model_fpath, String, the input file path to the sklearn models
+    
+    Returns
+    
+    class_models_dict - Dictionary, the single sklearn model classifiers
+    
+    Example
+    
+    load_class_models(model_keys = ['gbc', 'rfc', 'abc', 'etc', 'svc'], 
+                      model_fpath = 'C:\\Users\\...\\{}_best_model.pkl'
+                      )
+    
     """
     
     # create a dictionary to hold the class models
