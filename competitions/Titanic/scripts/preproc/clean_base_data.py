@@ -83,7 +83,7 @@ def clean_base_data(base_fpath,
     # check input data types
     str_inputs = [base_fpath, base_clean_fpath]
     if any([type(val) != str for val in str_inputs]):
-        raise ValueError('Input params [train_fpath, test_fpath, base_fpath] must be str data types')
+        raise ValueError('Input params [base_fpath, base_clean_fpath] must be str data types')
     # check if input file path exists
     if os.path.exists(base_fpath) == False:
         raise OSError('Input file path {} does not exist'.format(base_fpath))
