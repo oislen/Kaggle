@@ -64,6 +64,7 @@ learning_curve_fnamt = '{}_learning_curve.png'
 hist_valid_preds_fname = '{}_hist_valid_preds.png'
 metrics_fname = '{}_perf_metrics.csv'
 roc_fname = '{}_roc_curve.png'
+feat_imp = '{}_feat_imp.png'
 hist_test_preds_fname = '{}_hist_test_preds.png'
 gf_fname = "geneticfunction.pickle"
 
