@@ -36,7 +36,12 @@ def fit_age_mod(base_train,
     
     Function Overview
     
-    This function fits sklearn model for the Titanic compeition
+    This function fits an age model for the Titanic compeition in order to impute missing values.
+    The process includes splitting the training data into training and validation (holdout) sets.
+    Grid search cross validation is then applied to find the optimal parameters for the model.
+    Once the optimal model is found, the model is validated using the validation (holdout) set.
+    Performance metrics and residual plots are all use to evaluate the final model.
+    The final model is then refitted to the entire training set and predictions are made for the test set.
     
     Defaults
     
@@ -54,7 +59,6 @@ def fit_age_mod(base_train,
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
-                return_mod = True,
                 verbose = 0
                 )
     
@@ -70,6 +74,10 @@ def fit_age_mod(base_train,
     test_size - Float, the proportion of data to have in the testing set, default is 0.2
     random_split - Boolean, whether to randomise the data before splitting, default is True
     scoring - String, the type of scoring to perform on gbm model, default is 'neg_mean_squared_error'
+    cv - Integer, the number of folds to use for cross fold validation when training the model, default is 10
+    n_jobs - Integer, the number of cores to use when processing data, default is -1 for all cores
+    refit - Boolean, whether to refit the best model following grid search cross validation hypter parameter tuning, default is True
+    verbose - Integer, whether to print verbose updates when tuning model, default is 0
     
     Returns
     
@@ -90,7 +98,6 @@ def fit_age_mod(base_train,
                 cv = 10,
                 n_jobs = -1,
                 refit = True,
-                return_mod = True,
                 verbose = 0
                 )
     
