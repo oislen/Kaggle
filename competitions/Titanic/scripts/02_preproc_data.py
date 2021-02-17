@@ -84,7 +84,10 @@ def prg_preproc_data(train_fpath,
     
     # engineer new features
     feat_engineer(base_clean_fpath = base_clean_fpath,
-                  base_engin_fpath = base_engin_fpath
+                  base_engin_fpath = base_engin_fpath,
+                  top_n_int_terms = 10,
+                  stand_range = [0, 1],
+                  stand_type = 'range'
                   )
     
     return 0
