@@ -13,7 +13,7 @@ from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import make_pipeline
 from model.perf_metrics import perf_metrics
 from graph.hist import hist
-from graph.vis_feat_imp import vis_feat_imp
+from graph.feat_imp import feat_imp
 from graph.learning_curve import learning_curve
 from graph.roc_curve import roc_curve
 
@@ -185,10 +185,16 @@ def fit_sur_mod(base_train,
                    output_fname = cons.learning_curve_fnamt.format(model_name)
                    )
     
+    # if the model is tree based
     if model_name in ['rfc', 'abc', 'etc', 'gbc']:
         
         # plot feature importance
-        vis_feat_imp(name = model_name, model = best_model, X_train = X_train)
+        feat_imp(name = model_name, 
+                 model = best_model, 
+                 X_train = X_train,
+                 output_dir = cons.model_results_dir.format(model_name),
+                 output_fname = cons.feat_imp.format(model_name)
+                 )
        
     print('predicting for validation set ...')
     
