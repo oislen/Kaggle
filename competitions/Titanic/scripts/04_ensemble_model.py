@@ -17,6 +17,28 @@ from ensemble.comp_valid_perf_metrics import comp_valid_perf_metrics
 def ensemble_model():
     
     """
+    
+    Ensemble Model Documentation
+    
+    Function Overview
+    
+    This funcion fits an ensemble voting classifer given all the previous fitted sklearn single classifiers.
+    
+    Defaults
+    
+    ensemble_model()
+    
+    Parameters
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    ensemble_model()
+    
+    
     """
     
     # extract out the surivial model information
@@ -39,6 +61,8 @@ def ensemble_model():
     
     #-- Correlation of Predictions --#
     
+    print('Loading model predictions ...')
+    
     # load in the model predictions
     preds_df = load_class_preds(model_keys = model_keys, 
                                 join_col = id_col,
@@ -51,12 +75,16 @@ def ensemble_model():
     # extract out the prediction columns
     model_pred_cols = preds_df.columns.drop(id_col).tolist()
     
+    print('Creating correlation matrix of model predictions ...')
+    
     # plot correlation matrix of classification model predictions
     corr_mat(dataset = preds_df,
              attrs = model_pred_cols,
              method = 'spearman'
              )
         
+    print('Creating comparison report of model performance metrics ...')
+    
     # load performance metrics
     perf_metrics = comp_valid_perf_metrics(model_keys = sur_dict, 
                                            perf_metrics_fpath = cons.perf_metrics_fpath
@@ -66,6 +94,8 @@ def ensemble_model():
     
     #-- Voting Classifier --#
     
+    print('Creating majority vote classifer ...')
+    
     # find majority vote
     preds_df['major_vote'] = preds_df.mode(numeric_only = True, axis = 1)
     
@@ -74,67 +104,92 @@ def ensemble_model():
     
     # write predictions
     maj_vote.to_csv(model_pred_data_fpath.format('mvc'),
-                    sep = ',',
-                    encoding = 'utf-8',
-                    header = True,
-                    index = False
+                    sep = cons.sep,
+                    encoding = cons.encoding,
+                    header = cons.header,
+                    index = cons.index
                     )
+    
+    print('Loading engineered feature data ...')
     
     # load in the engineered data
     base_engin_fpath = cons.base_engin_data_fpath
       
     # load in data
     base = pd.read_csv(base_engin_fpath, 
-                       sep = '|'
+                       sep = cons.sep
                        )
     
+    print('Splitting into train and test sets ...')
+    
     # split the data based on the original dataset
-    base_train = base[base.Dataset == 'train']
-    base_test = base[base.Dataset == 'test']
+    base_train = base[base['Dataset'] == 'train']
+    base_test = base[base['Dataset'] == 'test']
+    
+    print('Loading best sklearn models ...')
     
     # load in classification models
     class_models_dict = load_class_models(model_keys = model_keys, 
                                           model_fpath = model_class_fpath
                                           )
     
+    print('Creating voting classifer model ...')
+    
     # extract the estimaters from the model dictionary
     estimators = [(key, val) for key, val in class_models_dict.items()]
     
     # define the voting classifer model
-    votingC = ensemble.VotingClassifier(estimators=estimators, 
+    votingC = ensemble.VotingClassifier(estimators = estimators, 
                                         voting = 'soft', 
-                                        n_jobs = 4
+                                        n_jobs = -1
                                         )
     
     # definte the predictor columns
     X_col = base.columns.drop(cons.id_cols).tolist()
+    
+    print('Checking randomforest predictions as a sanity check ... ')
+    
+    # make test set predictions
+    model = class_models_dict['rfc']
+    preds_df['rfc2_Survived'] = model.predict(base_test[X_col]).astype(int)
+    tab = pd.crosstab(index = preds_df['rfc_Survived'], columns = preds_df['rfc2_Survived'] )
+    
+    print(tab)
+    
+    print('Fitting voting classifier model ...')
     
     # fit voting classifer
     votingC = votingC.fit(X = base_train[X_col], 
                           y = base_train[cons.y_col[0]]
                           )
     
-    # make test set predictions
-    preds_df['Survived'] = votingC.predict(base_test[X_col]).astype(int)
+    print('predicting for test set ...')
     
     # make test set predictions
-    model = class_models_dict['rfc']
-    preds_df['rfc2_Survived'] = model.predict(base_test[X_col]).astype(int)
-    print(pd.crosstab(index = preds_df['rfc_Survived'], columns = preds_df['rfc2_Survived'] ))
+    preds_df['Survived'] = votingC.predict(base_test[X_col]).astype(int)
     
     # output predictions
     results = preds_df[[id_col, 'Survived']]
     
-    print(pd.crosstab(index = preds_df['major_vote'], columns = preds_df['Survived'] ))
+    # create a cross tab of differences between the majority vote and voting classifer model predicitons
+    tab = pd.crosstab(index = preds_df['major_vote'], columns = preds_df['Survived'] )
+    
+    print(tab)
+    
+    print('Writing voting classifer model predictions to disk ...')
     
     # write predictions
     results.to_csv(model_pred_data_fpath.format('evc'),
-                   sep = ',',
-                   encoding = 'utf-8',
-                   header = True,
-                   index = False
+                   sep = cons.sep,
+                   encoding = cons.encoding,
+                   header = cons.header,
+                   index = cons.index
                    )
+    
+    return 0 
 
+# if running main programme
 if __name__ == '__main__':
     
+    # run ensemble model
     ensemble_model()
