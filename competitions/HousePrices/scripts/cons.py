@@ -8,6 +8,7 @@ Created on Thu Feb 18 10:42:07 2021
 # load libraries
 import os
 import sys
+from sklearn import ensemble
 
 # set programme constants
 comp_name = 'house-prices-advanced-regression-techniques'
@@ -38,6 +39,7 @@ train_data_fname = 'train.csv'
 test_data_fname = 'test.csv'
 base_data_fname = 'base.csv'
 clean_data_fname = 'clean.csv'
+engin_data_fname = 'engin.csv'
 glm_feat_imp_fname = 'GLM_feat_imp.csv'
 
 # create file paths
@@ -45,6 +47,7 @@ train_data_fpath = os.path.join(data_dir, train_data_fname)
 test_data_fpath = os.path.join(data_dir, test_data_fname)
 base_data_fpath = os.path.join(data_dir, base_data_fname)
 clean_data_fpath = os.path.join(data_dir, clean_data_fname)
+engin_data_fpath = os.path.join(data_dir, engin_data_fname)
 glm_feat_imp_fpath = os.path.join(data_dir, glm_feat_imp_fname)
 
 # append utilities directory to path
@@ -99,3 +102,17 @@ utilities_map_dict = {'ELO':1, 'NoSeWa':2, 'NoSewr':3, 'AllPub':4}
 
 # create dummy columns list
 dummy_cols = ['MSZoning', 'Street', 'LandContour', 'LotConfig', 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType', 'Foundation', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'CentralAir', 'Electrical', 'Functional', 'GarageType', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition']
+
+# create outlier dictionary for filtering out anomalies
+outlier_dict = {'1stFlrSF':4000, 'BsmtFinSF1':4000, 'GrLivArea':5000, 'LotFrontage':300, 'MiscVal':8000, 'OpenPorchSF':500, 'TotalBsmtSF':6000, 'SalePrice':300000}
+
+#-- Model Constants --#
+
+# set the random state
+random_state = 1234
+
+# define the target variable
+y_col = ['logSalePrice']
+
+# define a random forest regressor model
+rfr_mod = ensemble.RandomForestRegressor(random_state = random_state)
