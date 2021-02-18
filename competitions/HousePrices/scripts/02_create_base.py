@@ -70,9 +70,6 @@ def create_base(train_data_fpath,
                           ignore_index = True
                           )
     
-    # create logSalePrice (Will be target)
-    base_data['logSalePrice'] = np.log1p(base_data['SalePrice'])
-    
     print('Outputting base file ...')
     
     # output the dataset
