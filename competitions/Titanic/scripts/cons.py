@@ -86,7 +86,7 @@ hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
 perf_metrics_fpath = os.path.join(model_results_dir, metrics_fname)
 
 # append utilities directory to path
-for p in [utilities_dir,]:
+for p in [utilities_dir]:
     sys.path.append(p)
 
 # set ground truth url
