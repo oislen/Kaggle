@@ -5,294 +5,82 @@ Created on Sun Nov 18 15:33:13 2018
 @author: oislen
 """
 
-#~~~~~ User Inputs ~~~~~
-
-fill_nan = True
-map_numeric = True
-feature_eng = True
-ordinal_rank = True
-dummy_encode = True
-remove_outliers = True
-derive_interact = True
-boxcox_trans = False
-output_data = True
-
-#~~~~~~~~~~~~~~~~~~~~~~~
-
-"""
-#####################
-#-- Preliminaries --#
-#####################
-"""
-
 # load in relevant libraries
 import pandas as pd
+import numpy as np
 from scipy.stats import skew
-
-# load cusotm functions
-import sys
-va_dir = 'C:/Users/User/Documents/Data_Analytics/Python/value_analysis'
-sys.path.append(va_dir)
 import value_analysis as va
+import cons
+
+print('Loading input data ...')
 
 # load in data
-input_dir = 'C:\\Users\\User\\Documents\\GitHub\\Kaggle\\HousePrices\\data\\'
-base_name = 'base.csv'
-base = pd.read_csv(input_dir + base_name, sep = '|')
-
-"""
-##################################
-#-- Create the Cleaned Dataset --#
-##################################
-"""
-
-# create the clean dataset
-clean = pd.DataFrame()
+base = pd.read_csv(cons.base_data_fpath, sep = cons.sep)
 
 # set the id, dataset and target columns
-tar_cols = ['Id', 'Dataset', 'SalePrice', 'logSalePrice']
-clean[tar_cols] = base[tar_cols]
+clean = base.copy()
 
-"""
-#######################
-#-- Fill NaN Values --#
-#######################
-"""
+print('Fill in NaN values for base data...')
+    
+# fill in zeros
+clean[cons.zero_imp] = clean[cons.zero_imp].fillna(0)    
 
-# if filling in the NaN Values
-if fill_nan == True:
-    
-    print('Fill in NaN values for base data...')
-    
-    # columns to fill in zeros for
-    zero_imp = ['MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF',
-                'TotalBsmtSF', 'BsmtFullBath', 'BsmtHalfBath',
-                'GarageCars', 'GarageArea'
-                ]
-    
-    # for each zero_imp column
-    for col in zero_imp:
-        
-        # fill in zeros
-        base[col] = base[col].fillna(0)    
-    
-    # columns to fill in medians for
-    median_imp = ['LotFrontage',]
-    
-    # for each median_imp column
-    for col in median_imp:
-        
-        # fill in medians
-        base[col] = base[col].fillna(base[col].median())      
+# fill in medians
+clean[cons.median_imp] = clean[cons.median_imp].apply(lambda x: x.fillna(x.median()), axis = 0) 
 
-    # columns to impute mode for
-    mode_imp = ['MSZoning', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
-                'BsmtFinType1', 'BsmtFinType2', 'Electrical', 'Functional',
-                'GarageType', 'SaleType', 'GarageYrBlt', 'KitchenQual', 
-                'BsmtExposure', 'BsmtQual', 'GarageQual', 'GarageCond', 
-                'Utilities', 'GarageFinish', 'BsmtCond'
-                ]
-    
-    # for each mode_imp column
-    for col in mode_imp:
-        
-        # fill in the mode
-        base[col] = base[col].fillna(base[col].value_counts().index[0])
+# fill in the mode
+clean[cons.mode_imp] = clean[cons.mode_imp].apply(lambda x: x.fillna(x.value_counts().index[0], axis = 0))
 
-    # columns to impute new category 'none' for
-    none_imp = ['MiscFeature', 'FireplaceQu', 'PoolQC', 'Alley', 'Fence']
-    
-    # for each none_imp column
-    for col in none_imp:
-        
-        # fill in the none category
-        base[col] = base[col].fillna('None')       
-        
-"""
-########################
-#-- Transfer Numeric --#
-########################
-"""
+# fill in the none category
+clean[cons.none_imp] = clean[cons.none_imp].fillna('None')       
 
-if map_numeric == True:
-    
-    print('Transfer numeric variales ...')
-    
-    # create a list of the numeric columns
-    num_cols = base.columns[(base.dtypes == 'int64') | (base.dtypes == 'float64')]
-    num_cols = num_cols.drop(['Id', 'SalePrice', 'logSalePrice'])
-    
-    # set the numeric columns
-    clean[num_cols] = base[num_cols]
+print('Engineering new features ...')
 
-"""
-###########################
-#-- Feature Engineering --#
-###########################
-"""
+# create logSalePrice (Will be target)
+clean['logSalePrice'] = np.log1p(clean['SalePrice'])
 
-# if creating new features from existing ones
-if feature_eng == True:
-    
-    # create the total surface floor attribute
-    clean['TotalSF'] = clean['TotalBsmtSF'] + clean['1stFlrSF'] + clean['2ndFlrSF']
+# create the total surface floor attribute
+clean['TotalSF'] = clean['TotalBsmtSF'] + clean['1stFlrSF'] + clean['2ndFlrSF']
 
-"""
-#########################################
-#-- Map Ordinal Categorical Varibales --#
-#########################################
-"""
+print('Creating ordinal varibles ...')
 
-# if converting nominal categories to ordinal categories
-if ordinal_rank == True:
-    
-    print('Map ordinal categorical variables ...')
-    
-    ###########################
-    #-- Quality / Condition --#
-    ###########################
-    
-    # create a list of quality columns with the same levels
-    QC_Cols = ['ExterQual', 'ExterCond', 'BsmtQual', 'BsmtCond', 'HeatingQC', 
-               'KitchenQual', 'FireplaceQu', 'GarageQual', 'GarageCond', 
-               'PoolQC'
-               ]
-    
-    # create a list of corresponding ordinal names for thee columns
-    QC_Ord_Cols = ['ExterQual_ord', 'ExterCond_ord', 'BsmtQual_ord', 
-                   'BsmtCond_ord', 'HeatingQC_ord', 'KitchenQual_ord',
-                   'FireplaceQu_ord', 'GarageQual_ord', 'GarageCond_ord',
-                   'PoolQC_ord'
-                   ]
-    
-    # create the mapping dictionary
-    map_dict = {'Ex':5, 'Gd':4, 'TA':3, 'Fa':2, 'Po':1, 'None':0}
-    
-    # for each column
-    for idx in range(len(QC_Cols)):
-        
-        # map the categories to ordinal variables
-        clean[QC_Ord_Cols[idx]] = base[QC_Cols[idx]].map(map_dict)
-    
-    ################
-    #-- LotShape --#
-    ################
-    
-    # create the mapping dictionary
-    map_dict = {'Reg':4, 'IR1':3, 'IR2':2, 'IR3':1}
-    
-    # map the categories to ordinal variables
-    clean['LotShape_ord'] = base['LotShape'].map(map_dict)
-    
-    #################
-    #-- LandSlope --#
-    #################
-    
-    # create the mapping dictionary
-    map_dict = {'Gtl':1, 'Mod':2, 'Sev':3}
-    
-    # map the categories to ordinal variables
-    clean['LandSlope_ord'] = base['LandSlope'].map(map_dict)
-    
-    ####################
-    #-- BsmtExposure --#
-    ####################
-    
-    # create the mapping dictionary
-    map_dict = {'Gd':4, 'Av':3, 'Mn':2, 'No':1}
-    
-    # map the categories to ordinal variables
-    clean['BsmtExposure_ord'] = base['BsmtExposure'].map(map_dict)
-    
-    ####################
-    #-- BsmtFinType1 --#
-    ####################
-    
-    #clean['BsmtFinType1_Ord'] = base['BsmtFinType1'].map({})
-    
-    ####################
-    #-- GarageFinish --#
-    ####################
-    
-    # create the mapping dictionary
-    map_dict = {'Fin':3, 'RFn':2, 'Unf':1}
-    
-    # map the categories to ordinal variables
-    clean['GarageFinish_ord'] = base['GarageFinish'].map(map_dict)
-    
-    ##################
-    #-- PavedDrive --#
-    ##################
-    
-    # create the mapping dictionary
-    map_dict = {'Y':3, 'P':2, 'N':1}
-    
-    # map the categories to ordinal variables
-    clean['PavedDrive_ord'] = base['PavedDrive'].map(map_dict)
-    
-    #############
-    #-- Alley --#
-    #############
-    
-    # create the mapping dictionary
-    map_dict = {'None':0, 'Grvl':1, 'Pave':2}
-    
-    # map the categories to ordinal variables
-    clean['Alley_ord'] = base['Alley'].astype(str).map(map_dict)
-    
-    #################
-    #-- Utilities --#
-    #################
-    
-    # create the mapping dictionary
-    map_dict = {'ELO':1, 'NoSeWa':2, 'NoSewr':3, 'AllPub':4}
-    
-    # map the categories to ordinal variables
-    clean['Utilities_ord'] = base['Utilities'].map(map_dict)
+# map the categories to ordinal variables
+clean[cons.QC_Ord_Cols] = clean[cons.QC_Cols].apply(lambda x: x.map(cons.qc_cols_map_dict), axis = 0)
 
-"""
-#################################################
-#-- Dummy Encode Nomial Categorical Variables --#
-#################################################
-"""
+# map the categories to ordinal variables
+clean['LotShape_ord'] = clean['LotShape'].map(cons.lotshape_map_dict)
 
-# if dummy encoding the categorical variables
-if dummy_encode == True:
-    
-    print('Dummy encoding nominal categorical variables ...')
-    
-    # define the columns to derive dummy variables for
-    dum_cols = base.columns[base.dtypes == 'object'].drop('Dataset')
-    
-    # ordinal variables to drop
-    ord_cols = QC_Cols + ['LotShape', 'BsmtExposure', 'GarageFinish', 
-                          'PavedDrive', 'Alley', 'Utilities'
-                          ]
-    
-    # drop the ordinal variables
-    dum_cols = dum_cols.drop(ord_cols)
-    
-    # create the dummy variables
-    dummy = va.derive_variables(dataset = base,
-                                attr = dum_cols,
-                                var_type = 'dummy',
-                                suffix = '_bin'
-                                )
-    
-    # append the dummy variables to the dataset
-    clean = pd.concat(objs = [clean,
-                              dummy], 
-                      axis = 1
-                      )
+# map the categories to ordinal variables
+clean['LandSlope_ord'] = clean['LandSlope'].map(cons.landslope_map_dict)
 
-"""
-#######################
-#-- Remove Outliers --#
-#######################
-"""
+# map the categories to ordinal variables
+clean['BsmtExposure_ord'] = clean['BsmtExposure'].map(cons.basement_expo_map_dict)
+
+# map the categories to ordinal variables
+clean['GarageFinish_ord'] = clean['GarageFinish'].map(cons.garagefinish_map_dict)
+
+# map the categories to ordinal variables
+clean['PavedDrive_ord'] = clean['PavedDrive'].map(cons.paved_drive_map_dict)
+
+# map the categories to ordinal variables
+clean['Alley_ord'] = clean['Alley'].astype(str).map(cons.alley_map_dict)
+
+# map the categories to ordinal variables
+clean['Utilities_ord'] = clean['Utilities'].map(cons.utilities_map_dict)
+
+print('Dummy encoding categorical variables ...')
+
+# create dummy indicators
+dummy = pd.get_dummies(data = clean[cons.dummy_cols])
+
+# create concatenation list
+concat_list = [clean, dummy]
+
+# concatenate dummies to data
+clean = pd.concat(objs = concat_list, axis = 1)
 
 # if removing the numeric outliers from the data
-if remove_outliers == True:
+if False:
     
     print('Remove outliers ...')
     
@@ -316,20 +104,12 @@ if remove_outliers == True:
     # drop SalePrice
     clean = clean.drop(columns = 'SalePrice')
 
-"""
-#########################
-#-- Interaction Terms --#
-#########################
-"""
-
-if derive_interact == True:
+if False:
     
     print('Creating interaction terms ...')
-    
-    feat_imp_dir = 'C:\\Users\\User\\Documents\\GitHub\\Kaggle\\HousePrices\\report\\clean_data\\feat_imp'
-    
+
     # load in the feature importance data
-    feat_imp = pd.read_csv(feat_imp_dir + '\\GLM_feat_imp.csv',
+    feat_imp = pd.read_csv(cons.glm_feat_imp_fpath,
                            sep = '|'
                            )
     
@@ -340,7 +120,7 @@ if derive_interact == True:
     int_data = va.derive_variables(dataset = clean,
                                    attr = der_cols,
                                    var_type = 'interaction',
-                                   suffix = '_intr'
+                                   suffix = '_int'
                                    )
     
     # concatenate the interaction data with the clean
@@ -349,13 +129,7 @@ if derive_interact == True:
                       axis = 1
                       )
 
-"""
-#############################
-#-- BoxCox Transformation --#
-#############################
-"""
-
-if boxcox_trans == True:
+if False:
     
     print('Transforming skewed attributes ...')
     
@@ -382,23 +156,12 @@ if boxcox_trans == True:
     # update the columns
     clean[skewed_cols] = boxcox_data[skewed_cols]
 
-"""
-########################
-#-- Output Base File --#
-########################
-"""
+print('Outputting base file ...')
 
-if output_data == True:
-
-    print('Outputting base file ...')
-    
-    # define the output location and filename
-    output_filename = 'clean.csv'
-    
-    # output the dataset
-    clean.to_csv(input_dir + output_filename,
-                 sep = '|',
-                 encoding = 'utf-8',
-                 header = True,
-                 index = False
-                 )
+# output the dataset
+clean.to_csv(cons.clean_data_fpath,
+             sep = cons.sep,
+             encoding = cons.encoding,
+             header = cons.header,
+             index = cons.index
+             )
