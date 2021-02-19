@@ -147,16 +147,3 @@ def engin_base_data(clean_data_fpath,
 
         
     return 0
-
-# if running script as main programme
-if __name__ == '__main__':
-    
-    # extract file paths
-    clean_data_fpath = cons.clean_data_fpath
-    engin_data_fpath = cons.engin_data_fpath
-    
-    # run data engineering script
-    engin_base_data(clean_data_fpath = clean_data_fpath,
-                    engin_data_fpath = engin_data_fpath
-                    )
-    

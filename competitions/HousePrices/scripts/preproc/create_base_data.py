@@ -11,10 +11,10 @@ import pandas as pd
 import numpy as np
 import cons 
 
-def create_base(train_data_fpath,
-                test_data_fpath,
-                base_data_fpath
-                ):
+def create_base_data(train_data_fpath,
+                     test_data_fpath,
+                     base_data_fpath
+                     ):
     
     """
     
@@ -81,17 +81,3 @@ def create_base(train_data_fpath,
                      )
     
     return 0
-
-# if running script as main programme
-if __name__ == '__main__':
-    
-    # extract file paths from cons
-    train_data_fpath = cons.train_data_fpath
-    test_data_fpath = cons.test_data_fpath
-    base_data_fpath = cons.base_data_fpath
-    
-    # call function
-    create_base(train_data_fpath = train_data_fpath,
-                test_data_fpath = test_data_fpath,
-                base_data_fpath = base_data_fpath
-                )

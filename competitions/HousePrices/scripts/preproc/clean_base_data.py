@@ -125,16 +125,3 @@ def clean_base_data(base_data_fpath,
                  )
     
     return 0
-
-# if running script as main programme
-if __name__ == '__main__':
-
-    # extract input file paths
-    base_data_fpath = cons.base_data_fpath
-    clean_data_fpath = cons.clean_data_fpath
-    
-    # run clean base data
-    clean_base_data(base_data_fpath = base_data_fpath,
-                    clean_data_fpath = clean_data_fpath
-                    )
-    
