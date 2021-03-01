@@ -9,6 +9,11 @@ Created on Thu Feb 18 10:42:07 2021
 import os
 import sys
 from sklearn import ensemble
+from sklearn.linear_model import ElasticNet, Lasso
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.kernel_ridge import KernelRidge
+import xgboost as xgb
+import lightgbm as lgb
 
 # set programme constants
 comp_name = 'house-prices-advanced-regression-techniques'
@@ -32,7 +37,9 @@ utilities_dir = os.path.join(root_dir, 'utilities')
 houseprices_comp_dir = os.path.join(root_dir, 'competitions\\HousePrices')
 scripts_dir = os.path.join(houseprices_comp_dir, 'scripts')
 data_dir = os.path.join(houseprices_comp_dir, 'data')
+preds_dir = os.path.join(data_dir, 'preds')
 report_dir = os.path.join(houseprices_comp_dir, 'report')
+metrics_dir = os.path.join(report_dir, 'model_metrics')
 
 # create file names
 train_data_fname = 'train.csv'
@@ -41,6 +48,7 @@ base_data_fname = 'base.csv'
 clean_data_fname = 'clean.csv'
 engin_data_fname = 'engin.csv'
 glm_feat_imp_fname = 'GLM_feat_imp.csv'
+preds_data_fname = 'preds.csv'
 
 # create file paths
 train_data_fpath = os.path.join(data_dir, train_data_fname)
@@ -48,6 +56,7 @@ test_data_fpath = os.path.join(data_dir, test_data_fname)
 base_data_fpath = os.path.join(data_dir, base_data_fname)
 clean_data_fpath = os.path.join(data_dir, clean_data_fname)
 engin_data_fpath = os.path.join(data_dir, engin_data_fname)
+preds_data_fpath = os.path.join(data_dir, preds_data_fname)
 glm_feat_imp_fpath = os.path.join(data_dir, glm_feat_imp_fname)
 
 # append utilities directory to path
@@ -56,6 +65,8 @@ for p in [utilities_dir, va_dir]:
 
 #-- Cleaning Constants --#
     
+# define reference columns
+ref_cols = ['Id', 'Dataset', 'logSalePrice']
 tar_cols = ['Id', 'Dataset', 'SalePrice', 'logSalePrice']
 
 # columns to fill in zeros for
@@ -116,3 +127,57 @@ y_col = ['logSalePrice']
 
 # define a random forest regressor model
 rfr_mod = ensemble.RandomForestRegressor(random_state = random_state)
+
+# create LASSO model
+lasso = Lasso(alpha = 0.0005, 
+              random_state = 1
+              )
+
+# create elastic net model
+ENet =  ElasticNet(alpha = 0.0005, 
+                   l1_ratio = 0.9, 
+                   random_state = 3
+                   )
+
+# create kernel ridge regression model
+KRR = KernelRidge(alpha = 0.6, 
+                  kernel = 'polynomial', 
+                  degree = 2, 
+                  coef0 = 2.5
+                  )
+
+# create gradient boosted model
+GBoost = GradientBoostingRegressor(n_estimators = 3000, 
+                                   learning_rate = 0.05,
+                                   max_depth = 4, 
+                                   max_features = 'sqrt',
+                                   min_samples_leaf = 15, 
+                                   min_samples_split = 10, 
+                                   loss = 'huber', 
+                                   random_state =5
+                                   )
+
+# create XGBoost model
+model_xgb = xgb.XGBRegressor(colsample_bytree=0.4603, gamma=0.0468, 
+                             learning_rate=0.05, max_depth=3, 
+                             min_child_weight=1.7817, n_estimators=2200,
+                             reg_alpha=0.4640, reg_lambda=0.8571,
+                             subsample=0.5213, silent=1,
+                             random_state =7, nthread = -1)
+
+# create LGBoost model
+model_lgb = lgb.LGBMRegressor(objective='regression',num_leaves=5,
+                              learning_rate=0.05, n_estimators=720,
+                              max_bin = 55, bagging_fraction = 0.8,
+                              bagging_freq = 5, feature_fraction = 0.2319,
+                              feature_fraction_seed=9, bagging_seed=9,
+                              min_data_in_leaf =6, min_sum_hessian_in_leaf = 11)
+
+# create a dictionary of models
+models_dict = {'lasso':lasso, 
+               'ENet':ENet, 
+               'KRR':KRR, 
+               'GBoost':GBoost, 
+               'model_xgb':model_xgb, 
+               'model_lgb':model_lgb
+               }
