@@ -82,7 +82,13 @@ def preproc_base_data(train_data_fpath,
     
     # run data engineering script
     engin_base_data(clean_data_fpath = clean_data_fpath,
-                    engin_data_fpath = engin_data_fpath
+                    engin_data_fpath = engin_data_fpath,
+                    top_n_int_terms = 25,
+                    outliers = True,
+                    interterms = True,
+                    feat_sel = True,
+                    boxcox = False,
+                    stand = True
                     )
     
     
@@ -90,7 +96,6 @@ def preproc_base_data(train_data_fpath,
 
 if __name__ == '__main__':
 
-    
     # extract file paths from cons
     train_data_fpath = cons.train_data_fpath
     test_data_fpath = cons.test_data_fpath
