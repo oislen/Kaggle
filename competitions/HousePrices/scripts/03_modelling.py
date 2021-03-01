@@ -9,20 +9,32 @@ Created on Mon Apr 22 09:58:04 2019
 import cons
 import pandas as pd
 import numpy as np
-import value_analysis as va
+from sklearn.model_selection import train_test_split
 from model.perf_metrics import perf_metrics
 from model.StackModels import StackModels
 
-def model_data():
+def model_data(data_fpath):
     
     """
     
     Model Data Documentation
     
+    Function Overview
+    
+    Defaults
+    
+    Parameters
+    
+    Returns
+    
+    Example
+    
     """
     
+    print('Loading in data ...')
+    
     # load in data
-    clean = pd.read_csv(cons.clean_data_fpath, 
+    clean = pd.read_csv(data_fpath, 
                         sep = cons.sep
                         )
     
@@ -35,35 +47,20 @@ def model_data():
     test = clean[(clean['Dataset'] == 'test')]
     train = clean[(clean['Dataset'] == 'train')]
     
+    # extract out the columns
+    y_col = 'logSalePrice'
+    X_cols = train.columns.drop(['Id', 'logSalePrice', 'Dataset'])
+    
     # randomly split the dataset
-    X_valid, X_train, y_valid, y_train = va.train_test_split_sample(dataset = train,
-                                                                    y = ['logSalePrice'],
-                                                                    X = train.columns.drop(['Id', 'logSalePrice', 'Dataset']),
-                                                                    train_size = 0.8,
-                                                                    test_size = 0.2
-                                                                    )
+    X_valid, X_train, y_valid, y_train = train_test_split(train[X_cols],
+                                                          train[y_col],
+                                                          train_size = 0.8,
+                                                          test_size = 0.2
+                                                          )
     
     # extract out the relevant columns
-    y_train_sub = y_train.logSalePrice.values
+    y_train_sub = y_train.values
     X_test = test.drop(columns = ['Id', 'logSalePrice', 'Dataset'])
-    
-    #-- Lasso Model --#
-    
-    # create parameters dictionary
-    params_dict = {'alpha':[0.0001, 0.0002, 0.0005, 0.0008,
-                            0.001, 0.002, 0.005, 0.008,
-                            0.01, 0.02, 0.05, 0.08,
-                            0.1, 0.2, 0.5, 0.8
-                            ]
-                   }
-    
-    # tune the parameters
-    va.tune_hyperparameters(model = cons.lasso, 
-                            params = params_dict,
-                            X_train = X_train,
-                            y_train = y_train,
-                            scoring = 'neg_mean_squared_error'
-                            )
     
     # for each model
     for name, model in cons.models_dict.items():
@@ -83,6 +80,8 @@ def model_data():
     
     #-- Stack Model --#
     
+    print('Creating stacked model ...')
+    
     # create the model (via stacked class)
     StackMod = StackModels(base_models = (cons.ENet, cons.GBoost, cons.KRR),
                            meta_model = cons.lasso
@@ -95,13 +94,15 @@ def model_data():
     sm_y_valid_pred = StackMod.predict(X_valid.values)
     
     # generate metrics for the predictions
-    perf_metrics(y_obs = y_valid['logSalePrice'].values,
+    perf_metrics(y_obs = y_valid.values,
                  y_pred = sm_y_valid_pred,
                  target_type = 'reg',
                  digits = 4
                  )
     
-    #-- XG Boost Model --#
+    #-- XGBoost Model --#
+    
+    print('Creating XGBoost model ...')
     
     # extract out xgb model
     model_xgb = cons.model_xgb
@@ -113,13 +114,15 @@ def model_data():
     xgb_y_valid_pred = model_xgb.predict(X_valid.values)
     
     # generate metrics for the predictions
-    perf_metrics(y_obs = y_valid['logSalePrice'].values,
+    perf_metrics(y_obs = y_valid.values,
                  y_pred = xgb_y_valid_pred,
                  target_type = 'reg',
                  digits = 4
                  )
     
     #-- LG Boost Model --#
+    
+    print('Creating LGBoost Model ...')
     
     # extract out lgb model
     model_lgb = cons.model_lgb
@@ -131,7 +134,7 @@ def model_data():
     lgb_y_valid_pred = model_lgb.predict(X_valid.values)
     
     # generate metrics for the predictions
-    perf_metrics(y_obs = y_valid['logSalePrice'].values,
+    perf_metrics(y_obs = y_valid.values,
                  y_pred = lgb_y_valid_pred,
                  target_type = 'reg',
                  digits = 4
@@ -139,8 +142,10 @@ def model_data():
     
     #-- Weighted Model --#
     
+    print('Generate weighted predictions ...')
+    
     #  set up stacked model
-    drop_cols = ['Id', 'Dataset', 'SalePrice', 'logSalePrice']
+    drop_cols = ['Id', 'Dataset', 'logSalePrice']
     X_train_full = train.drop(columns = drop_cols).values
     y_train_full = train['logSalePrice'].values
     X_test = test.drop(columns = drop_cols).values
@@ -160,6 +165,8 @@ def model_data():
     # create a weighted ensemble from the three models
     ensemble = sm_pred * 0.70 + xgb_pred * 0.15 + lgb_pred * 0.15
     
+    print('Creating output predictions ...')
+    
     # create submission file
     sub = pd.DataFrame()
     sub['Id'] = test_ID.astype(int)
@@ -172,9 +179,14 @@ def model_data():
                header = cons.header,
                index = cons.index
                )
+    
+    return 0
 
 # if running script as main programme
 if __name__ == '__main__':
     
+    # extract out the file path
+    data_fpath = cons.engin_data_fpath
+    
     # execute model
-    model_data()
+    model_data(data_fpath = data_fpath)
