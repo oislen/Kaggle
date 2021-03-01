@@ -17,6 +17,7 @@ from preproc.standardise_variables import standardise_variables
 def engin_base_data(clean_data_fpath,
                     engin_data_fpath,
                     top_n_int_terms = 25,
+                    outliers = True,
                     interterms = True,
                     feat_sel = True,
                     boxcox = True,
@@ -44,16 +45,22 @@ def engin_base_data(clean_data_fpath,
     # load in data
     clean = pd.read_csv(clean_data_fpath, sep = cons.sep)
     
-    print('Remove outliers ...')
-    
-    # iterate through the outlier threshold dictionary
-    for col, thresh in cons.outlier_dict.items():
+    # if removing outliers
+    if outliers == True:
         
-        # create the outlier filter
-        filt = clean[col] <= thresh
+        print('Remove outliers ...')
         
-        # apply the filter
-        clean = clean[filt]
+        # iterate through the outlier threshold dictionary
+        for col, thresh in cons.outlier_dict.items():
+            
+            # extract out training data
+            train_df = clean[clean['Dataset'] == 'train']
+        
+            # apply outlier filter and extract index
+            filt_index = train_df[clean[col] > thresh].index
+        
+            # apply the full dataset
+            clean = clean.drop(index = filt_index)
     
     print('Drop sale price ...')
     
@@ -156,10 +163,10 @@ def engin_base_data(clean_data_fpath,
         print('Standardising data ...')
         
         # create a list of variables to standardise
-        stand_cols = clean.columns.drop(cons.ref_cols).tolist()
+        stand_cols = final_data.columns.drop(cons.ref_cols).tolist()
         
         # standardise the dataset using the robust scalar method
-        final_data[stand_cols] = standardise_variables(dataset = clean,
+        final_data[stand_cols] = standardise_variables(dataset = final_data,
                                                        attr = stand_cols,
                                                        stand_type = 'robust'
                                                        )
