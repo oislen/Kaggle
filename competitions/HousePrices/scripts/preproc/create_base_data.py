@@ -22,13 +22,31 @@ def create_base_data(train_data_fpath,
     
     Function Overview
     
+    This function combines the train and test data into the base dataset.
+    
     Defaults
+    
+    create_base_data(train_data_fpath,
+                     test_data_fpath,
+                     base_data_fpath
+                     )
     
     Parameters
     
+    train_data_fpath - String, the full file path to the input training data
+    test_data_fpath - String, the full file path to the input test data
+    base_data_fpath - String, the full file path to output the base data
+    
     Returns
     
+    0 for successful execution
+    
     Example
+    
+    create_base_data(train_data_fpath = 'C:\\Users\\...\\data\\train.csv',
+                     test_data_fpath = 'C:\\Users\\...\\data\\test.csv',
+                     base_data_fpath 'C:\\Users\\...\\data\\base.csv'
+                     )
     
     """
     
