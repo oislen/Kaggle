@@ -6,9 +6,9 @@ Created on Sun Nov 18 15:33:13 2018
 """
 
 # load in relevant libraries
+import cons
 import pandas as pd
 import numpy as np
-import cons
 
 def clean_base_data(base_data_fpath,
                     clean_data_fpath
@@ -20,13 +20,33 @@ def clean_base_data(base_data_fpath,
     
     Function Overview
     
+    This funciton cleans and processes the base data for modelling.
+    Cleaning steps include:
+        * Filling in NaN values
+        * Engineering new features e.g. TotalSF, logSalePrice
+        * Creating ordinal variables
+        * Dummy Encoding categorical variables 
+    
     Defaults
+    
+    clean_base_data(base_data_fpath,
+                    clean_data_fpath
+                    )
     
     Parameters
     
+    base_data_fpath - String, the full file path to the input base dataset
+    clean_data_fpath - String, the full file path to output the cleaned dataset
+    
     Returns
     
+    0 for successful execution
+    
     Example
+    
+    clean_base_data(base_data_fpath = 'C:\\Users\\...\\data\\base.csv',
+                    clean_data_fpath = 'C:\\Users\\...\\data\\clean.csv'
+                    )
     
     """
     
@@ -81,7 +101,7 @@ def clean_base_data(base_data_fpath,
     clean['PavedDrive_ord'] = clean['PavedDrive'].map(cons.paved_drive_map_dict)
     
     # map the categories to ordinal variables
-    clean['Alley_ord'] = clean['Alley'].astype(str).map(cons.alley_map_dict)
+    clean['Alley_ord'] = clean['Alley'].astype(np.str).map(cons.alley_map_dict)
     
     # map the categories to ordinal variables
     clean['Utilities_ord'] = clean['Utilities'].map(cons.utilities_map_dict)
