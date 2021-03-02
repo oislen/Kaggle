@@ -66,6 +66,8 @@ for p in [utilities_dir, va_dir]:
 #-- Cleaning Constants --#
     
 # define reference columns
+Id_col = 'Id'
+y_col = 'logSalePrice'
 ref_cols = ['Id', 'Dataset', 'logSalePrice']
 tar_cols = ['Id', 'Dataset', 'SalePrice', 'logSalePrice']
 
@@ -122,8 +124,8 @@ outlier_dict = {'1stFlrSF':4000, 'BsmtFinSF1':4000, 'GrLivArea':5000, 'LotFronta
 # set the random state
 random_state = 1234
 
-# define the target variable
-y_col = ['logSalePrice']
+# set target type for perf_metrics
+target_type = 'reg'
 
 # define a random forest regressor model
 rfr_mod = ensemble.RandomForestRegressor(random_state = random_state)
