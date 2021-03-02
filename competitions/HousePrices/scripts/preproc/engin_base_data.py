@@ -30,13 +30,53 @@ def engin_base_data(clean_data_fpath,
     
     Function Overview
     
+    This functoin generates the engineered base dataset.
+    Engineering steps include:
+        * Removing outliers
+        * Dropping Sales Price
+        * Generating interaction terms
+        * Performing feature importance on all terms
+        * Transforming skewed attributes with boxcox transformation
+        * Standardising attributes using robust standardisation method
+    
     Defaults
+    
+    engin_base_data(clean_data_fpath,
+                    engin_data_fpath,
+                    top_n_int_terms = 25,
+                    outliers = True,
+                    interterms = True,
+                    feat_sel = True,
+                    boxcox = True,
+                    stand = True
+                    )
     
     Parameters
     
+    clean_data_fpath - String, the full file path to the input cleaned dataset
+    engin_data_fpath - String, the full file path to output the engineered dataset
+    top_n_int_terms - Integer, the number of interaction terms to derive, default is 25
+    outliers - Boolean, whether or not to remove the outlier observations, default is True
+    interterms - Boolean, whether or not to generate interaction terms, default is True
+    feat_sel - Boolean, whether or not to perform feature selection, default is True
+    boxcox - Boolean, whether or not to transformed highly skewed attributes using boxcox power transformation, defualt is True
+    stand - Boolean, whether or not to standardise all features using robust standardisation method, default is True
+    
     Returns
     
+    0 for successful execution
+    
     Example
+    
+    engin_base_data(clean_data_fpath = 'C:\\Users\\...\\data\\clean.csv',
+                    engin_data_fpath = 'C:\\Users\\...\\data\\engin.csv',
+                    top_n_int_terms = 25,
+                    outliers = True,
+                    interterms = True,
+                    feat_sel = True,
+                    boxcox = True,
+                    stand = True
+                    )
     
     """
     
@@ -54,13 +94,14 @@ def engin_base_data(clean_data_fpath,
         for col, thresh in cons.outlier_dict.items():
             
             # extract out training data
-            train_df = clean[clean['Dataset'] == 'train']
+            train_df = clean[clean['Dataset'] == 'train'].copy(deep = True)
         
             # apply outlier filter and extract index
-            filt_index = train_df[clean[col] > thresh].index
+            filt = (clean[col] > thresh)
+            index = train_df[filt].index
         
             # apply the full dataset
-            clean = clean.drop(index = filt_index)
+            clean = clean.drop(index = index)
     
     print('Drop sale price ...')
     
