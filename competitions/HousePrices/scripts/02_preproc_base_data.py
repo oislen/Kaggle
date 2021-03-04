@@ -87,7 +87,7 @@ def preproc_base_data(train_data_fpath,
                     outliers = True,
                     interterms = True,
                     feat_sel = True,
-                    boxcox = False,
+                    boxcox = True,
                     stand = True
                     )
     
