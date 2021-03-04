@@ -103,6 +103,9 @@ def engin_base_data(clean_data_fpath,
             # apply the full dataset
             clean = clean.drop(index = index)
     
+    # reset the index given the recently removed data
+    clean = clean.reset_index(drop = 'True')
+    
     print('Drop sale price ...')
     
     # drop SalePrice
@@ -140,7 +143,7 @@ def engin_base_data(clean_data_fpath,
         pred_cols = attr_cols + int_data.columns.tolist()
         
         # extract training data
-        y_train = engin.loc[engin['Dataset'] == 'train', cons.y_col[0]]
+        y_train = engin.loc[engin['Dataset'] == 'train', cons.y_col]
         X_train = engin.loc[engin['Dataset'] == 'train', pred_cols]
         
         # create a tree model
@@ -194,7 +197,7 @@ def engin_base_data(clean_data_fpath,
         boxcox_data = boxcox_trans(dataset = final_data,
                                    attr = skewed_cols
                                    )    
-        
+            
         # update the columns
         final_data[skewed_cols] = boxcox_data[skewed_cols]
     
