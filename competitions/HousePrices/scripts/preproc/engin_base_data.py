@@ -9,10 +9,10 @@ Created on Thu Feb 18 16:51:39 2021
 import pandas as pd
 import cons
 from scipy.stats import skew
-from preproc.derive_variables import derive_variables
-from preproc.tree_feat_imp import tree_feat_imp
-from preproc.boxcox_trans import boxcox_trans
-from preproc.standardise_variables import standardise_variables
+from derive_variables import derive_variables
+from tree_feat_imp import tree_feat_imp
+from boxcox_trans import boxcox_trans
+from standardise_variables import standardise_variables
 
 def engin_base_data(clean_data_fpath,
                     engin_data_fpath,

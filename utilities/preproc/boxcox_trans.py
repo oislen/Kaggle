@@ -12,7 +12,7 @@ Created on Thu Feb 18 17:38:12 2021
 # import relevant libraries
 import pandas as pd
 import scipy.stats as stats
-import value_analysis.constants as cons
+import cons
 import matplotlib.pyplot as plt
 
 plot_size_width = cons.plot_size_width

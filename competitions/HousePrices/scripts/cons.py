@@ -27,7 +27,9 @@ encoding = 'utf-8'
 header = True
 index = False
 
+###########################
 #-- File Path Constants --#
+###########################
 
 # set directories
 git_dir = 'C:\\Users\\User\\Documents\\GitHub'
@@ -40,6 +42,10 @@ data_dir = os.path.join(houseprices_comp_dir, 'data')
 preds_dir = os.path.join(data_dir, 'preds')
 report_dir = os.path.join(houseprices_comp_dir, 'report')
 metrics_dir = os.path.join(report_dir, 'model_metrics')
+utilities_comp = os.path.join(utilities_dir, 'comp')
+utilities_graph = os.path.join(utilities_dir, 'graph')
+utilities_model = os.path.join(utilities_dir, 'model')
+utilties_preproc = os.path.join(utilities_dir, 'preproc')
 
 # create file names
 train_data_fname = 'train.csv'
@@ -60,10 +66,22 @@ preds_data_fpath = os.path.join(data_dir, preds_data_fname)
 glm_feat_imp_fpath = os.path.join(data_dir, glm_feat_imp_fname)
 
 # append utilities directory to path
-for p in [utilities_dir, va_dir]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
     sys.path.append(p)
 
+######################
+#-- Plot Constants --#
+######################
+
+plot_size_width = 12
+plot_size_height = 8
+plot_title_size = 25
+plot_axis_text_size = 20
+plot_label_size = 'x-large'
+
+##########################
 #-- Cleaning Constants --#
+##########################
     
 # define reference columns
 Id_col = 'Id'
@@ -119,7 +137,9 @@ dummy_cols = ['MSZoning', 'Street', 'LandContour', 'LotConfig', 'LandSlope', 'Ne
 # create outlier dictionary for filtering out anomalies
 outlier_dict = {'1stFlrSF':4000, 'BsmtFinSF1':4000, 'GrLivArea':5000, 'LotFrontage':300, 'MiscVal':8000, 'OpenPorchSF':500, 'TotalBsmtSF':6000, 'SalePrice':300000}
 
+#######################
 #-- Model Constants --#
+#######################
 
 # set the random state
 random_state = 1234
