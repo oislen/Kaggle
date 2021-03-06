@@ -9,7 +9,7 @@ Created on Fri Feb 12 12:32:37 2021
 import cons
 import pandas as pd
 from sklearn import ensemble
-from graph.corr_mat import corr_mat
+from corr_mat import corr_mat
 from ensemble.load_class_preds import load_class_preds
 from ensemble.load_class_models import load_class_models
 from ensemble.comp_valid_perf_metrics import comp_valid_perf_metrics

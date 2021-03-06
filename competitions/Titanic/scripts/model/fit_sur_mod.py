@@ -11,11 +11,11 @@ import joblib
 from sklearn.model_selection import train_test_split, GridSearchCV
 from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import make_pipeline
-from model.perf_metrics import perf_metrics
-from graph.hist import hist
-from graph.feat_imp import feat_imp
-from graph.learning_curve import learning_curve
-from graph.roc_curve import roc_curve
+from perf_metrics import perf_metrics
+from hist import hist
+from feat_imp import feat_imp
+from learning_curve import learning_curve
+from roc_curve import roc_curve
 
 def fit_sur_mod(base_train,
                 base_test,

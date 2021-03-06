@@ -9,9 +9,9 @@ Created on Sun Nov  4 21:46:26 2018
 import os
 import pandas as pd
 import cons
-from preproc.derive_variables import derive_variables
-from preproc.tree_feat_imp import tree_feat_imp
-from preproc.standardise_variables import standardise_variables
+from derive_variables import derive_variables
+from tree_feat_imp import tree_feat_imp
+from standardise_variables import standardise_variables
 
 def feat_engineer(base_clean_fpath,
                   base_engin_fpath,

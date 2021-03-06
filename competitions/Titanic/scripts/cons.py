@@ -45,6 +45,10 @@ bivar_assoc_dir = os.path.join(report_dir, 'bivariate_analysis\\association_test
 bivar_corr_dir = os.path.join(report_dir, 'bivariate_analysis\\correlation_tests')
 bivar_gains_dir = os.path.join(report_dir, 'bivariate_analysis\\measure_gains')
 model_results_dir = os.path.join(report_dir, 'model_results\\{}')
+utilities_comp = os.path.join(utilities_dir, 'comp')
+utilities_graph = os.path.join(utilities_dir, 'graph')
+utilities_model = os.path.join(utilities_dir, 'model')
+utilties_preproc = os.path.join(utilities_dir, 'preproc')
 
 # define filenames
 zip_data_fname = '{}.zip'.format(comp_name)
@@ -86,7 +90,7 @@ hyper_param_fpath = os.path.join(model_results_dir, hyperparam_fname)
 perf_metrics_fpath = os.path.join(model_results_dir, metrics_fname)
 
 # append utilities directory to path
-for p in [utilities_dir]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
     sys.path.append(p)
 
 # set ground truth url

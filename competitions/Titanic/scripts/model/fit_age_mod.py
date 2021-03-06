@@ -9,9 +9,9 @@ Created on Tue Feb  9 15:10:47 2021
 import pandas as pd
 import cons
 from sklearn.model_selection import train_test_split, GridSearchCV
-from model.perf_metrics import perf_metrics
-from graph.preds_obs_resids import preds_obs_resids
-from graph.hist import hist
+from perf_metrics import perf_metrics
+from preds_obs_resids import preds_obs_resids
+from hist import hist
 
 def fit_age_mod(base_train,
                 base_test,

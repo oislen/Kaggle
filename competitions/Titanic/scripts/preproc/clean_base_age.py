@@ -6,7 +6,7 @@ Created on Sun Nov  4 19:18:53 2018
 """
 
 # load in relevant libraries
-from graph.hist import hist
+from hist import hist
 from model.fit_age_mod import fit_age_mod
 
 def clean_base_age(base,
