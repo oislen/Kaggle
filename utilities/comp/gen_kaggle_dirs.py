@@ -38,7 +38,7 @@ def gen_kaggle_dirs():
     cwd = os.getcwd()
     
     # determine the path of the parent kaggle directory
-    kaggle_dir = os.path.dirname(cwd)
+    kaggle_dir = os.path.dirname(os.path.dirname(cwd))
     
     # join on the kaggle competition sub directory to the parent kaggle directory
     kaggle_comp_dir = os.path.join(kaggle_dir, 'competitions')
