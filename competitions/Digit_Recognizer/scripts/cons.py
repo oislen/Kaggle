@@ -25,6 +25,10 @@ utilities_dir = os.path.join(root_dir, 'utilities')
 digit_comp_dir = os.path.join(root_dir, 'competitions\\Digit_Recognizer')
 scripts_dir = os.path.join(digit_comp_dir, 'scripts')
 data_dir = os.path.join(digit_comp_dir, 'data')
+utilities_comp = os.path.join(utilities_dir, 'comp')
+utilities_graph = os.path.join(utilities_dir, 'graph')
+utilities_model = os.path.join(utilities_dir, 'model')
+utilties_preproc = os.path.join(utilities_dir, 'preproc')
 
 # define filenames
 zip_data_fname = '{}.zip'.format(comp_name)
@@ -41,4 +45,5 @@ train_data_fpath = os.path.join(data_dir, train_data_fname)
 pred_data_fpath = os.path.join(data_dir, pred_data_fname)
 
 # append utilities directory to path
-sys.path.append(utilities_dir)
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
+    sys.path.append(p)
