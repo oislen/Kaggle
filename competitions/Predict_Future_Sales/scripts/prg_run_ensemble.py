@@ -9,6 +9,7 @@ Created on Sun May 17 10:57:04 2020
 import os 
 import sys
 from importlib import import_module
+import cons
 import numpy as np
 
 np.random.seed(1234)
@@ -30,9 +31,6 @@ exe_path = '{}/02_prg_run_ensemble/meta_level_I'.format(cwd)
 sys.path.append(prep_raw_data_path)
 sys.path.append(reference_path)
 sys.path.append(exe_path)
-
-# load in file constants
-cons = import_module(name = 'file_constants')
 
 # get todays date
 #date = dt.datetime.today().strftime('%Y%m%d')
