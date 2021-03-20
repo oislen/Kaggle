@@ -9,6 +9,7 @@ Created on Sun May 10 18:12:12 2020
 import os 
 import sys
 from importlib import import_module
+import cons
 
 # user settings
 start = 1
@@ -32,9 +33,6 @@ prg_03 = import_module(name = '03_backfill_missing_items')
 prg_05 = import_module(name = '05_gen_total_shift_attrs')
 prg_04 = import_module(name = '04_append_supplement_attrs')
 prg_06 = import_module(name = '06_prep_model_data')
-
-# load in file constants
-cons = import_module(name = 'file_constants')
 
 if 1 in run_range:
     print('~~~~~ Preparing Raw data ...')
