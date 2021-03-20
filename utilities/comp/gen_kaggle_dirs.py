@@ -46,7 +46,9 @@ def gen_kaggle_dirs():
     # define a dictionary of competitions and subdirectories to  generate
     comp_dirs = {'Digit_Recognizer':['data'],
                  'HousePrices':['data'],
-                 'Titanic':['data\\models', 'data\\preds', 'report\\arch', 'report\\model_results']
+                 'Titanic':['data\\models', 'data\\preds', 'report\\arch', 'report\\model_results'],
+                 'Predict_Future_Sales':['data\\raw', 'data\\clean', 'data\\base', 'data\\model', 'data\\pred', 'data\\ref',
+                                         'report\\feat_imp', 'report\\cv_results', 'report\\valid_plots\\preds_hist', 'report\\valid_plots\\preds_vs_true', 'report\\valid_metrics']
                  }
              
     # iterate over the dictionary of paths to generate
