@@ -496,45 +496,57 @@ def recast_df(dataset, sample_size = 100000):
     range_float32 = (lim_float32.min, lim_float32.max) 
     range_float64 = (lim_float64.min, lim_float64.max)  
     
-    print('Finding optimal data type cast ...')
+    # recast int data
+    if join_int.empty == False:
+        
+        print('Finding optimal int data type cast ...')
+        
+        # get apply min / max search
+        join_int['dtype'] = join_int.apply(lambda x: 'int64' if x['min'] >= range_int64[0] and x['max'] <= range_int64[1] else x['dtype'], axis = 1)
+        join_int['dtype'] = join_int.apply(lambda x: 'int32' if x['min'] >= range_int32[0] and x['max'] <= range_int32[1] else x['dtype'], axis = 1)
+        join_int['dtype'] = join_int.apply(lambda x: 'int16' if x['min'] >= range_int16[0] and x['max'] <= range_int16[1] else x['dtype'], axis = 1)
+        join_int['dtype'] = join_int.apply(lambda x: 'int8' if x['min'] >= range_int8[0] and x['max'] <= range_int8[1] else x['dtype'], axis = 1)
+        
+        print('Recasting data ...')
+        
+        # extract out the relevant data types
+        filt_cast_int64 = join_int['dtype'] == 'int64'
+        filt_cast_int32 = join_int['dtype'] == 'int32'
+        filt_cast_int16 = join_int['dtype'] == 'int16'
+        filt_cast_int8 = join_int['dtype'] == 'int8'
+        cast_cols_int64 = join_int.loc[filt_cast_int64, 'index']
+        cast_cols_int32 = join_int.loc[filt_cast_int32, 'index']
+        cast_cols_int16 = join_int.loc[filt_cast_int16, 'index']
+        cast_cols_int8 = join_int.loc[filt_cast_int8, 'index']
+        
+        # recast the data
+        data[cast_cols_int64] = data[cast_cols_int64].astype(np.int64)
+        data[cast_cols_int32] = data[cast_cols_int32].astype(np.int32)
+        data[cast_cols_int16] = data[cast_cols_int16].astype(np.int16)
+        data[cast_cols_int8] = data[cast_cols_int8].astype(np.int8)
+        
+    # recast float data
+    if join_float.empty == False:
     
-    # get apply min / max search
-    join_int['dtype'] = join_int.apply(lambda x: 'int64' if x['min'] >= range_int64[0] and x['max'] <= range_int64[1] else x['dtype'], axis = 1)
-    join_int['dtype'] = join_int.apply(lambda x: 'int32' if x['min'] >= range_int32[0] and x['max'] <= range_int32[1] else x['dtype'], axis = 1)
-    join_int['dtype'] = join_int.apply(lambda x: 'int16' if x['min'] >= range_int16[0] and x['max'] <= range_int16[1] else x['dtype'], axis = 1)
-    join_int['dtype'] = join_int.apply(lambda x: 'int8' if x['min'] >= range_int8[0] and x['max'] <= range_int8[1] else x['dtype'], axis = 1)
-    
-    # get apply min / max search
-    join_float['dtype'] = join_float.apply(lambda x: 'float64' if x['min'] >= range_float64[0] and x['max'] <= range_float64[1] else x['dtype'], axis = 1)
-    join_float['dtype'] = join_float.apply(lambda x: 'float32' if x['min'] >= range_float32[0] and x['max'] <= range_float32[1] else x['dtype'], axis = 1)
-    #join_float['dtype'] = join_float.apply(lambda x: 'float16' if x['min'] >= range_float16[0] and x['max'] <= range_float16[1] else x['dtype'], axis = 1)
-    
-    print('Recasting data ...')
-    
-    # extract out the relevant data types
-    filt_cast_float64 = join_float['dtype'] == 'float64'
-    filt_cast_float32 = join_float['dtype'] == 'float32'
-    cast_cols_float64 = join_float.loc[filt_cast_float64, 'index']
-    cast_cols_float32 = join_float.loc[filt_cast_float32, 'index']
-    
-    # extract out the relevant data types
-    filt_cast_int64 = join_int['dtype'] == 'int64'
-    filt_cast_int32 = join_int['dtype'] == 'int32'
-    filt_cast_int16 = join_int['dtype'] == 'int16'
-    filt_cast_int8 = join_int['dtype'] == 'int8'
-    cast_cols_int64 = join_int.loc[filt_cast_int64, 'index']
-    cast_cols_int32 = join_int.loc[filt_cast_int32, 'index']
-    cast_cols_int16 = join_int.loc[filt_cast_int16, 'index']
-    cast_cols_int8 = join_int.loc[filt_cast_int8, 'index']
-    
-    # recast the data
-    data[cast_cols_float64] = data[cast_cols_float64].astype(np.float64)
-    data[cast_cols_float32] = data[cast_cols_float32].astype(np.float32)
-    data[cast_cols_int64] = data[cast_cols_int64].astype(np.int64)
-    data[cast_cols_int32] = data[cast_cols_int32].astype(np.int32)
-    data[cast_cols_int16] = data[cast_cols_int16].astype(np.int16)
-    data[cast_cols_int8] = data[cast_cols_int8].astype(np.int8)
-
+        print('Finding optimal float data type cast ...')
+        
+        # get apply min / max search
+        join_float['dtype'] = join_float.apply(lambda x: 'float64' if x['min'] >= range_float64[0] and x['max'] <= range_float64[1] else x['dtype'], axis = 1)
+        join_float['dtype'] = join_float.apply(lambda x: 'float32' if x['min'] >= range_float32[0] and x['max'] <= range_float32[1] else x['dtype'], axis = 1)
+        #join_float['dtype'] = join_float.apply(lambda x: 'float16' if x['min'] >= range_float16[0] and x['max'] <= range_float16[1] else x['dtype'], axis = 1)
+        
+        print('Recasting data ...')
+        
+        # extract out the relevant data types
+        filt_cast_float64 = join_float['dtype'] == 'float64'
+        filt_cast_float32 = join_float['dtype'] == 'float32'
+        cast_cols_float64 = join_float.loc[filt_cast_float64, 'index']
+        cast_cols_float32 = join_float.loc[filt_cast_float32, 'index']
+        
+        # recast the data
+        data[cast_cols_float64] = data[cast_cols_float64].astype(np.float64)
+        data[cast_cols_float32] = data[cast_cols_float32].astype(np.float32)
+        
     print(data.dtypes.value_counts())
         
     return data
