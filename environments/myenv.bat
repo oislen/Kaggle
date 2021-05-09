@@ -23,6 +23,9 @@ call conda install -c conda-forge pygam --yes
 call conda install -c conda-forge mysqlalchemy --yes
 call conda install -c conda-forge scrapy --yes
 
+:: pip install additional libraries
+call pip install kaggle
+
 :: list all installed libraries
 call conda list
 
