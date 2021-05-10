@@ -6,9 +6,11 @@ Created on Sun May 10 19:15:38 2020
 """
 
 import pandas as pd
-import reference.clean_utilities as utl
 import reference.clean_constants as clean_cons
 from sklearn.preprocessing import StandardScaler
+from reference.gen_shift_attr import gen_shift_attr
+from reference.mean_encode import mean_encode
+from reference.recast_df import recast_df
 import pickle as pk
 
 def prep_model_data(cons):
@@ -43,52 +45,52 @@ def prep_model_data(cons):
     print('item_cnt_day')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = lags,
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = lags,
+                                   fill_value = fill_na
+                                   )
     
     #-- Lag Shop Total Shifts --#
     
     print('shop_id_total_item_cnt_day')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['shop_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = lags,
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['shop_id_total_item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = lags,
+                                   fill_value = fill_na
+                                   )
     
     #--Lag Item Total Shifts --#
     
     print('item_id_total_item_cnt_day')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = lags,
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['item_id_total_item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = lags,
+                                   fill_value = fill_na
+                                   )
      
     #-- Lag Item Price --#
     
     print('item_price')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_price'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['item_price'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = [1],
+                                   fill_value = fill_na
+                                   )
     
     
     #-- Lag Revenue --#
@@ -96,13 +98,13 @@ def prep_model_data(cons):
     print('revenue')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['revenue'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['revenue'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = [1],
+                                   fill_value = fill_na
+                                   )
     
     #-- Lag Shop id Cat id Total --#
     
@@ -110,46 +112,46 @@ def prep_model_data(cons):
     
     # create shift attributes
     
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_category_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['item_category_id_total_item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = [1],
+                                   fill_value = fill_na
+                                   )
     
     print('shop_id_item_category_id_total_item_cnt_day')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['shop_id_item_category_id_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['shop_id_item_category_id_total_item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = [1],
+                                   fill_value = fill_na
+                                   )
         
     print('city_enc_total_item_cnt_day')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['city_enc_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['city_enc_total_item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = [1],
+                                   fill_value = fill_na
+                                   )
             
     print('item_id_city_enc_total_item_cnt_day')
     
     # create shift attributes
-    base_agg_comp = utl.gen_shift_attr(dataset = base_agg_comp, 
-                                       values = ['item_id_city_enc_total_item_cnt_day'], 
-                                       index = index_shift, 
-                                       columns = columns_shift,
-                                       lags = [1],
-                                       fill_value = fill_na
-                                       )
+    base_agg_comp = gen_shift_attr(dataset = base_agg_comp, 
+                                   values = ['item_id_city_enc_total_item_cnt_day'], 
+                                   index = index_shift, 
+                                   columns = columns_shift,
+                                   lags = [1],
+                                   fill_value = fill_na
+                                   )
     
 
     #table.apply(lambda x: x.rank(axis = 0, method = 'first'), axis = 1)
@@ -182,16 +184,16 @@ def prep_model_data(cons):
 
     print('Mean encoding data ...')
     
-    base_agg_comp['date_block_num_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['date_block_num'], tar = 'item_cnt_day')
-    base_agg_comp['shop_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['shop_id'], tar = 'item_cnt_day')
-    base_agg_comp['item_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_id'], tar = 'item_cnt_day')
-    base_agg_comp['shop_item_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['shop_item_id'], tar = 'item_cnt_day')
-    base_agg_comp['item_category_id_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_category_id'], tar = 'item_cnt_day')
-    base_agg_comp['item_cat_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_cat'], tar = 'item_cnt_day')
-    base_agg_comp['item_cat_sub_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['item_cat_sub'], tar = 'item_cnt_day')
-    base_agg_comp['city_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['city'], tar = 'item_cnt_day')
-    base_agg_comp['year_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['year'], tar = 'item_cnt_day')
-    base_agg_comp['month_mean_enc'] = utl.mean_encode(dataset = base_agg_comp, attr = ['month'], tar = 'item_cnt_day')
+    base_agg_comp['date_block_num_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['date_block_num'], tar = 'item_cnt_day')
+    base_agg_comp['shop_id_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['shop_id'], tar = 'item_cnt_day')
+    base_agg_comp['item_id_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['item_id'], tar = 'item_cnt_day')
+    base_agg_comp['shop_item_id_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['shop_item_id'], tar = 'item_cnt_day')
+    base_agg_comp['item_category_id_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['item_category_id'], tar = 'item_cnt_day')
+    base_agg_comp['item_cat_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['item_cat'], tar = 'item_cnt_day')
+    base_agg_comp['item_cat_sub_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['item_cat_sub'], tar = 'item_cnt_day')
+    base_agg_comp['city_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['city'], tar = 'item_cnt_day')
+    base_agg_comp['year_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['year'], tar = 'item_cnt_day')
+    base_agg_comp['month_mean_enc'] = mean_encode(dataset = base_agg_comp, attr = ['month'], tar = 'item_cnt_day')
     
     """
     print('Remove all items with no historic sell price from training set ...')
@@ -248,7 +250,7 @@ def prep_model_data(cons):
     
     print('Recasting data ...')
     
-    model_data = utl.recast_df(dataset = model_data)
+    model_data = recast_df(dataset = model_data)
     
     shape = model_data.shape
     

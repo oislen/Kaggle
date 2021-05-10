@@ -5,8 +5,12 @@ Created on Sat May  9 19:23:38 2020
 @author: oislen
 """
 
+# import relevant libraries
 import pandas as pd
-import reference.clean_utilities as utl
+from reference.load_files import load_files
+from reference.backfill_attr import backfill_attr
+from reference.fill_id import fill_id
+from reference.recast_df import recast_df
 
 def back_fill_missing_items(cons):
     
@@ -21,7 +25,7 @@ def back_fill_missing_items(cons):
     print('working on item sells and price ...')
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
+    item_categories, items, sales_train, sample_submission, shops, test = load_files('clean', cons)
     
     agg_base = pd.read_feather(cons.base_agg_data_fpath)
     
@@ -29,33 +33,33 @@ def back_fill_missing_items(cons):
     
     #-- Price --#
     
-    price_unstack = utl.backfill_attr(dataset = agg_base, 
-                                      pivot_values = ['item_price'], 
-                                      fillna = -999,
-                                      pivot_index = ['date_block_num'], 
-                                      pivot_columns = ['shop_id', 'item_id'], 
-                                      ffill = True
-                                      )
+    price_unstack = backfill_attr(dataset = agg_base, 
+                                  pivot_values = ['item_price'], 
+                                  fillna = -999,
+                                  pivot_index = ['date_block_num'], 
+                                  pivot_columns = ['shop_id', 'item_id'], 
+                                  ffill = True
+                                  )
     
     #-- Monthly Sales --#
     
-    total_unstack = utl.backfill_attr(dataset = agg_base, 
-                                      pivot_values = ['item_cnt_day'], 
-                                      fillna = 0,
-                                      pivot_index = ['date_block_num'], 
-                                      pivot_columns = ['shop_id', 'item_id'], 
-                                      ffill = False
-                                      )
+    total_unstack = backfill_attr(dataset = agg_base, 
+                                  pivot_values = ['item_cnt_day'], 
+                                  fillna = 0,
+                                  pivot_index = ['date_block_num'], 
+                                  pivot_columns = ['shop_id', 'item_id'], 
+                                  ffill = False
+                                  )
     
     #-- Renenue --#
     
-    revenue_unstack = utl.backfill_attr(dataset = agg_base, 
-                                        pivot_values = ['revenue'], 
-                                        fillna = 0,
-                                        pivot_index = ['date_block_num'], 
-                                        pivot_columns = ['shop_id', 'item_id'], 
-                                        ffill = False
-                                        )
+    revenue_unstack = backfill_attr(dataset = agg_base, 
+                                    pivot_values = ['revenue'], 
+                                    fillna = 0,
+                                    pivot_index = ['date_block_num'], 
+                                    pivot_columns = ['shop_id', 'item_id'], 
+                                    ffill = False
+                                    )
     
     #-- ID --#
     
@@ -88,10 +92,10 @@ def back_fill_missing_items(cons):
     
     print('Filling in ID ...')
     
-    join_df = utl.fill_id(dataset = join_df, fill_type = 'range', split = 'train')
-    join_df = utl.fill_id(dataset = join_df, fill_type = 'range', split = 'valid')
-    join_df = utl.fill_id(dataset = join_df, fill_type = 'range', split = 'test')
-    join_df = utl.fill_id(dataset = join_df, fill_type = 'value', split = 'holdout', fillna = -999)
+    join_df = fill_id(dataset = join_df, fill_type = 'range', split = 'train')
+    join_df = fill_id(dataset = join_df, fill_type = 'range', split = 'valid')
+    join_df = fill_id(dataset = join_df, fill_type = 'range', split = 'test')
+    join_df = fill_id(dataset = join_df, fill_type = 'value', split = 'holdout', fillna = -999)
     
     print('Create primary key ...')
     
@@ -135,7 +139,7 @@ def back_fill_missing_items(cons):
 
     print('Recast data ...')
     
-    join_df_filt = utl.recast_df(dataset = join_df_filt)
+    join_df_filt = recast_df(dataset = join_df_filt)
     
     shape = join_df_filt.shape
 

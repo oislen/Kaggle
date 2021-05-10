@@ -6,7 +6,7 @@ Created on Mon May 10 08:59:38 2021
 """
 
 import numpy as np
-import reference.extract_float_int_cols as extract_float_int_cols
+from reference.extract_float_int_cols import extract_float_int_cols
 
 def recast_df(dataset, 
               sample_size = 100000

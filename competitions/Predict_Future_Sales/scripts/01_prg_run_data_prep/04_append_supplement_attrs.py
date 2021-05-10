@@ -6,7 +6,9 @@ Created on Sun May 10 18:06:01 2020
 """
 
 import pandas as pd
-import reference.clean_utilities as utl
+from reference.load_files import load_files
+from reference.gen_retail_calender import gen_retail_calender
+from reference.recast_df import recast_df
 
 def append_supplement_attrs(cons):
     
@@ -22,7 +24,7 @@ def append_supplement_attrs(cons):
     """
 
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
+    item_categories, items, sales_train, sample_submission, shops, test = load_files('clean', cons)
     
     # output aggreated base data as feather file
     base_agg_comp = pd.read_feather(cons.base_agg_comp_fpath)
@@ -52,7 +54,7 @@ def append_supplement_attrs(cons):
     
     print('Generate calendar days ...')
     
-    retail_calander = utl.gen_retail_calender()
+    retail_calander = gen_retail_calender()
     join_cols = ['date_block_num']
     base_agg_comp = base_agg_comp.merge(retail_calander, on = join_cols, how = 'left')
     
@@ -60,7 +62,7 @@ def append_supplement_attrs(cons):
     
     print('Recast data ...')
     
-    base_agg_comp = utl.recast_df(dataset = base_agg_comp)
+    base_agg_comp = recast_df(dataset = base_agg_comp)
     
     print('Outputting supplementary data {} ...'.format(shape))
     

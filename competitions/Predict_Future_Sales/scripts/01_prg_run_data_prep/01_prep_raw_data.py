@@ -6,7 +6,8 @@ Created on Mon Apr 27 20:58:03 2020
 """
 
 import pandas as pd
-import reference.clean_utilities as utl
+from reference.load_files import load_files
+from reference.recast_df import recast_df
 from sklearn import preprocessing
 
 def prep_raw_data(cons):
@@ -37,7 +38,7 @@ def prep_raw_data(cons):
     """
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('raw', cons)
+    item_categories, items, sales_train, sample_submission, shops, test = load_files('raw', cons)
     
     #-- Sales Data --#
     
@@ -114,12 +115,12 @@ def prep_raw_data(cons):
     #-- Downcase Data --#
     
     # recast data
-    sample_submission = utl.recast_df(dataset = sample_submission)
-    items = utl.recast_df(dataset = items)
-    shops = utl.recast_df(dataset = shops)
-    item_categories = utl.recast_df(dataset = item_categories)
-    sales_train = utl.recast_df(dataset = sales_train)
-    test = utl.recast_df(dataset = test)
+    sample_submission = recast_df(dataset = sample_submission)
+    items = recast_df(dataset = items)
+    shops = recast_df(dataset = shops)
+    item_categories = recast_df(dataset = item_categories)
+    sales_train = recast_df(dataset = sales_train)
+    test = recast_df(dataset = test)
     
     #-- Output Files --#
     

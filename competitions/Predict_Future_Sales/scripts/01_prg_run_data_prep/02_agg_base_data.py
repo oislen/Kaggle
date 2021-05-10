@@ -5,9 +5,13 @@ Created on Thu Apr 30 20:33:00 2020
 @author: oislen
 """
 
+# import relevant libraries
 import pandas as pd
 import reference.clean_constants as clean_cons
-import reference.clean_utilities as utl
+from reference.load_files import load_files
+from reference.gen_most_recent_item_price import gen_most_recent_item_price
+from reference.recast_df import recast_df
+
 import pickle as pk
 
 def agg_base_data(cons):
@@ -18,7 +22,7 @@ def agg_base_data(cons):
     print('Loading clean data ...')
     
     # load in the raw data
-    item_categories, items, sales_train, sample_submission, shops, test = utl.load_files('clean', cons)
+    item_categories, items, sales_train, sample_submission, shops, test = load_files('clean', cons)
     
     print('aggregating base data ...')
     
@@ -48,7 +52,7 @@ def agg_base_data(cons):
     print('Getting most recent sale price ...')
 
     # Generate most recent item price for test set 
-    recent_price = utl.gen_most_recent_item_price(dataset = agg_base)
+    recent_price = gen_most_recent_item_price(dataset = agg_base)
     join_cols = ['item_id']
     base_test_price = test.merge(recent_price, on = join_cols, how = 'left')
     
@@ -83,7 +87,7 @@ def agg_base_data(cons):
     
     print('Recast data ...')
     
-    base_concat = utl.recast_df(dataset = base_concat)
+    base_concat = recast_df(dataset = base_concat)
     
     print('outputting aggregated base data {} ...'.format(shape))
     
