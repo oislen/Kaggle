@@ -23,11 +23,15 @@ def prep_raw_data(cons):
     
     Defaults
     
-    prep_raw_data()
+    prep_raw_data(cons)
     
     Parameters
     
+    cons - Python Module, programme constants for competition
+    
     Returns
+    
+    0 for successful execution
     
     Outputs
     
@@ -134,4 +138,4 @@ def prep_raw_data(cons):
     sales_train.to_feather(cons.sales_train_clean_fpath)
     test.to_feather(cons.test_clean_fpath)
     
-    return
+    return 0

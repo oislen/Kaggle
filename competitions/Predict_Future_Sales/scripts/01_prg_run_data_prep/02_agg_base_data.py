@@ -17,6 +17,30 @@ import pickle as pk
 def agg_base_data(cons):
 
     """
+    
+    Aggregare Base Data Documentation
+    
+    Function Overview
+    
+    This function aggregates the raw data to a month, shop and item level, the same level as the test submission file
+    Additional processing steps are taken, such as removing duplicate shop ids,calculating total revenue and recasting data types.
+    
+    Defaults
+    
+    agg_base_data(cons)
+    
+    Parameters
+    
+    cons - Python Module, the programme constants for the competition
+    
+    Return
+    
+    0 for successful execution
+    
+    Example
+    
+    agg_base_data(cons = cons)
+    
     """
         
     print('Loading clean data ...')
@@ -94,4 +118,4 @@ def agg_base_data(cons):
     # output aggreated base data as feather file
     base_concat.to_feather(cons.base_agg_data_fpath)
     
-    return
+    return 0

@@ -21,6 +21,26 @@ def prep_model_data(cons):
     
     Function Overview
     
+    This function prepares the data for modelling.
+    This includes creating shift / lagged attributes for various shops, items and revenue.
+    Delta attributes are also created.
+    
+    Defaults
+    
+    prep_model_data(cons)
+    
+    Parameters
+    
+    cons - Python Module, the programme constants for the competition
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    prep_model_data(cons = cons)
+    
     """
     
     print('loading in base data ...')
@@ -259,4 +279,4 @@ def prep_model_data(cons):
     # output the model data
     model_data.to_feather(cons.model_data_fpath)
 
-    return
+    return 0 

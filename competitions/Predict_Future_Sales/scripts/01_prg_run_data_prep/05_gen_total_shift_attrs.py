@@ -20,7 +20,8 @@ def gen_shift_attrs(cons):
     Function Overview
     
     This function generates shift attributes for a specified column.
-    It is achieved by creating a pivot table on shop_id and item_id by date_block_num
+    It is achieved by creating a pivot table on shop_id and item_id by date_block_num.
+    Additiona; attributes are also created such as months since first and last purchase, and number of item price changes.
     
     Defaults
     
@@ -28,14 +29,15 @@ def gen_shift_attrs(cons):
     
     Parameters
     
-    cons - 
+    cons - Python Module, the programme constants for the competition
     
     Returns
     
-    Outputs
+    0 for successful execution
     
     Example
     
+    gen_shift_attrs(cons = cons)
     
     """
     
@@ -165,5 +167,5 @@ def gen_shift_attrs(cons):
     model_data = base_agg_comp.reset_index(drop = True)
     model_data.to_feather(cons.base_agg_shft_fpath)
     
-    return
+    return 0
     

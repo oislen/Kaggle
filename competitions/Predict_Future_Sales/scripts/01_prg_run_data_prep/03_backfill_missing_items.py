@@ -18,7 +18,26 @@ def back_fill_missing_items(cons):
     
     Back Fill Missing Items Documentation
     
-    This function back fills items fold in the holdout set that are not found in the train, valid and test sets
+    Function Overview
+    
+    This function back fills items found in the holdout set that are not found in the train, valid and test sets
+    Additional process also include creating a primary key, creating indicators for missing data and irrelevant obserations.
+    
+    Defaults
+    
+    back_fill_missing_items(cons)
+    
+    Parameters
+    
+    cons - Python Module, the programme constants for the competition
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    back_fill_missing_items(cons)
     
     """
     
@@ -148,4 +167,4 @@ def back_fill_missing_items(cons):
     # output aggreated base data as feather file
     join_df_filt.to_feather(cons.base_agg_comp_fpath)
     
-    return 
+    return 0

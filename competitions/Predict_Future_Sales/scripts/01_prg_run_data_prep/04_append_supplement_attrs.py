@@ -19,7 +19,24 @@ def append_supplement_attrs(cons):
     
     Function Overview
     
-    This function appends the
+    This function appends supplementary attributes to the data.
+    These attributes include retail calender specific information and price information.
+    
+    Defaults
+    
+    append_supplement_attrs(cons)
+    
+    Parameters
+    
+    cons - Python Module, the programme constants for the competition
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    append_supplement_attrs(cons = cons)
     
     """
 
@@ -69,4 +86,4 @@ def append_supplement_attrs(cons):
     # output file as a feather file
     base_agg_comp.to_feather(cons.base_agg_supp_fpath)
     
-    return
+    return 0
