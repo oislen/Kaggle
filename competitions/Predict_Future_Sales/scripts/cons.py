@@ -8,6 +8,12 @@ Created on Sun Apr 26 17:15:06 2020
 # import relevant libraries
 import os
 import sys
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
+import numpy as np
+
+
 # set competition name
 comp_name = 'competitive-data-science-predict-future-sales'
 download_data = True
@@ -85,6 +91,69 @@ gradboost_feat_imp = os.path.join(feat_imp_dir, 'gradboost_feat_imp.csv')
 # set directory to pickled test shop item id combinations
 holdout_shop_item_id_comb = os.path.join(ref_data_dir, 'holdout_shop_item_id_comb.pickle')
 
+# script directories
+prg_run_ensemble_dir = os.path.join(scripts_dir, '02_prg_run_ensemble')
+meta_level_I_dir = os.path.join(prg_run_ensemble_dir, 'meta_level_I')
+
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_ensemble_dir, meta_level_I_dir]:
     sys.path.append(p)
+
+################
+#-- Ensemble --#
+################
+
+# set model pk output file path
+model_name = '{model_type}_dept{max_dept}'
+model_pk_fpath = '{models_dir}/{model_name}_model.pkl'
+cv_sum_fpath = '{cv_results_dir}/{model_name}_cv_summary.csv'
+
+# assign decision tree regressor
+model_dict={'dtree':DecisionTreeRegressor(),
+            'gradboost':GradientBoostingRegressor(),
+            'knn':KNeighborsRegressor(),
+            'randforest':RandomForestRegressor()
+            }
+
+# set max number of features
+n = 30
+
+# set model parameters
+params_dict = {'dtree':{'criterion':['mse', 'friedman_mse'],
+                     'splitter':['best'],
+                     'max_depth':[], # assign max dept
+                     'min_samples_split':[2, 4, 8],
+                     'min_samples_leaf':[2, 4, 8],
+                     'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4]],
+                     'random_state':[] # assign rand_state
+                     },
+               'gradboost':{'criterion':['friedman_mse', 'mse'],
+                            'max_depth':[], # assign max dept
+                            'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
+                            'random_state':[],  # assign rand_state
+                            'n_estimators':[25, 30, 35, 40]
+                            },
+               'knn':{'n_neighbors':[3, 4, 5, 6, 7],
+                      'weights':['uniform', 'distance'],
+                      'algorithm':['auto'],
+                      'p':[1, 2, 3, 4]
+                      },
+               'randforest':{'criterion':['mse'],
+                             'max_depth':[], # assign max_dept
+                             'random_state':[], # assign rand_state
+                             'n_estimators':[25, 30, 35, 40],
+                             'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
+                             'n_jobs':[] # assign n_cpu
+                             }
+              }
+
+
+# set the train, valid and test sub limits
+#train_cv_split_dict = [{'train_sub':idx, 'valid_sub':idx + 1} for idx in np.arange(start = 12, stop = 29, step = 5)]
+train_cv_split_dict = [{'train_sub':28, 'valid_sub':29}]
+
+# set the train, valid and test sub limits
+test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
+
+# set predictions
+mod_preds = '{pred_data_dir}/{model_name}_{date}'
