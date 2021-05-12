@@ -6,7 +6,7 @@ Created on Sun May 17 12:20:21 2020
 """
 
 from importlib import import_module
-import utilities_ensemble as utl_ens
+import reference.utilities_ensemble as utl_ens
 
 model_train = import_module(name = '01_model_training')
 model_pred = import_module(name = '02_model_predictions')
@@ -15,18 +15,13 @@ kaggl_pred = import_module(name = '04_format_kaggle_preds')
 
 def exe_model(cons,
               feat_imp,
-              data_fpath,
-              model,
-              model_params,
-              train_cv_split_dict,
-              model_pk_fpath,
-              mod_preds,
-              cv_sum_fpath,
-              test_split_dict,
               n,
-              model_name,
               skip_train,
-              n_cpu
+              n_cpu,
+              model_type,
+              max_dept,
+              date,
+              rand_state
               ):
     
     """
@@ -34,6 +29,23 @@ def exe_model(cons,
     Execute Level I Model Documentation
     
     """
+    
+    model_name = cons.model_name.format(model_type = model_type, max_dept = max_dept)
+    mod_preds = cons.mod_preds.format(pred_data_dir = cons.pred_data_dir, model_name = model_name, date = date)
+    model_pk_fpath = cons.model_pk_fpath.format(models_dir = cons.models_dir, model_name = model_name)
+    cv_sum_fpath = cons.cv_sum_fpath.format(cv_results_dir = cons.cv_results_dir, model_name = model_name)
+    model = cons.model_dict[model_type]
+    model_params = cons.params_dict[model_type]
+    data_fpath = cons.model_data_fpath
+    train_cv_split_dict = cons.train_cv_split_dict
+    test_split_dict = cons.test_split_dict
+    
+    # assign additional model parameters
+    model_params['max_depth'].append(max_dept)
+    model_params['random_state'].append(rand_state)
+    if model_type == 'randforest':
+        model_params['n_jobs'].append(n_cpu)
+        
     
     # TODO functionise this 
     # set the prediction output paths
