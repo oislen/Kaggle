@@ -11,6 +11,8 @@ import sys
 from importlib import import_module
 import cons
 import numpy as np
+from meta_level_I.exe_model import exe_model
+#exe_model = import_module(name = '02_prg_run_ensemble.meta_level_I.exe_model')
 
 np.random.seed(1234)
 # user settings
@@ -19,7 +21,7 @@ n = 30
 start = 2
 end = 2
 run_range = range(start, end + 1)
-n_cpu = 6
+n_cpu = -1
 
 # get current wd
 cwd = os.getcwd()
@@ -45,35 +47,29 @@ if 1 in run_range:
     prg_feat_imp.gen_feature_selection(cons,  feat_type = 'gradboost', n_cpu = n_cpu) 
     
 if 2 in run_range:
-    
     print('~~~~~ Working on Decision Tree Models ...')
-    
-    prg_dt = import_module(name = 'mod_dtree')
-    prg_dt.mod_dtree(cons, max_dept = 3, rand_state = 1, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
-    prg_dt.mod_dtree(cons, max_dept = 5, rand_state = 2, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
-    prg_dt.mod_dtree(cons, max_dept = 7, rand_state = 3, model_type = 'dtree', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
- 
-#if 3 in run_range:
-    
-    #print('~~~~~ Working on KNN Models ...')
-    
-    #prg_knn = import_module(name = 'mod_knn')
-    #prg_knn.mod_knn(cons, model_type = 'knn', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
+    # execute the model
+    exe_model(cons = cons, feat_imp = 'randforest', max_dept = 3, rand_state = 1, model_type = 'dtree', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    exe_model(cons = cons, feat_imp = 'randforest', max_dept = 5, rand_state = 2, model_type = 'dtree', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    exe_model(cons = cons, feat_imp = 'randforest', max_dept = 7, rand_state = 3, model_type = 'dtree', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
 
+#if 3 in run_range:
+    #print('~~~~~ Working on KNN Models ...')
+    #exe_model(cons = cons, feat_imp = 'randforest', rand_state = 1, model_type = 'knn', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    
 if 4 in run_range:
     
     print('~~~~~ Working on Random Forest Models ...')
     
-    prg_rf = import_module(name = 'mod_randforest')
-    prg_rf.mod_randforest(cons, max_dept = 3, rand_state = 1, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu) 
-    prg_rf.mod_randforest(cons, max_dept = 5, rand_state = 2, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu) 
-    prg_rf.mod_randforest(cons, max_dept = 7, rand_state = 3, model_type = 'randforest', feat_imp = 'randforest', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu) 
+    exe_model(cons = cons, feat_imp = 'randforest', max_dept = 3, rand_state = 1, model_type = 'randforest', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    exe_model(cons = cons, feat_imp = 'randforest', max_dept = 5, rand_state = 2, model_type = 'randforest', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    exe_model(cons = cons, feat_imp = 'randforest', max_dept = 7, rand_state = 3, model_type = 'randforest', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
     
 if 5 in run_range:
     
     print('~~~~~ Working on Gradient Boosting Models ...')
     
-    prg_gb = import_module(name = 'mod_gradboost')
-    prg_gb.mod_gradboost(cons, max_dept = 3, rand_state = 1, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
-    prg_gb.mod_gradboost(cons, max_dept = 5, rand_state = 2, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
-    prg_gb.mod_gradboost(cons, max_dept = 7, rand_state = 3, model_type = 'gradboost', feat_imp = 'gradboost', n = n, date = date, skip_train = skip_train, n_cpu = n_cpu)
+    exe_model(cons = cons, feat_imp = 'gradboost', max_dept = 3, rand_state = 1, model_type = 'gradboost', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    exe_model(cons = cons, feat_imp = 'gradboost', max_dept = 5, rand_state = 2, model_type = 'gradboost', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    exe_model(cons = cons, feat_imp = 'gradboost', max_dept = 7, rand_state = 3, model_type = 'gradboost', n = n, skip_train = skip_train, n_cpu = n_cpu, date = date)
+    
