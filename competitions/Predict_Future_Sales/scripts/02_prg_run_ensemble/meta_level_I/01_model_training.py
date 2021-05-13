@@ -51,7 +51,7 @@ def cv_model_train(data_fpath,
                        n_jobs = n_cpu,
                        cv = cv_list,
                        refit = refit_bool,
-                       verbose = 2
+                       verbose = 3
                        )
     
     print('running grid search cv ...')
