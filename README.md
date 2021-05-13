@@ -25,7 +25,13 @@ An CNN model is built using the LeNet architecture. The model is trained and val
 
 ### House Prices <a name="house-prices-advanced-regression-techniques"></a>
 
+#### Description
+
 The HousePrices directory holds all of the code for the [House Prices competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques). The purpose of this competition is to predict the final price of residential homes in Ames, Iowa using 79 explanatory variables such as basement ceiling height and distance to railroad. The data has plenty of scope for feature engineering and advanced regression techniques.
+
+#### Methodology
+
+The data is initially cleaned by filling in zeros, modes and medians where appropriate. Afterwards, categorical variables with a natural order are mapped to ordinal variables, and then dummy encoded. Further feature engineering is performed by removing outliers, deriving interactiong terms and transforming skewed attributes with a box-cox power transaformation. Finally, a final set of predictors are selected using feature importance ranking from a random forest model. A weighted ensemble model containing a xgboost model, a lgboost model and stacked sklearn model (Elastic Nets, Gradient Boosting Regressor and Kernel Ridge Regressor) was then trained, tested and used for predicting the final test file.
 
 ### Predict Future Sales <a name="competitive-data-science"></a>
 
