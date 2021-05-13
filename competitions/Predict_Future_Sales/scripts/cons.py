@@ -121,16 +121,12 @@ n = 30
 # set model parameters
 params_dict = {'dtree':{'criterion':['mse', 'friedman_mse'],
                      'splitter':['best'],
-                     'max_depth':[], # assign max dept
                      'min_samples_split':[2, 4, 8],
                      'min_samples_leaf':[2, 4, 8],
                      'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4]],
-                     'random_state':[] # assign rand_state
                      },
                'gradboost':{'criterion':['friedman_mse', 'mse'],
-                            'max_depth':[], # assign max dept
                             'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
-                            'random_state':[],  # assign rand_state
                             'n_estimators':[25, 30, 35, 40]
                             },
                'knn':{'n_neighbors':[3, 4, 5, 6, 7],
@@ -139,11 +135,8 @@ params_dict = {'dtree':{'criterion':['mse', 'friedman_mse'],
                       'p':[1, 2, 3, 4]
                       },
                'randforest':{'criterion':['mse'],
-                             'max_depth':[], # assign max_dept
-                             'random_state':[], # assign rand_state
                              'n_estimators':[25, 30, 35, 40],
-                             'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
-                             'n_jobs':[] # assign n_cpu
+                             'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]]
                              }
               }
 
