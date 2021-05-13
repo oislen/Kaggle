@@ -54,6 +54,10 @@ def cv_model_train(data_fpath,
                        verbose = 3
                        )
     
+    print(model_params)
+    
+    print('N Jobs: {n_cpu}'.format(n_cpu = n_cpu))
+    
     print('running grid search cv ...')
     
     print(pred_cols)
