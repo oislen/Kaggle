@@ -41,10 +41,10 @@ def exe_model(cons,
     test_split_dict = cons.test_split_dict
     
     # assign additional model parameters
-    model_params['max_depth'].append(max_dept)
-    model_params['random_state'].append(rand_state)
+    model_params['max_depth'] = [max_dept]
+    model_params['random_state'] = [rand_state]
     if model_type == 'randforest':
-        model_params['n_jobs'].append(n_cpu)
+        model_params['n_jobs'] = [n_cpu]
         
     
     # TODO functionise this 
