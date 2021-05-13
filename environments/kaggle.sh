@@ -2,9 +2,9 @@
 conda env list
 
 # create and activate new environment
-conda env remove --name myenv
-conda create --name myenv python=3.6 --yes
-conda activate myenv
+conda env remove --name kaggle
+conda create --name kaggle python=3.6 --yes
+conda activate kaggle
 conda list
 
 # install all relevant python libraries
@@ -20,8 +20,8 @@ conda install -c conda-forge spyder --yes
 conda install -c conda-forge notebook --yes
 conda install -c conda-forge pyarrow --yes
 conda install -c conda-forge pygam --yes
-conda install -c conda-forge mysqlalchemy --yes
-conda install -c conda-forge scrapy --yes
+#conda install -c conda-forge mysqlalchemy --yes
+#conda install -c conda-forge scrapy --yes
 
 # list all installed libraries
 conda list
