@@ -155,7 +155,6 @@ def gen_cv_splits(dataset,
         # append the cv splits to the output list
         cv_list.append((data_splits_dict['train_data_idx'], data_splits_dict['valid_data_idx']))
     
-
     return cv_list
 
 def gen_cv_sum(clf, 
@@ -517,37 +516,213 @@ def format_preds(dataset,
     
     return data
 
-def calc_rmse(dataset, tar, pred, out_fpath = None):
+def calc_rmse(dataset, 
+              tar, 
+              pred, 
+              out_fpath = None
+              ):
+    
     """
+    
+    Calculate RMSE Documenation
+    
+    Function Overview
+    
+    This function calculates roost mean square error for a given dataset, target variable and predictor variable.
+    The results can also be written to a specified file path as a .csv file.
+    
+    Defaults
+    
+    calc_rmse(dataset, 
+              tar, 
+              pred, 
+              out_fpath = None
+              )
+    
+    Parameters
+    
+    dataset - DataFrame, the data to calculate RMSE for
+    tar - String, the target column name of the given dataset
+    pred - String, the predictions column name of the given dataset
+    out_fpath - String, the file path to output the results as a .csv file, default is None
+    
+    Returns
+    
+    rmse_df - DataFrame, the calculated RMSE of the given dataset
+    
+    Example
+    
+    calc_rmse(dataset = y_valid, 
+              tar = 'item_cnt_day', 
+              pred = 'y_valid_pred',
+              out_fpath = preds_valid_rmse
+              )
+    
     """
+    
+    # take a depp copy of the data
     data = dataset.copy(True)
+    
     # calculate RMSE
     rmse = np.sqrt(((data[tar] - data[pred]) ** 2).sum() / data.shape[0])
+    
+    # convert result to a dictionary
     rmse_dict = {'RMSE':[rmse]}
+    
+    # convert dictionary into dataframe
     rmse_df = pd.DataFrame(rmse_dict, index = [0])
+    
+    # if outputing results
     if out_fpath != None:
-        rmse_df.to_csv(out_fpath, index = False)
+        
+        # write to speficied file path
+        rmse_df.to_csv(out_fpath, 
+                       index = False
+                       )
+        
     return rmse_df
 
-def plot_preds_vs_true(dataset, tar, pred, model_name, out_fpath = None):
+def plot_preds_vs_true(dataset, 
+                       tar, 
+                       pred, 
+                       model_name, 
+                       out_fpath = None
+                       ):
+    
      """
+     
+     Plot Predictions vs True Observations Documentation
+     
+     Function Overview
+     
+     This function plots the model predictions against the true observations as a scatter plot.
+     
+     Defaults
+     
+     plot_preds_vs_true(dataset, 
+                       tar, 
+                       pred, 
+                       model_name, 
+                       out_fpath = None
+                       )
+     
+     Parameters
+     
+     dataset - DataFrame, the data to create the predicitons vs true observations plot from
+     tar - String, the name of the target column in the given dataset
+     pred - String the name of the predictions column in the given dataset
+     model_name - String, the name of the model used to create the predictions
+     out_fpath - String, the file path to output the plot as a .png file, default is None
+     
+     Returns
+     
+     0 for successful execution
+     
+     Example
+     
+     plot_preds_vs_true(dataset = y_valid, 
+                        tar = 'item_cnt_day', 
+                        pred = 'y_valid_pred', 
+                        model_name = model_name, 
+                        out_fpath = preds_vs_true_valid
+                        )
+     
      """
+     
+     # take a deep copy of the data
      data = dataset.copy(True)
-     sns.scatterplot(x = tar, y = pred, data = data)
+     
+     # create the initial scatter plot of predicitons vs true observations
+     sns.scatterplot(x = tar, 
+                     y = pred, 
+                     data = data
+                     )
+     
+     # add the model name as a title for the plot
      plt.title(model_name)
+     
+     # if outputting the plot
      if out_fpath != None:
+         
+         # write to the specified file path as a .png file
          plt.savefig(out_fpath)
+         
+    # print the ploe
      plt.show() 
+     
      return 0
  
-def plot_preds_hist(dataset, pred, model_name, bins = 100, kde = False, out_fpath = None):
+def plot_preds_hist(dataset, 
+                    pred, 
+                    model_name, 
+                    bins = 100, 
+                    kde = False, 
+                    out_fpath = None
+                    ):
+    
     """
+    
+    Plot Predcitions Histogram Documentation
+    
+    Function Overview
+    
+    This function plots a histogram of the model predictions
+    
+    Parameters
+    
+    plot_preds_hist(dataset, 
+                    pred, 
+                    model_name, 
+                    bins = 100, 
+                    kde = False, 
+                    out_fpath = None
+                    )
+    
+    Parameters
+    
+    dataset - DataFrame, the data to use for plotting the model predictions
+    pred - String, the name of the predictions column in the given dataset
+    model_name - String, the name of the model used to create the predictions
+    bins - Integer, the number of bins to have in the histogram, defualt 100
+    kde - Boolean, wheather to a kernal density estimation to the plot, default is True
+    out_fpath - String, the file path to output the results as a .csv, default is None
+    
+    Returns
+    
+    0 fir successful execution
+    
+    Example
+    
+    
+    plot_preds_hist(dataset = y_valid, 
+                    pred = 'item_cnt_day', 
+                    bins = 100, 
+                    kde = False, 
+                    model_name = model_name, 
+                    out_fpath = true_hist_valid
+                    )
+    
     """
+    
+    # take a deep copy of the data
     data = dataset.copy(True)
+    
     # create a hist of pred distribution
-    sns.distplot(a = data[pred], bins = bins, kde = kde)
+    sns.distplot(a = data[pred], 
+                 bins = bins, 
+                 kde = kde
+                 )
+    
+    # add the model name to the plot as a title
     plt.title(model_name)
+    
+    # if outputting the plot
     if out_fpath != None:
+        
+        # write to the file path as a .png
         plt.savefig(out_fpath)
+        
+    # print the plot
     plt.show() 
+    
     return 0
