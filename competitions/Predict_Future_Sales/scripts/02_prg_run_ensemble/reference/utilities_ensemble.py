@@ -5,6 +5,7 @@ Created on Sun May 17 10:59:45 2020
 @author: oislen
 """
 
+# import relevant libraries
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -14,7 +15,28 @@ def extract_model_cols(dataset):
     
     """
     
-    Extract Model Columns
+    Extract Model Columns Documentation
+    
+    Function Overview
+    
+    This function splits up the columns of a given modeling dataset into index columns, target columns, excluded columns and predictor columns.
+    The results are returned as arrays within a python dictionary.
+    
+    Defaults
+    
+    extract_model_cols(dataset)
+    
+    Parameters
+    
+    dataset - DataFrame, the modelling dataset to extract the various columns from.
+    
+    Returns
+    
+    model_cols_dict - Dictionary, the extract columnsstored within arrays
+    
+    Example
+    
+    extract_model_cols(dataset = base)
     
     """
     
@@ -56,22 +78,54 @@ def extract_model_cols(dataset):
     
     return model_cols_dict
     
-
 def gen_cv_splits(dataset,
                   train_cv_split_dict
                   ):
     
     """
+    
+    Generate Cross-Validation Splits Documentation
+    
+    Function Overview
+    
+    This function splits up the modelling data into cross-validation splits given a dictionary of desired splits.
+    
+    Defaults
+    
+    gen_cv_splits(dataset,
+                  train_cv_split_dict
+                  )
+    
+    Parameters
+    
+    dataset - DataFrame, the modelling data to split into cross-validation splits
+    train_cv_split_dict - Dictionary, the desired splits to use when generating the cross-validation splits
+    
+    Returns
+    
+    cv_list - List of dictionarys, the resulting cross-validation data splits of the modelling data
+    
+    Example
+    
+    gen_cv_splits(dataset = base,
+                  train_cv_split_dict =  [{'train_sub':28, 'valid_sub':29}]
+                  )
+    
     """
+    
+    # take a deep copy of the data
     data = dataset.copy(True)
     
+    # create an empty list to append the cv splits to
     cv_list = []
     
+    # for each split in the specified cv data splits dictionary
     for splits_limits in train_cv_split_dict:
         
         print(splits_limits)
         print('taking subset of data ...')
         
+        # subset the required columns for performing the data split
         sub_cols = ['date_block_num', 'data_split', 'primary_key']
         data_sub = data[sub_cols]
         
@@ -97,38 +151,63 @@ def gen_cv_splits(dataset,
         data_splits_dict = {'train_data_idx':train_data,
                             'valid_data_idx':valid_data
                             }
-
+        
+        # append the cv splits to the output list
         cv_list.append((data_splits_dict['train_data_idx'], data_splits_dict['valid_data_idx']))
     
 
     return cv_list
 
-
-
-def gen_cv_sum(clf, cv_sum_fpath):
+def gen_cv_sum(clf, 
+               cv_sum_fpath
+               ):
     
     """
     
     Generate Cross Validation Summary
     
+    Function Overview
     
+    This functions generates the cross-validation summary for a given classifier and outputs the results to a desired file path.
+    
+    Defaults
+    
+    gen_cv_sum(clf, 
+               cv_sum_fpath
+               )
+    
+    Parameters
+    
+    clf - Sklearn GridSearchCV, the fitted scikit-learn grid search cv object to extract results from
+    cv_sum_fpath - String, the output file path to write the cross-validation results to as a .csv file
+    
+    Returns
+    
+    cv_results - DataFrame, the cross-validation results
+    
+    Example
+    
+    gen_cv_sum(clf = gcv, 
+               cv_sum_fpath = cv_sum_fpath
+               )
     
     """
     
+    # create a DataFrame with relevent results extracted from the given GridSearchCV object
     cv_results = pd.DataFrame({'params':clf.cv_results_['params'],
                                'mean_test_score':clf.cv_results_['mean_test_score'] * -1,
                                'std_test_score':clf.cv_results_['std_test_score'],
                                'rank_test_score':clf.cv_results_['rank_test_score']
                                })
     
+    # sort the results by rank test score
     cv_results = cv_results.sort_values(by = ['rank_test_score'])
     
+    # write the results to the file path
     cv_results.to_csv(cv_sum_fpath, index = False)
     
     return cv_results
     
-
-
 def extract_data_splits(dataset,
                         index_cols,
                         req_cols,
@@ -138,8 +217,53 @@ def extract_data_splits(dataset,
                         ):
     
     """
+    
+    Extract Data Splits Documentation
+    
+    Function Overview
+    
+    This function splits the modelling data into training, validation, test, holdout and meta-level II sets.
+    The training data is used to training the initial models.
+    The valudation data is used to validate the initial trained models.
+    The test data is used as an out of sample set to test the generalised performance of the initial trained models.
+    The holdout data is used to make predictions from the initial models, which are then used to to train a meta level two stacked model.
+    
+    Defaults
+    
+    extract_data_splits(dataset,
+                        index_cols,
+                        req_cols,
+                        tar_cols,
+                        pred_cols,
+                        test_split_dict
+                        )
+    
+    Parameters
+    
+    dataset - DataFrame, the modelling data
+    index_cols - List of Strings, the names of the index columns of the modelling data
+    req_cols - List of Strings, the names of the required columns of the modelling data
+    tar_cols - List of Strings, the names of the target columns of the modelling data
+    pred_cols - List of Strings, the names of the predictor columns of the modelling data
+    test_split_dict - Dictionary, the train, validation and test splitting configurations for the modelling data
+    
+    Returns
+    
+    data_splits_dict - Dictionary, the various data splits for modelling stored as DataFrames
+    
+    Example
+    
+    extract_data_splits(dataset = base,
+                        index_cols = index_cols,
+                        req_cols = req_cols,
+                        tar_cols = tar_cols,
+                        pred_cols = pred_cols,
+                        test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
+                        )
+    
     """
-
+    
+    # take a deep copy of the data
     data = dataset.copy(True)
 
     print('generating data splits ...')
@@ -216,7 +340,42 @@ def feat_imp_sum(model,
                  pred_cols, 
                  feat_imp_fpath
                  ):
-           
+    
+    """
+    
+    Feature Importance Summary Documentation
+    
+    Function Overview
+    
+    This functoin creates a feature importance summary for a given fitted model and set of predictor columns. 
+    The results are outputed to the specified file path as a .csv file
+    
+    Defaults
+    
+    feat_imp_sum(model, 
+                 pred_cols, 
+                 feat_imp_fpath
+                 )
+    
+    Parameters
+    
+    model - Sklearn Model, the fitted sklearn model to extract the feature importance results from
+    pred_cols- List of Strings, the predictor columns used in the fitted sklearn model
+    feat_imp_fpath - String, the output file path to save the feature importance results as a .csv file
+    
+    Returns
+    
+    feat_imp - DataFrame, the feature importance results of the fitted sklearn model
+    
+    Example
+    
+    feat_imp_sum(model =  gbr, 
+                 pred_cols = pred_cols, 
+                 feat_imp_fpath = feat_imp_fpath
+                 )
+    
+    """
+    
     # extract feature importance
     feat_imp = pd.DataFrame({'attr':pred_cols,
                              'feat_imp':model.feature_importances_ * 100
@@ -241,6 +400,34 @@ def extract_feat_imp(cons,
     """
     
     Extract Feature Importance Documentation
+    
+    Function Overview
+    
+    This function extracts the top n features from a given feature importance summary.
+    
+    Defaults
+    
+    extract_feat_imp(cons, 
+                     feat_imp, 
+                     n = 20
+                     )
+    
+    Parameters
+    
+    cons - Python Module, the programme constants for the competition
+    feat_imp - DataFrame, the results of the feature importance analysis
+    n - Integer, the number of best features to extract from the feature importance analysis, default is 20
+    
+    Returns
+    
+    model_cols_dict - Dictionary, the extract n predictors based on the feature importance results, as well as the index columns, required columns and target columsn
+    
+    Example
+    
+    extract_feat_imp(cons = cons, 
+                     feat_imp = 'randforest', 
+                     n = 20
+                     )
     
     """
     
@@ -282,13 +469,42 @@ def extract_feat_imp(cons,
     
     return model_cols_dict
 
-
-
-def format_preds(dataset, preds_cols):
+def format_preds(dataset, 
+                 preds_cols
+                 ):
     
     """
+    
+    Format Predictions Documentation
+    
+    Function Overvieew
+    
+    This function formats the predictions by rounding the down the final predictions to the nearest values
+    
+    Defaults
+    
+    format_preds(dataset, 
+                 preds_cols
+                 )
+    
+    Parameters
+    
+    dataset - DataFrame, the final predictins to round down to the nearest values
+    preds_cols - Strings, the predictions column name
+    
+    Returns
+    
+    data - DataFrame, the formated final predictions
+    
+    Example
+    
+    format_preds(dataset = y_test, 
+                 preds_cols = 'y_test_pred'
+                 )
+    
     """
     
+    # take a deep copy of the data
     data = dataset.copy(True)
     
     # map items with no historical sell to 0
@@ -322,7 +538,7 @@ def plot_preds_vs_true(dataset, tar, pred, model_name, out_fpath = None):
      if out_fpath != None:
          plt.savefig(out_fpath)
      plt.show() 
-     return
+     return 0
  
 def plot_preds_hist(dataset, pred, model_name, bins = 100, kde = False, out_fpath = None):
     """
@@ -334,4 +550,4 @@ def plot_preds_hist(dataset, pred, model_name, bins = 100, kde = False, out_fpat
     if out_fpath != None:
         plt.savefig(out_fpath)
     plt.show() 
-    return
+    return 0
