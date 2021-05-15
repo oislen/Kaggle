@@ -5,6 +5,8 @@ Created on Sat May 15 08:32:18 2021
 @author: oislen
 """
 
+import pandas as pd
+
 def extract_data_splits(dataset,
                         index_cols,
                         req_cols,
@@ -97,18 +99,29 @@ def extract_data_splits(dataset,
     test_data = data[filt_test]
     holdout_data = data[filt_holdout]
     meta_lvl_II = data[filt_meta_lvl_II]
-
+    
+    # define the X_cols and y_cols
+    X_cols = index_cols + pred_cols
+    y_cols = index_cols + req_cols + tar_cols
+    
+    print(X_cols)
+    
+    # check if duplicate values are occuring
+    if (pd.Series(X_cols).value_counts() > 1).any() or (pd.Series(y_cols).value_counts() > 1).any():
+        # return error message and fail
+        raise ValueError('Duplicate columns are being passed to the extract data splitter.')
+    
     # split datasets into train, valid, test and holdout
-    X_train = train_data[list(set(index_cols + pred_cols))]
-    y_train = train_data[list(set(index_cols + req_cols + tar_cols))]
-    X_valid = valid_data[list(set(index_cols + pred_cols))]
-    y_valid = valid_data[list(set(index_cols + req_cols + tar_cols))]
-    X_test = test_data[list(set(index_cols + pred_cols))]
-    y_test = test_data[list(set(index_cols + req_cols + tar_cols))]
-    X_holdout = holdout_data[list(set(index_cols + pred_cols))]
-    y_holdout = holdout_data[list(set(index_cols + req_cols + tar_cols))]
-    X_meta_lvl_II = meta_lvl_II[list(set(index_cols + pred_cols))]
-    y_meta_lvl_II = meta_lvl_II[list(set(index_cols + req_cols + tar_cols))]
+    X_train = train_data[X_cols]
+    y_train = train_data[y_cols]
+    X_valid = valid_data[X_cols]
+    y_valid = valid_data[y_cols]
+    X_test = test_data[X_cols]
+    y_test = test_data[y_cols]
+    X_holdout = holdout_data[X_cols]
+    y_holdout = holdout_data[y_cols]
+    X_meta_lvl_II = meta_lvl_II[X_cols]
+    y_meta_lvl_II = meta_lvl_II[y_cols]
     
     print('creating output dictionary ...')
     
