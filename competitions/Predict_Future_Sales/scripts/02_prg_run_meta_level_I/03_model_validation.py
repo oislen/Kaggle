@@ -10,7 +10,10 @@ from reference.calc_rmse import calc_rmse
 from reference.plot_preds_vs_true import plot_preds_vs_true
 from reference.plot_preds_hist import plot_preds_hist
 
-def model_validation(pred_paths, valid_output_paths, model_name):
+def model_validation(pred_paths, 
+                     valid_output_paths,
+                     model_name
+                     ):
     
     """
     

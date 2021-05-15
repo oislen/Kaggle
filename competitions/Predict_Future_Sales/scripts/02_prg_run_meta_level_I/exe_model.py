@@ -28,6 +28,57 @@ def exe_model(cons,
     
     Execute Level I Model Documentation
     
+    Function Overview
+    
+    This function executes the meta lebel I model steps:
+        1. Training the initial sklearn model using GridSearchcv.
+        2. Making model predictions for validation set, out-of-sample test set and kaggle competition test file.
+        3. Validating model predictions for validation set and out-of-sample test set.
+        4. Formating the kaggle competition test file
+    
+    Defaults
+    
+    exe_model(cons,
+              feat_imp,
+              n,
+              skip_train,
+              n_cpu,
+              model_type,
+              max_dept,
+              date,
+              rand_state
+              )
+    
+    Parameters
+    
+    cons - Python Module, the compeition programme constants
+    feat_imp - String, the type of model feature importance to use
+    n - Integer, the number of top ranked features to extract from the feature importance results
+    skip_train - Boolean, whether to skip the model training set, if models are already trained from previous iteration
+    n_cpu - Integer, the number of cpus / jobs to use when performing the grid search cross validation to find optimal model parameters
+    model_type - String, the type of model being used to generate model predictions
+    max_dept - Integer, the maximum dept for tree based models
+    date - String, the date to use when outputing model results
+    rand_state - Integer, the random seed to use for reproducabilty
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    exe_model(cons = cons, 
+              feat_imp = 'randforest', 
+              max_dept = 3, 
+              rand_state = 1, 
+              model_type = 'dtree', 
+              n = 30, 
+              skip_train = False, 
+              n_cpu = -1, 
+              date = '20200502'
+              )
+        
+    
     """
     
     model_name = cons.model_name.format(model_type = model_type, max_dept = max_dept)

@@ -25,6 +25,57 @@ def cv_model_train(data_fpath,
                    ):
     
     """
+    
+    Cross- Validation Model Training Documentation
+    
+    Function Overview
+    
+    This performs a grid search cross-validation to find the optimal combination of model parameters and train the model.
+    The optimal model is output after the hyper-parameter tuning is completed.
+    
+    Defaults
+    
+    cv_model_train(data_fpath,
+                   tar_cols,
+                   pred_cols,
+                   model,
+                   model_params,
+                   train_cv_split_dict,
+                   model_pk_fpath,
+                   cv_sum_fpath,
+                   n_cpu
+                   )
+    
+    Parameters
+    
+    data_fpath - String, the full file path to the training data
+    tar_cols - List of Strings, the target columns within the training data
+    pred_cols - List of Strings, the predictor columns within the training data
+    model - Sklearn Model, the sci-kit learn model to train
+    model_params - Dictionary, the model parameters to tune using grid search cross-validation
+    train_cv_split_dict - Dictionary, the splitting configurations for the cross-validation training
+    model_pk_fpath - String, the full file path to output the model as a .pkl file
+    cv_sum_fpath - String, the full file path to output the cross-validation summary
+    n_cpu - Integer, the number of cpus to use when performing the grid search cross-validation
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    model_train.cv_model_train(data_fpath = data_fpath,
+                               tar_cols = tar_cols,
+                               pred_cols = pred_cols,
+                               model = DecisionTreeRegressor(),
+                               model_params = {'criterion':['mse', 'friedman_mse']},
+                               train_cv_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33},
+                               model_pk_fpath = model_pk_fpath,
+                               cv_sum_fpath = cv_sum_fpath,
+                               n_cpu = -1
+                               )
+
+    
     """
     
     print('loading base data {} ...'.format(data_fpath))
