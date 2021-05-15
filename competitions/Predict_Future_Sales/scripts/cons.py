@@ -95,11 +95,11 @@ gradboost_feat_imp = os.path.join(feat_imp_dir, 'gradboost_feat_imp.csv')
 holdout_shop_item_id_comb = os.path.join(ref_data_dir, 'holdout_shop_item_id_comb.pickle')
 
 # script directories
-prg_run_ensemble_dir = os.path.join(scripts_dir, '02_prg_run_ensemble')
-reference_path = os.path.join(prg_run_ensemble_dir, 'reference')
+prg_run_meta_level_I = os.path.join(scripts_dir, '02_prg_run_meta_level_I')
+meta_level_I_reference_path = os.path.join(prg_run_meta_level_I, 'reference')
 
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_ensemble_dir, reference_path]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_meta_level_I, meta_level_I_reference_path]:
     sys.path.append(p)
 
 ################

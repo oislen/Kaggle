@@ -6,7 +6,8 @@ Created on Sun May 17 15:59:25 2020
 """
 
 import pandas as pd
-import utilities_ensemble as utl_ens
+from reference.extract_model_cols import extract_model_cols
+from reference.feat_imp_sum import feat_imp_sum
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 
@@ -38,7 +39,7 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
     base = pd.read_feather(cons.model_data_fpath)
     
     # seperate predictors from response
-    model_cols_dict = utl_ens.extract_model_cols(base)
+    model_cols_dict = extract_model_cols(base)
     pred_cols = model_cols_dict['pred_cols']
     
     # filter out the training data
@@ -68,10 +69,10 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
         
         # extract feature importance
         feat_imp_fpath = cons.randforest_feat_imp
-        rf_feat_imp = utl_ens.feat_imp_sum(model = rfc, 
-                                           pred_cols = pred_cols, 
-                                           feat_imp_fpath = feat_imp_fpath
-                                           )
+        rf_feat_imp = feat_imp_sum(model = rfc, 
+                                   pred_cols = pred_cols, 
+                                   feat_imp_fpath = feat_imp_fpath
+                                   )
         
         print(rf_feat_imp.head(20))
         
@@ -103,10 +104,10 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
         
         # extract feature importance
         feat_imp_fpath = cons.gradboost_feat_imp
-        gb_feat_imp = utl_ens.feat_imp_sum(model = gbr, 
-                                           pred_cols = pred_cols, 
-                                           feat_imp_fpath = feat_imp_fpath
-                                           )
+        gb_feat_imp = feat_imp_sum(model = gbr, 
+                                   pred_cols = pred_cols, 
+                                   feat_imp_fpath = feat_imp_fpath
+                                   )
         
         print(gb_feat_imp.head(20))
         
