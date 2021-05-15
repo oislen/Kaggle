@@ -5,13 +5,13 @@ Created on Sun May 17 15:59:51 2020
 @author: oislen
 """
 
+import cons
 import pandas as pd
-import reference.utilities_ensemble as utl_ens
 from sklearn.model_selection import GridSearchCV
 import joblib as jl
 import pickle as pk
-
-pd.set_option('display.max_columns', 10)
+from reference.gen_cv_splits import gen_cv_splits
+from reference.gen_cv_sum import gen_cv_sum
 
 def cv_model_train(data_fpath,
                    tar_cols,
@@ -35,9 +35,9 @@ def cv_model_train(data_fpath,
     print('creating cv index splits ...')
     
     # generate indices for cv splits
-    cv_list = utl_ens.gen_cv_splits(dataset = base,
-                                    train_cv_split_dict = train_cv_split_dict
-                                    )
+    cv_list = gen_cv_splits(dataset = base,
+                            train_cv_split_dict = train_cv_split_dict
+                            )
     
     # set the refit boolean
     refit_bool = True
@@ -51,7 +51,7 @@ def cv_model_train(data_fpath,
                        n_jobs = n_cpu,
                        cv = cv_list,
                        refit = refit_bool,
-                       verbose = 3
+                       verbose = cons.verbose
                        )
     
     print(model_params)
@@ -76,7 +76,7 @@ def cv_model_train(data_fpath,
     print('generating summary ...')
     
     # generate a summary of the cv results
-    cv_results = utl_ens.gen_cv_sum(gcv, cv_sum_fpath)
+    cv_results = gen_cv_sum(gcv, cv_sum_fpath)
     
     print(cv_results.head())
     
@@ -89,4 +89,4 @@ def cv_model_train(data_fpath,
     jl.dump(bdtr, model_pk_fpath)
     pk.dump(bdtr, open(model_pk_fpath, "wb"), protocol = pk.HIGHEST_PROTOCOL)
     
-    return
+    return 0

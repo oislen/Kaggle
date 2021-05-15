@@ -6,9 +6,9 @@ Created on Sun May 17 16:00:32 2020
 """
 
 import pandas as pd
-import reference.utilities_ensemble as utl_ens
-import joblib as jl
+#import joblib as jl
 import pickle as pk
+from reference.extract_data_splits import extract_data_splits
 
 def model_preds(data_fpath,
                 model_pk_fpath,
@@ -23,7 +23,7 @@ def model_preds(data_fpath,
     """
     """
     
-    print('loading in base data ...'.format(data_fpath))
+    print('loading in base data {} ...'.format(data_fpath))
     
     # load in model data
     base = pd.read_feather(data_fpath)
@@ -37,13 +37,13 @@ def model_preds(data_fpath,
     print('splitting out dataset ...')
     
     # run the data splits function
-    data_splits_dict = utl_ens.extract_data_splits(dataset = base,
-                                                   index_cols = index_cols,
-                                                   tar_cols = tar_cols,
-                                                   req_cols = req_cols,
-                                                   pred_cols = pred_cols,
-                                                   test_split_dict = test_split_dict
-                                                   )
+    data_splits_dict = extract_data_splits(dataset = base,
+                                           index_cols = index_cols,
+                                           tar_cols = tar_cols,
+                                           req_cols = req_cols,
+                                           pred_cols = pred_cols,
+                                           test_split_dict = test_split_dict
+                                           )
     
     # extract out the data splits
     X_valid = data_splits_dict['X_valid']
@@ -82,4 +82,4 @@ def model_preds(data_fpath,
     y_holdout.reset_index(drop = True).to_feather(y_holdout_preds_path)
     y_meta_lvl_II.reset_index(drop = True).to_feather(meta_lvl_II_feats_path)
 
-    return
+    return 0

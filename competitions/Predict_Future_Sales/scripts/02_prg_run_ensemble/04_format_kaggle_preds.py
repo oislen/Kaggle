@@ -33,4 +33,4 @@ def format_kaggle_preds(pred_paths):
                             index = False
                             )
     
-    return
+    return 0

@@ -6,7 +6,7 @@ Created on Sun May 17 12:20:21 2020
 """
 
 from importlib import import_module
-import reference.utilities_ensemble as utl_ens
+from reference.extract_feat_imp import extract_feat_imp
 
 model_train = import_module(name = '01_model_training')
 model_pred = import_module(name = '02_model_predictions')
@@ -94,16 +94,16 @@ def exe_model(cons,
                           }
     
     # load in feature importance cols
-    extract_feat_imp = utl_ens.extract_feat_imp(cons = cons, 
-                                                feat_imp = feat_imp,
-                                                n = n
-                                                )
+    extract_feat_imp_df = extract_feat_imp(cons = cons, 
+                                           feat_imp = feat_imp,
+                                           n = n
+                                           )
     
     # set the target abd predictors to tune
-    index_cols = extract_feat_imp['index_cols']
-    req_cols = extract_feat_imp['req_cols']
-    tar_cols = extract_feat_imp['tar_cols']
-    pred_cols = extract_feat_imp['pred_cols']
+    index_cols = extract_feat_imp_df['index_cols']
+    req_cols = extract_feat_imp_df['req_cols']
+    tar_cols = extract_feat_imp_df['tar_cols']
+    pred_cols = extract_feat_imp_df['pred_cols']
     
     # if skipping the training step
     if not skip_train:
@@ -140,4 +140,4 @@ def exe_model(cons,
     # call the kaggle format predictions
     kaggl_pred.format_kaggle_preds(pred_paths = pred_paths)
 
-    return
+    return 0

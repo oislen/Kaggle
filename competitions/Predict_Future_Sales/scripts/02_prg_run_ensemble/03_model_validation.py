@@ -77,4 +77,4 @@ def model_validation(pred_paths, valid_output_paths, model_name):
     utl_ens.plot_preds_hist(dataset = y_test, pred = 'y_test_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_test)
     utl_ens.plot_preds_hist(dataset = y_holdout, pred = 'y_holdout_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_holdout)
     
-    return
+    return 0
