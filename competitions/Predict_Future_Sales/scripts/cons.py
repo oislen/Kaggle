@@ -8,11 +8,14 @@ Created on Sun Apr 26 17:15:06 2020
 # import relevant libraries
 import os
 import sys
+import pandas as pd
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 import numpy as np
 
+# set pandas options
+pd.set_option('display.max_columns', 10)
 
 # set competition name
 comp_name = 'competitive-data-science-predict-future-sales'
@@ -93,15 +96,23 @@ holdout_shop_item_id_comb = os.path.join(ref_data_dir, 'holdout_shop_item_id_com
 
 # script directories
 prg_run_ensemble_dir = os.path.join(scripts_dir, '02_prg_run_ensemble')
-meta_level_I_dir = os.path.join(prg_run_ensemble_dir, 'meta_level_I')
+reference_path = os.path.join(prg_run_ensemble_dir, 'reference')
 
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_ensemble_dir, meta_level_I_dir]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_ensemble_dir, reference_path]:
     sys.path.append(p)
 
 ################
 #-- Ensemble --#
 ################
+
+# execution constants
+n_cpu = -1
+verbose = 3
+
+# set ransom seed
+rand_seed = 1234
+np.random.seed(rand_seed)
 
 # set model pk output file path
 model_name = '{model_type}_dept{max_dept}'
