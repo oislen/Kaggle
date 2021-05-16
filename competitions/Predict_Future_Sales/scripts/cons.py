@@ -165,7 +165,7 @@ params_dict = {'dtree':{'criterion':['mse'],
                             #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
                             'n_estimators':[25],
                             'random_state':[rand_seed],
-                            'max_depth':[5]
+                            'max_depth':[10]
                             },
                'knn':{'n_neighbors':[3, 4, 5, 6, 7],
                       'weights':['uniform', 'distance'],
@@ -177,7 +177,7 @@ params_dict = {'dtree':{'criterion':['mse'],
                              'n_estimators':[25],
                              #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
                              'random_state':[rand_seed],
-                             'max_depth':[5]
+                             'max_depth':[10]
                              }
               }
 
