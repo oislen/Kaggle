@@ -5,15 +5,14 @@ Created on Sun May 17 15:59:25 2020
 @author: oislen
 """
 
+import cons
 import pandas as pd
 from reference.extract_model_cols import extract_model_cols
 from reference.feat_imp_sum import feat_imp_sum
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 
-pd.set_option('display.max_columns', 10)
-
-def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
+def gen_feature_selection(feat_type = 'randforest'):
     
     """
     
@@ -27,11 +26,19 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
     
     Defaults
     
-    gen_feature_selection(cons)
+    gen_feature_selection(feat_type = 'randforest')
     
     Parameters
     
-    cons - python module, the file_constants.py module
+    feat_type - String, the type of model to use for generating the feature importance, default is 'randforest'
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    gen_feature_selection(feat_type = 'randforest')
     
     """
         
@@ -55,13 +62,13 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
         print('Running random forest feature importance ...')
         
         # initiate random forest model
-        rfc = RandomForestRegressor(max_depth = 7, 
-                                    random_state = 1234, 
-                                    criterion = 'mse',
-                                    n_estimators = 20,
-                                    n_jobs = n_cpu,
-                                    verbose = 2,
-                                    max_features = 'auto'
+        rfc = RandomForestRegressor(max_depth = cons.feat_imp_max_depth, 
+                                    random_state = cons.rand_seed, 
+                                    criterion = cons.feat_imp_criterion,
+                                    n_estimators = cons.feat_imp_n_estimators,
+                                    n_jobs = cons.n_cpu,
+                                    verbose = cons.verbose,
+                                    max_features = cons.feat_imp_max_features
                                     )
         
         # fit random forests model
@@ -89,14 +96,14 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
         print('Running gradient boosting feature importance ...')
         
         # initiate random forest model
-        gbr = GradientBoostingRegressor(max_depth = 7, 
-                                        random_state = 1234, 
-                                        criterion = 'mse',
-                                        n_estimators = 20,
-                                        verbose = 2,
+        gbr = GradientBoostingRegressor(max_depth = cons.feat_imp_max_depth, 
+                                        random_state = cons.rand_seed, 
+                                        criterion = cons.feat_imp_criterion,
+                                        n_estimators = cons.feat_imp_n_estimators,
+                                        verbose = cons.verbose,
                                         #validation_fraction = 0.1,
                                         #n_iter_no_change = 5,
-                                        max_features = 'auto'
+                                        max_features = cons.feat_imp_max_features
                                         )
         
         # fit random forests model
@@ -111,4 +118,4 @@ def gen_feature_selection(cons, feat_type = 'randforest', n_cpu = -2):
         
         print(gb_feat_imp.head(20))
         
-    return
+    return 0
