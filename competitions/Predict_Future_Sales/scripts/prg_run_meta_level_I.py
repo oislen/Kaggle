@@ -6,14 +6,15 @@ Created on Sun May 17 10:57:04 2020
 """
 
 # import relevant libraries
+import cons
 from exe_model import exe_model
 from reference.gen_feature_selection import gen_feature_selection
 
 # user settings
 skip_train = False # whether to skip training and make predictions with pre-fitted models
 n = 30 # number of top ranked feature importance attributes to consdier
-start = 2 # which step to start from
-end = 5 # which step to end at
+start = 4 # which step to start from
+end = 4 # which step to end at
 date = '20200523' # set the date to output the files with
 #date = dt.datetime.today().strftime('%Y%m%d') # alternatively use todays date
 
@@ -29,23 +30,17 @@ if 1 in run_range:
 if 2 in run_range:
     print('~~~~~ Working on Decision Tree Models ...')
     # execute the model
-    exe_model(feat_imp = 'randforest', max_dept = 3, rand_state = 1, model_type = 'dtree', n = n, skip_train = skip_train, date = date)
-    exe_model(feat_imp = 'randforest', max_dept = 5, rand_state = 2, model_type = 'dtree', n = n, skip_train = skip_train, date = date)
-    exe_model(feat_imp = 'randforest', max_dept = 7, rand_state = 3, model_type = 'dtree', n = n, skip_train = skip_train, date = date)
+    exe_model(feat_imp = 'randforest', model_type = 'dtree', n = n, skip_train = skip_train, date = date)
 
 #if 3 in run_range:
 #    print('~~~~~ Working on KNN Models ...')
-#    exe_model(feat_imp = 'randforest', rand_state = 1, model_type = 'knn', n = n, skip_train = skip_train, date = date)
+#    exe_model(feat_imp = 'randforest', model_type = 'knn', n = n, skip_train = skip_train, date = date)
     
 if 4 in run_range:
     print('~~~~~ Working on Random Forest Models ...')
-    exe_model(feat_imp = 'randforest', max_dept = 3, rand_state = 1, model_type = 'randforest', n = n, skip_train = skip_train, date = date)
-    exe_model(feat_imp = 'randforest', max_dept = 5, rand_state = 2, model_type = 'randforest', n = n, skip_train = skip_train, date = date)
-    exe_model(feat_imp = 'randforest', max_dept = 7, rand_state = 3, model_type = 'randforest', n = n, skip_train = skip_train, date = date)
+    exe_model(feat_imp = 'randforest', model_type = 'randforest', n = n, skip_train = skip_train, date = date)
     
 if 5 in run_range:
     print('~~~~~ Working on Gradient Boosting Models ...')
-    exe_model(feat_imp = 'gradboost', max_dept = 3, rand_state = 1, model_type = 'gradboost', n = n, skip_train = skip_train, date = date)
-    exe_model(feat_imp = 'gradboost', max_dept = 5, rand_state = 2, model_type = 'gradboost', n = n, skip_train = skip_train, date = date)
-    exe_model(feat_imp = 'gradboost', max_dept = 7, rand_state = 3, model_type = 'gradboost', n = n, skip_train = skip_train, date = date)
+    exe_model(feat_imp = 'gradboost', model_type = 'gradboost', n = n, skip_train = skip_train, date = date)
     
