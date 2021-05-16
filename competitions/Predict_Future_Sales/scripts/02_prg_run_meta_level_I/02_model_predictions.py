@@ -21,6 +21,52 @@ def model_preds(data_fpath,
                 ):
     
     """
+    
+    Model Predictions Documentation
+    
+    Function Overview
+    
+    This function generates predictions using the fitted models for the validation, test set, holdout set and meta level II set.
+    
+    Defaults
+    
+    model_preds(data_fpath,
+                model_pk_fpath,
+                index_cols,
+                req_cols,
+                tar_cols,
+                pred_cols,
+                test_split_dict,
+                pred_paths
+                )
+    
+    Parameters
+    
+    data_fpath - String, the full file path to the base data
+    model_pk_fpath - String, the full file path to the fitted model
+    index_cols - List of Strings, the index columns of the base data
+    req_cols - List of Strings, the required columns of the base data
+    tar_cols - List of Strings, the target columns of the base data
+    pred_cosl - List of Strings, the predictor columns of the base data
+    test_split_dict - Dictionary, the train, validation and test splitting configurations for the modelling data
+    pred_paths - Dictionary, the output file paths for the validation, test set, hold out set and meta level II set predictions
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    model_preds(data_fpath = data_fpath,
+                model_pk_fpath = model_pk_fpath,
+                index_cols = index_cols,
+                req_cols = req_cols,
+                tar_cols = tar_cols,
+                pred_cols = pred_cols,
+                test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33},
+                pred_paths = pred_paths
+                )
+    
     """
     
     print('loading in base data {} ...'.format(data_fpath))
