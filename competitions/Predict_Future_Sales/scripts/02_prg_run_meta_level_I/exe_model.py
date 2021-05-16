@@ -5,6 +5,7 @@ Created on Sun May 17 12:20:21 2020
 @author: oislen
 """
 
+import cons
 from importlib import import_module
 from reference.extract_feat_imp import extract_feat_imp
 
@@ -13,11 +14,9 @@ model_pred = import_module(name = '02_model_predictions')
 model_valid = import_module(name = '03_model_validation')
 kaggl_pred = import_module(name = '04_format_kaggle_preds')
 
-def exe_model(cons,
-              feat_imp,
+def exe_model(feat_imp,
               n,
               skip_train,
-              n_cpu,
               model_type,
               max_dept,
               date,
@@ -38,11 +37,9 @@ def exe_model(cons,
     
     Defaults
     
-    exe_model(cons,
-              feat_imp,
+    exe_model(feat_imp,
               n,
               skip_train,
-              n_cpu,
               model_type,
               max_dept,
               date,
@@ -51,11 +48,9 @@ def exe_model(cons,
     
     Parameters
     
-    cons - Python Module, the compeition programme constants
     feat_imp - String, the type of model feature importance to use
     n - Integer, the number of top ranked features to extract from the feature importance results
     skip_train - Boolean, whether to skip the model training set, if models are already trained from previous iteration
-    n_cpu - Integer, the number of cpus / jobs to use when performing the grid search cross validation to find optimal model parameters
     model_type - String, the type of model being used to generate model predictions
     max_dept - Integer, the maximum dept for tree based models
     date - String, the date to use when outputing model results
@@ -67,14 +62,12 @@ def exe_model(cons,
     
     Example
     
-    exe_model(cons = cons, 
-              feat_imp = 'randforest', 
+    exe_model(feat_imp = 'randforest', 
               max_dept = 3, 
               rand_state = 1, 
               model_type = 'dtree', 
               n = 30, 
               skip_train = False, 
-              n_cpu = -1, 
               date = '20200502'
               )
         
@@ -95,7 +88,7 @@ def exe_model(cons,
     model_params['max_depth'] = [max_dept]
     model_params['random_state'] = [rand_state]
     if model_type == 'randforest':
-        model_params['n_jobs'] = [n_cpu]
+        model_params['n_jobs'] = [cons.n_cpu]
         
     
     # TODO functionise this 
@@ -167,8 +160,7 @@ def exe_model(cons,
                                    model_params = model_params,
                                    train_cv_split_dict = train_cv_split_dict,
                                    model_pk_fpath = model_pk_fpath,
-                                   cv_sum_fpath = cv_sum_fpath,
-                                   n_cpu = n_cpu
+                                   cv_sum_fpath = cv_sum_fpath
                                    )
         
     # get model predictions
