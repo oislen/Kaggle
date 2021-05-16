@@ -11,7 +11,27 @@ def format_kaggle_preds(pred_paths):
     
     """
     
-    Format Kaggle Predictions
+    Format Kaggle Predictions Documentation
+    
+    Function Overview
+    
+    This functions formats and prepares the kaggle competition predicitons for submission to the kaggle competition platform
+    
+    Defaults
+    
+    format_kaggle_preds(pred_paths)
+    
+    Paraemeters
+    
+    pred_paths - String, the full file path to the hold out predictions
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    format_kaggle_preds(pred_paths = pred_paths)
     
     """
     
