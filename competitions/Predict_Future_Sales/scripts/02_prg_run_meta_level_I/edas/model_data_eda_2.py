@@ -20,7 +20,7 @@ base = pd.read_feather(cons.model_data_fpath)
 feat_imp = pd.read_csv(cons.randforest_feat_imp)
 
 # extract out top 10 attributes
-top_n_attr = feat_imp['attr'][0:10].tolist()
+top_n_attr = feat_imp['attr'].tolist()
 
 base.columns
 base.data_split.value_counts()
@@ -87,7 +87,59 @@ def dist_comp(attr):
     return data
 
 
-dist_comp(attr = 'item_cnt_day_shift_1')
-dist_comp(attr = 'year_mean_enc')
-dist_comp(attr = 'month_mean_enc')
-dist_comp(attr = 'item_id_months_first_rec')
+dist_comp(attr = 'item_cnt_day_shift_1') # fine
+dist_comp(attr = 'year_mean_enc') # useless
+dist_comp(attr = 'month_mean_enc') # useless (multiple-values broken?)
+dist_comp(attr = 'item_id_months_first_rec') # fine
+dist_comp(attr = 'item_cnt_day_shift_1_div_item_id_total_item_cnt_day_shift_1')
+dist_comp(attr = 'date_block_num') # useless
+dist_comp(attr = 'shop_item_id_mean_enc') # fine
+dist_comp(attr = 'year') # useless
+dist_comp(attr = 'price_decimal_len') # fine
+dist_comp(attr = 'price_decimal') # fine
+dist_comp(attr = 'shop_id_item_category_id_total_item_cnt_day_shift_1') # fine
+dist_comp(attr = 'item_id_total_item_cnt_day_shift_1') # fine
+dist_comp(attr = 'revenue_shift_1') # fine
+dist_comp(attr = 'item_cnt_day_shift_1_div_shop_id_total_item_cnt_day_shift_1') # fine
+dist_comp(attr = 'city_mean_enc') # fine
+dist_comp(attr = 'item_cat_mean_enc') # fine
+dist_comp(attr = 'date_block_num_mean_enc') # useless (multiple-values broken?)
+dist_comp(attr = 'item_id_mean_enc') # fine
+dist_comp(attr = 'item_cat_sub_id') # useless
+dist_comp(attr = 'item_category_id_mean_enc') # fine
+dist_comp(attr = 'item_cat_sub_mean_enc') # fine
+dist_comp(attr = 'city_enc_total_item_cnt_day_shift_1') # fine
+dist_comp(attr = 'shop_id') # useless
+dist_comp(attr = 'shop_id_mean_enc') # fine
+dist_comp(attr = 'item_id') # useless
+dist_comp(attr = 'item_id_total_item_cnt_day_shift_3') # fine
+dist_comp(attr = 'item_price_shift_1') # fine
+dist_comp(attr = 'item_category_id_total_item_cnt_day_shift_1') # fine
+dist_comp(attr = 'days_of_month') # useless
+dist_comp(attr = 'item_id_city_enc_total_item_cnt_day_shift_1') # fine
+dist_comp(attr = 'item_cnt_day_shift_2') # fine
+dist_comp(attr = 'delta_item_cnt_day_1_2') # fine
+dist_comp(attr = 'item_cnt_day_shift_3_div_shop_id_total_item_cnt_day_shift_3') # fine
+dist_comp(attr = 'item_cnt_day_shift_3_div_item_id_total_item_cnt_day_shift_3') # fine
+dist_comp(attr = 'item_cnt_day_shift_4_div_shop_id_total_item_cnt_day_shift_4') # fine
+dist_comp(attr = 'item_cnt_day_shift_2_div_item_id_total_item_cnt_day_shift_2') # fine
+dist_comp(attr = 'item_cnt_day_shift_4_div_item_id_total_item_cnt_day_shift_4') # fine
+dist_comp(attr = 'item_cnt_day_shift_2_div_shop_id_total_item_cnt_day_shift_2') # fine
+dist_comp(attr = 'item_cat_id') # useless
+dist_comp(attr = 'delta_item_cnt_day_3_4') # fine 
+dist_comp(attr = 'item_id_months_last_rec') # fine
+dist_comp(attr = 'city_enc') # useless (values look brokem)
+dist_comp(attr = 'month') # useless
+dist_comp(attr = 'n_weekenddays') # fine (possibly remove)
+dist_comp(attr = 'n_publicholidays') # fine (possibly remove)
+dist_comp(attr = 'totalholidays') # fine (possibly remove)
+dist_comp(attr = 'item_category_id') # useless
+dist_comp(attr = 'item_cnt_day_shift_3') # fine
+dist_comp(attr = 'delta_item_cnt_day_2_3') # fine
+dist_comp(attr = 'item_cnt_day_shift_4') # fine
+dist_comp(attr = 'shop_id_total_item_cnt_day_shift_1')
+dist_comp(attr = 'shop_id_total_item_cnt_day_shift_2')
+dist_comp(attr = 'shop_id_total_item_cnt_day_shift_3')
+dist_comp(attr = 'shop_id_total_item_cnt_day_shift_4')
+dist_comp(attr = 'item_id_total_item_cnt_day_shift_2')
+dist_comp(attr = 'item_id_total_item_cnt_day_shift_4')
