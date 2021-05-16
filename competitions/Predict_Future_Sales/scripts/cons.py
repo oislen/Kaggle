@@ -159,13 +159,13 @@ params_dict = {'dtree':{'criterion':['mse'],
                      'min_samples_leaf':[2, 4, 8],
                      #'max_features':[np.int8(np.float8(n / i)) for i in [1, 2, 3, 4]],
                      'random_state':[rand_seed],
-                     'max_depth':[None]
+                     'max_depth':[10]
                      },
                'gradboost':{'criterion':['mse'],
                             #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
                             'n_estimators':[25],
                             'random_state':[rand_seed],
-                            'max_depth':[8]
+                            'max_depth':[5]
                             },
                'knn':{'n_neighbors':[3, 4, 5, 6, 7],
                       'weights':['uniform', 'distance'],
@@ -177,7 +177,7 @@ params_dict = {'dtree':{'criterion':['mse'],
                              'n_estimators':[25],
                              #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
                              'random_state':[rand_seed],
-                             'max_depth':[8]
+                             'max_depth':[5]
                              }
               }
 
