@@ -102,6 +102,27 @@ meta_level_I_reference_path = os.path.join(prg_run_meta_level_I, 'reference')
 for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_meta_level_I, meta_level_I_reference_path]:
     sys.path.append(p)
 
+######################
+#-- Plot Constants --#
+######################
+
+plot_size_width = 12
+plot_size_height = 8
+plot_title_size = 25
+plot_axis_text_size = 20
+plot_label_size = 'x-large'
+bins = 100
+kde = False
+
+##########################
+#-- Feature Importance --#
+##########################
+
+feat_imp_max_depth = 7
+feat_imp_n_estimators = 20
+feat_imp_criterion = 'mse'
+feat_imp_max_features = 'auto'
+
 ################
 #-- Ensemble --#
 ################
@@ -109,6 +130,7 @@ for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, pr
 # execution constants
 n_cpu = -1
 verbose = 3
+refit_bool = True
 
 # set ransom seed
 rand_seed = 1234
