@@ -150,7 +150,7 @@ model_dict={'dtree':DecisionTreeRegressor(),
             }
 
 # set max number of features
-n = 30
+n = 43
 
 # set model parameters
 params_dict = {'dtree':{'criterion':['mse'],
