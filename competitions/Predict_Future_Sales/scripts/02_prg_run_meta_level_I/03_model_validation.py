@@ -5,10 +5,12 @@ Created on Sun May 17 12:27:58 2020
 @author: oislen
 """
 
+import os
+import cons
 import pandas as pd
-from reference.calc_rmse import calc_rmse
-from reference.plot_preds_vs_true import plot_preds_vs_true
-from reference.plot_preds_hist import plot_preds_hist
+from calc_rmse import calc_rmse
+from plot_preds_vs_true import plot_preds_vs_true
+from hist import hist
 
 def model_validation(pred_paths, 
                      valid_output_paths,
@@ -19,6 +21,34 @@ def model_validation(pred_paths,
     
     Model Validation Documentation
     
+    Function Overview
+    
+    This function performs validation checks on the predictions for the validation, test set and hold out set.
+    
+    Defaults
+    
+    model_validation(pred_paths, 
+                     valid_output_paths,
+                     model_name
+                     )
+
+    Parameters
+    
+    pred_paths - Dictionary, the input file paths for the validation, test set, hold out set predictions
+    valid_output_paths - Dictionary, the output file paths for the validation, test set and holdout set validation results
+    model_name - String, the name of the model to use when output the validation results
+    
+    Returns
+    
+    0 for successful execution
+    
+    Example
+    
+    model_validation(pred_paths = pred_paths, 
+                     valid_output_paths = valid_output_paths,
+                     model_name = model_name
+                     )
+
     """
     
     # extract out the validation output paths
@@ -76,10 +106,10 @@ def model_validation(pred_paths,
     print('Plotting predictions histograms ...')
     
     # create a hist of pred distribution
-    plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', bins = 100, kde = False, model_name = model_name, out_fpath = true_hist_valid)
-    plot_preds_hist(dataset = y_test, pred = 'item_cnt_day', bins = 100, kde = False, model_name = model_name, out_fpath = true_hist_test)
-    plot_preds_hist(dataset = y_valid, pred = 'y_valid_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_valid)
-    plot_preds_hist(dataset = y_test, pred = 'y_test_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_test)
-    plot_preds_hist(dataset = y_holdout, pred = 'y_holdout_pred', bins = 100, kde = False, model_name = model_name, out_fpath = preds_hist_holdout)
+    hist(dataset = y_valid, num_var = ['item_cnt_day'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(true_hist_valid), output_fname = os.path.basename(true_hist_valid))
+    hist(dataset = y_test, num_var = ['item_cnt_day'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(true_hist_test), output_fname = os.path.basename(true_hist_test))
+    hist(dataset = y_valid, num_var = ['y_valid_pred'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(preds_hist_valid), output_fname = os.path.basename(preds_hist_valid))
+    hist(dataset = y_test, num_var = ['y_test_pred'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(preds_hist_test), output_fname = os.path.basename(preds_hist_test))
+    hist(dataset = y_holdout, num_var = ['y_holdout_pred'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(preds_hist_holdout), output_fname = os.path.basename(preds_hist_holdout))
     
     return 0
