@@ -20,8 +20,7 @@ def cv_model_train(data_fpath,
                    model_params,
                    train_cv_split_dict,
                    model_pk_fpath,
-                   cv_sum_fpath,
-                   n_cpu
+                   cv_sum_fpath
                    ):
     
     """
@@ -42,8 +41,7 @@ def cv_model_train(data_fpath,
                    model_params,
                    train_cv_split_dict,
                    model_pk_fpath,
-                   cv_sum_fpath,
-                   n_cpu
+                   cv_sum_fpath
                    )
     
     Parameters
@@ -56,7 +54,6 @@ def cv_model_train(data_fpath,
     train_cv_split_dict - Dictionary, the splitting configurations for the cross-validation training
     model_pk_fpath - String, the full file path to output the model as a .pkl file
     cv_sum_fpath - String, the full file path to output the cross-validation summary
-    n_cpu - Integer, the number of cpus to use when performing the grid search cross-validation
     
     Returns
     
@@ -71,8 +68,7 @@ def cv_model_train(data_fpath,
                                model_params = {'criterion':['mse', 'friedman_mse']},
                                train_cv_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33},
                                model_pk_fpath = model_pk_fpath,
-                               cv_sum_fpath = cv_sum_fpath,
-                               n_cpu = -1
+                               cv_sum_fpath = cv_sum_fpath
                                )
 
     
@@ -90,24 +86,21 @@ def cv_model_train(data_fpath,
                             train_cv_split_dict = train_cv_split_dict
                             )
     
-    # set the refit boolean
-    refit_bool = True
-    
     print('creating grid search object ...')
     
     # initiate CV object
     gcv = GridSearchCV(estimator = model, 
                        param_grid = model_params,
                        scoring = 'neg_root_mean_squared_error',
-                       n_jobs = n_cpu,
+                       n_jobs = cons.n_cpu,
                        cv = cv_list,
-                       refit = refit_bool,
+                       refit = cons.refit_bool,
                        verbose = cons.verbose
                        )
     
     print(model_params)
     
-    print('N Jobs: {n_cpu}'.format(n_cpu = n_cpu))
+    print('N Jobs: {n_cpu}'.format(n_cpu = cons.n_cpu))
     
     print('running grid search cv ...')
     
