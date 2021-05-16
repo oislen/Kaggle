@@ -131,13 +131,14 @@ feat_imp_max_features = 'auto'
 n_cpu = -1
 verbose = 3
 refit_bool = True
+max_dept = 10
 
 # set ransom seed
 rand_seed = 1234
 np.random.seed(rand_seed)
 
 # set model pk output file path
-model_name = '{model_type}_dept{max_dept}'
+model_name = '{model_type}'
 model_pk_fpath = '{models_dir}/{model_name}_model.pkl'
 cv_sum_fpath = '{cv_results_dir}/{model_name}_cv_summary.csv'
 
@@ -152,24 +153,31 @@ model_dict={'dtree':DecisionTreeRegressor(),
 n = 30
 
 # set model parameters
-params_dict = {'dtree':{'criterion':['mse', 'friedman_mse'],
+params_dict = {'dtree':{'criterion':['mse'],
                      'splitter':['best'],
                      'min_samples_split':[2, 4, 8],
                      'min_samples_leaf':[2, 4, 8],
-                     'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4]],
+                     #'max_features':[np.int8(np.float8(n / i)) for i in [1, 2, 3, 4]],
+                     'random_state':[rand_seed],
+                     'max_depth':[None]
                      },
-               'gradboost':{'criterion':['friedman_mse', 'mse'],
-                            'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]],
-                            'n_estimators':[25, 30, 35, 40]
+               'gradboost':{'criterion':['mse'],
+                            #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
+                            'n_estimators':[25],
+                            'random_state':[rand_seed],
+                            'max_depth':[8]
                             },
                'knn':{'n_neighbors':[3, 4, 5, 6, 7],
                       'weights':['uniform', 'distance'],
                       'algorithm':['auto'],
-                      'p':[1, 2, 3, 4]
+                      'p':[1, 2, 3, 4],
+                      'random_state':[rand_seed]
                       },
                'randforest':{'criterion':['mse'],
-                             'n_estimators':[25, 30, 35, 40],
-                             'max_features':[np.int8(np.floor(n / i)) for i in [1, 2, 3, 4, 5]]
+                             'n_estimators':[25],
+                             #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
+                             'random_state':[rand_seed],
+                             'max_depth':[8]
                              }
               }
 
