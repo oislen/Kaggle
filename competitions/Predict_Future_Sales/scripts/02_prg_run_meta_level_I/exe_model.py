@@ -18,9 +18,7 @@ def exe_model(feat_imp,
               n,
               skip_train,
               model_type,
-              max_dept,
-              date,
-              rand_state
+              date
               ):
     
     """
@@ -52,9 +50,7 @@ def exe_model(feat_imp,
     n - Integer, the number of top ranked features to extract from the feature importance results
     skip_train - Boolean, whether to skip the model training set, if models are already trained from previous iteration
     model_type - String, the type of model being used to generate model predictions
-    max_dept - Integer, the maximum dept for tree based models
     date - String, the date to use when outputing model results
-    rand_state - Integer, the random seed to use for reproducabilty
     
     Returns
     
@@ -63,8 +59,6 @@ def exe_model(feat_imp,
     Example
     
     exe_model(feat_imp = 'randforest', 
-              max_dept = 3, 
-              rand_state = 1, 
               model_type = 'dtree', 
               n = 30, 
               skip_train = False, 
@@ -74,7 +68,7 @@ def exe_model(feat_imp,
     
     """
     
-    model_name = cons.model_name.format(model_type = model_type, max_dept = max_dept)
+    model_name = cons.model_name.format(model_type = model_type)
     mod_preds = cons.mod_preds.format(pred_data_dir = cons.pred_data_dir, model_name = model_name, date = date)
     model_pk_fpath = cons.model_pk_fpath.format(models_dir = cons.models_dir, model_name = model_name)
     cv_sum_fpath = cons.cv_sum_fpath.format(cv_results_dir = cons.cv_results_dir, model_name = model_name)
@@ -85,8 +79,6 @@ def exe_model(feat_imp,
     test_split_dict = cons.test_split_dict
     
     # assign additional model parameters
-    model_params['max_depth'] = [max_dept]
-    model_params['random_state'] = [rand_state]
     if model_type == 'randforest':
         model_params['n_jobs'] = [cons.n_cpu]
         
