@@ -13,8 +13,8 @@ from reference.gen_feature_selection import gen_feature_selection
 # user settings
 skip_train = False # whether to skip training and make predictions with pre-fitted models
 n = 30 # number of top ranked feature importance attributes to consdier
-start = 4 # which step to start from
-end = 4 # which step to end at
+start = 2 # which step to start from
+end = 2 # which step to end at
 date = '20200523' # set the date to output the files with
 #date = dt.datetime.today().strftime('%Y%m%d') # alternatively use todays date
 
