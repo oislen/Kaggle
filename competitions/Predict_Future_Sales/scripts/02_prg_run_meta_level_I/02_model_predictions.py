@@ -6,8 +6,7 @@ Created on Sun May 17 16:00:32 2020
 """
 
 import pandas as pd
-#import joblib as jl
-import pickle as pk
+import joblib as jl
 from reference.extract_data_splits import extract_data_splits
 
 def model_preds(data_fpath,
@@ -77,8 +76,7 @@ def model_preds(data_fpath,
     print('loading in model {} ...'.format(model_pk_fpath))
 
     # load best estimator here
-    #mod = jl.load(model_pk_fpath)
-    mod = pk.load(open(model_pk_fpath, "rb"),  encoding = "latin1")
+    mod = jl.load(model_pk_fpath)
     
     print('splitting out dataset ...')
     

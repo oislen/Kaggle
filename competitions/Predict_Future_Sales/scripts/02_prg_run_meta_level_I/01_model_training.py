@@ -9,7 +9,6 @@ import cons
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
 import joblib as jl
-import pickle as pk
 from reference.gen_cv_splits import gen_cv_splits
 from reference.gen_cv_sum import gen_cv_sum
 
@@ -128,9 +127,8 @@ def cv_model_train(data_fpath,
     
     # refit model
     bdtr = gcv.best_estimator_
-    #bdtr = bdtr.fit(X, y)
+    
     # pickle best estimator
     jl.dump(bdtr, model_pk_fpath)
-    pk.dump(bdtr, open(model_pk_fpath, "wb"), protocol = pk.HIGHEST_PROTOCOL)
     
     return 0
