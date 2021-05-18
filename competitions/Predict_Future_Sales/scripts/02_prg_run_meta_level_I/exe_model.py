@@ -99,36 +99,7 @@ def exe_model(feat_imp,
                   'kaggle_preds':kaggle_preds
                   }
     
-    
-    # TODO: functionise this
-    # set validation file path
-    preds_vs_true_fpath = '{}/{}'.format(cons.valid_preds_vs_true_dir, model_name)
-    preds_hist_fpath = '{}/{}'.format(cons.valid_preds_hist_dir, model_name)
-    preds_metrics_fpath = '{}/{}'.format(cons.valid_metrics_dir, model_name)
-
-    # set the validation output paths
-    preds_valid_rmse = '{}_valid_rmse.csv'.format(preds_metrics_fpath)
-    preds_test_rmse = '{}_test_rmse.csv'.format(preds_metrics_fpath)
-    preds_vs_true_valid = '{}_preds_vs_true_valid.png'.format(preds_vs_true_fpath)
-    preds_vs_true_test = '{}_preds_vs_true_test.png'.format(preds_vs_true_fpath)
-    true_hist_valid = '{}_true_valid.png'.format(preds_hist_fpath)
-    true_hist_test = '{}_true_test.png'.format(preds_hist_fpath)
-    preds_hist_valid = '{}_preds_valid.png'.format(preds_hist_fpath)
-    preds_hist_test = '{}_preds_test.png'.format(preds_hist_fpath)
-    preds_hist_holdout = '{}_preds_holdout.png'.format(preds_hist_fpath)
-    
-    # create a dictionary for the validation output file paths
-    valid_output_paths = {'preds_valid_rmse':preds_valid_rmse,
-                          'preds_test_rmse':preds_test_rmse,
-                          'preds_vs_true_valid':preds_vs_true_valid,
-                          'preds_vs_true_test':preds_vs_true_test,
-                          'true_hist_valid':true_hist_valid,
-                          'true_hist_test':true_hist_test,
-                          'preds_hist_valid':preds_hist_valid,
-                          'preds_hist_test':preds_hist_test,
-                          'preds_hist_holdout':preds_hist_holdout
-                          }
-    
+  
     # load in feature importance cols
     extract_feat_imp_df = extract_feat_imp(cons = cons, 
                                            feat_imp = feat_imp,
@@ -168,7 +139,7 @@ def exe_model(feat_imp,
     
     # call model validation
     model_valid.model_validation(pred_paths = pred_paths,
-                                 valid_output_paths = valid_output_paths,
+                                 valid_output_paths = cons.valid_output_paths,
                                  model_name = model_name
                                  )
     
