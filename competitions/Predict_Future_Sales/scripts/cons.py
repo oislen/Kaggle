@@ -91,6 +91,35 @@ model_data_fpath = os.path.join(model_data_dir, 'model_data.feather')
 randforest_feat_imp = os.path.join(feat_imp_dir, 'randforest_feat_imp.csv')
 gradboost_feat_imp = os.path.join(feat_imp_dir, 'gradboost_feat_imp.csv')
 
+# set validation file path
+model_name = '{model_type}'
+preds_vs_true_fpath = os.path.join(valid_preds_vs_true_dir, model_name)
+preds_hist_fpath = os.path.join(valid_preds_hist_dir, model_name)
+preds_metrics_fpath = os.path.join(valid_metrics_dir, model_name)
+
+# set the validation output paths
+preds_valid_rmse = '{preds_metrics_fpath}_valid_rmse.csv'.format(preds_metrics_fpath = preds_metrics_fpath)
+preds_test_rmse = '{preds_metrics_fpath}_test_rmse.csv'.format(preds_metrics_fpath = preds_metrics_fpath)
+preds_vs_true_valid = '{preds_vs_true_fpath}_preds_vs_true_valid.png'.format(preds_vs_true_fpath = preds_vs_true_fpath)
+preds_vs_true_test = '{preds_vs_true_fpath}_preds_vs_true_test.png'.format(preds_vs_true_fpath = preds_vs_true_fpath)
+true_hist_valid = '{preds_hist_fpath}_true_valid.png'.format(preds_hist_fpath = preds_hist_fpath)
+true_hist_test = '{preds_hist_fpath}_true_test.png'.format(preds_hist_fpath = preds_hist_fpath)
+preds_hist_valid = '{preds_hist_fpath}_preds_valid.png'.format(preds_hist_fpath = preds_hist_fpath)
+preds_hist_test = '{preds_hist_fpath}_preds_test.png'.format(preds_hist_fpath = preds_hist_fpath)
+preds_hist_holdout = '{preds_hist_fpath}_preds_holdout.png'.format(preds_hist_fpath = preds_hist_fpath)
+
+# create a dictionary for the validation output file paths
+valid_output_paths = {'preds_valid_rmse':preds_valid_rmse,
+                      'preds_test_rmse':preds_test_rmse,
+                      'preds_vs_true_valid':preds_vs_true_valid,
+                      'preds_vs_true_test':preds_vs_true_test,
+                      'true_hist_valid':true_hist_valid,
+                      'true_hist_test':true_hist_test,
+                      'preds_hist_valid':preds_hist_valid,
+                      'preds_hist_test':preds_hist_test,
+                      'preds_hist_holdout':preds_hist_holdout
+                      }
+
 # set directory to pickled test shop item id combinations
 holdout_shop_item_id_comb = os.path.join(ref_data_dir, 'holdout_shop_item_id_comb.pickle')
 
@@ -132,13 +161,14 @@ n_cpu = -1
 verbose = 3
 refit_bool = True
 max_dept = 10
+date = '20200523' # set the date to output the files with
+#date = dt.datetime.today().strftime('%Y%m%d') # alternatively use todays date
 
 # set ransom seed
 rand_seed = 1234
 np.random.seed(rand_seed)
 
 # set model pk output file path
-model_name = '{model_type}'
 model_pk_fpath = '{models_dir}/{model_name}_model.pkl'
 cv_sum_fpath = '{cv_results_dir}/{model_name}_cv_summary.csv'
 
@@ -177,7 +207,7 @@ params_dict = {'dtree':{'criterion':['mse'],
                              'n_estimators':[25],
                              #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
                              'random_state':[rand_seed],
-                             'max_depth':[10]
+                             'max_depth':[9]
                              }
               }
 
