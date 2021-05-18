@@ -52,15 +52,15 @@ def model_validation(pred_paths,
     """
     
     # extract out the validation output paths
-    preds_valid_rmse = valid_output_paths['preds_valid_rmse']
-    preds_test_rmse = valid_output_paths['preds_test_rmse']
-    preds_vs_true_valid = valid_output_paths['preds_vs_true_valid']
-    preds_vs_true_test = valid_output_paths['preds_vs_true_test']
-    true_hist_valid = valid_output_paths['true_hist_valid']
-    true_hist_test = valid_output_paths['true_hist_test']
-    preds_hist_valid = valid_output_paths['preds_hist_valid']
-    preds_hist_test = valid_output_paths['preds_hist_test']
-    preds_hist_holdout = valid_output_paths['preds_hist_holdout']
+    preds_valid_rmse = valid_output_paths['preds_valid_rmse'].format(model_type = model_name)
+    preds_test_rmse = valid_output_paths['preds_test_rmse'].format(model_type = model_name)
+    preds_vs_true_valid = valid_output_paths['preds_vs_true_valid'].format(model_type = model_name)
+    preds_vs_true_test = valid_output_paths['preds_vs_true_test'].format(model_type = model_name)
+    true_hist_valid = valid_output_paths['true_hist_valid'].format(model_type = model_name)
+    true_hist_test = valid_output_paths['true_hist_test'].format(model_type = model_name)
+    preds_hist_valid = valid_output_paths['preds_hist_valid'].format(model_type = model_name)
+    preds_hist_test = valid_output_paths['preds_hist_test'].format(model_type = model_name)
+    preds_hist_holdout = valid_output_paths['preds_hist_holdout'].format(model_type = model_name)
 
     print('Loading model predictions ...')
     
