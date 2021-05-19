@@ -14,6 +14,7 @@ import statsmodels.api as sm
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import RidgeCV, Ridge, ElasticNet, Lasso, LassoCV, LassoLarsCV
 from sklearn.model_selection import cross_val_score
+from consolidate_meta_features import consolidate_meta_features
 
 def rmse_cv(model, X_train, y):
     rmse= np.sqrt(-cross_val_score(model, X_train, y, scoring="neg_mean_squared_error", cv = 5))
@@ -21,11 +22,13 @@ def rmse_cv(model, X_train, y):
 
 #-- Consolidate Meta Features --#
 
-meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
-join_data = pd.read_feather(meta_feat_fpath)
+file = ['dtree_20200523_meta_lvl_II_feats.feather', 'gradboost_20200523_meta_lvl_II_feats.feather', 'randforest_20200523_meta_lvl_II_feats.feather']
+join_data = consolidate_meta_features(file, preds_dir = cons.pred_data_dir, meta_feat_fpath = cons.meta_feat_fpath)
+#meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
+#join_data = pd.read_feather(meta_feat_fpath)
 
 
-sns.scatterplot(x = 'gradboost_dept3_20200523', y = 'randforest_dept7_20200523', data = join_data)
+sns.scatterplot(x = 'gradboost_20200523_meta', y = 'randforest_20200523_meta', data = join_data)
 
 
 #-- Prepare modelling features --#
@@ -39,7 +42,7 @@ index_cols = ['primary_key', 'ID', 'data_split', 'meta_level', 'holdout_subset_i
               'shop_id']
 
 pred_cols = meta_cols[meta_cols.str.contains('_dept')].tolist()
-pred_cols = ['gradboost_dept3_20200523', 'randforest_dept7_20200523']
+pred_cols = ['gradboost_20200523_meta', 'randforest_20200523_meta']
 
 tar_col = ['item_cnt_day']
 
