@@ -5,30 +5,32 @@ Created on Tue May 18 07:36:53 2021
 @author: oislen
 """
 
+import os
 import cons
+import pandas as pd
 
-def consolidate_meta_features():
+def consolidate_meta_features(file, preds_dir, meta_feat_fpath):
     
     """
     """
     
-    file = ['dtree_dept3_20200523_meta_lvl_II_feats.feather',
-            'dtree_dept5_20200523_meta_lvl_II_feats.feather',
-            'dtree_dept7_20200523_meta_lvl_II_feats.feather',
-            'gradboost_dept3_20200523_meta_lvl_II_feats.feather',
-            'gradboost_dept5_20200523_meta_lvl_II_feats.feather',
-            'gradboost_dept7_20200523_meta_lvl_II_feats.feather',
-            'randforest_dept3_20200523_meta_lvl_II_feats.feather',
-            'randforest_dept5_20200523_meta_lvl_II_feats.feather',
-            'randforest_dept7_20200523_meta_lvl_II_feats.feather'
-            ]
+    #file = ['dtree_dept3_20200523_meta_lvl_II_feats.feather',
+     #       'dtree_dept5_20200523_meta_lvl_II_feats.feather',
+     #       'dtree_dept7_20200523_meta_lvl_II_feats.feather',
+     #       'gradboost_dept3_20200523_meta_lvl_II_feats.feather',
+     #       'gradboost_dept5_20200523_meta_lvl_II_feats.feather',
+     #       'gradboost_dept7_20200523_meta_lvl_II_feats.feather',
+     #       'randforest_dept3_20200523_meta_lvl_II_feats.feather',
+     #       'randforest_dept5_20200523_meta_lvl_II_feats.feather',
+     #       'randforest_dept7_20200523_meta_lvl_II_feats.feather'
+     #       ]
  
     for idx, f in enumerate(file):
         
         # extract out attr name
         attr_name = '_'.join(f.split('_')[0:3])
         
-        preds_fpath = '{}{}'.format(cons.preds_dir, f)
+        preds_fpath = os.path.join(preds_dir, f)
         
         data = pd.read_feather(preds_fpath)
         
@@ -47,5 +49,6 @@ def consolidate_meta_features():
         join_data = join_data.merge(preds_data, on = ['primary_key'], how = 'inner')
     
     # output meta feature
-    meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
     join_data.to_feather(meta_feat_fpath)
+    
+    return join_data
