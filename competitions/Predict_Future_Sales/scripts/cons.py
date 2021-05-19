@@ -24,10 +24,10 @@ unzip_data = True
 del_zip = True
 
 # set project directories
-git_dir = 'C:/Users/User/Documents/GitHub'
+git_dir = 'C:\\Users\\User\\Documents\\GitHub'
 #git_dir = '/run'
 root_dir = os.path.join(git_dir, 'Kaggle')
-comp_dir = os.path.join(root_dir, 'competitions/Predict_Future_Sales')
+comp_dir = os.path.join(root_dir, 'competitions\\Predict_Future_Sales')
 data_dir = os.path.join(comp_dir, 'data')
 scripts_dir = os.path.join(comp_dir, 'scripts')
 reports_dir = os.path.join(comp_dir, 'report')
@@ -91,6 +91,9 @@ model_data_fpath = os.path.join(model_data_dir, 'model_data.feather')
 randforest_feat_imp = os.path.join(feat_imp_dir, 'randforest_feat_imp.csv')
 gradboost_feat_imp = os.path.join(feat_imp_dir, 'gradboost_feat_imp.csv')
 
+# set location to save meta level features
+meta_feat_fpath = os.path.join(model_data_dir, 'meta_feats.feather')
+
 # set validation file path
 model_name = '{model_type}'
 preds_vs_true_fpath = os.path.join(valid_preds_vs_true_dir, model_name)
@@ -125,10 +128,11 @@ holdout_shop_item_id_comb = os.path.join(ref_data_dir, 'holdout_shop_item_id_com
 
 # script directories
 prg_run_meta_level_I = os.path.join(scripts_dir, '02_prg_run_meta_level_I')
+prg_run_meta_level_II = os.path.join(scripts_dir, '03_prg_run_meta_level_II')
 meta_level_I_reference_path = os.path.join(prg_run_meta_level_I, 'reference')
 
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_meta_level_I, meta_level_I_reference_path]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, prg_run_meta_level_I, meta_level_I_reference_path, prg_run_meta_level_II]:
     sys.path.append(p)
 
 ######################
