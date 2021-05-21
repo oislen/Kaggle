@@ -64,19 +64,20 @@ def plot_preds_hist(dataset,
     data = dataset.copy(True)
     
     # create a hist of pred distribution
-    sns.distplot(a = data[pred], 
-                 bins = bins, 
-                 kde = kde
-                 )
+    sns_plot = sns.histplot(data = data[pred], 
+                            bins = bins, 
+                            kde = kde
+                            )
     
     # add the model name to the plot as a title
-    plt.title(model_name)
+    sns_plot.set(title = model_name)
     
     # if outputting the plot
     if out_fpath != None:
         
         # write to the file path as a .png
-        plt.savefig(out_fpath)
+        print(out_fpath)
+        sns_plot.figure.savefig(out_fpath)
         
     # print the plot
     plt.show() 

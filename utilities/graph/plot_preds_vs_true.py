@@ -59,19 +59,20 @@ def plot_preds_vs_true(dataset,
      data = dataset.copy(True)
      
      # create the initial scatter plot of predicitons vs true observations
-     sns.scatterplot(x = tar, 
-                     y = pred, 
-                     data = data
-                     )
+     sns_plot = sns.scatterplot(x = tar, 
+                                y = pred, 
+                                data = data
+                                )
      
      # add the model name as a title for the plot
-     plt.title(model_name)
+     sns_plot.set(title = model_name)
      
      # if outputting the plot
      if out_fpath != None:
          
          # write to the specified file path as a .png file
-         plt.savefig(out_fpath)
+         print(out_fpath)
+         sns_plot.figure.savefig(out_fpath)
          
     # print the ploe
      plt.show() 
