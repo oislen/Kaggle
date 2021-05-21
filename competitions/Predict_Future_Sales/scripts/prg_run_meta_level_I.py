@@ -11,9 +11,9 @@ from exe_model import exe_model
 from reference.gen_feature_selection import gen_feature_selection
 
 # user True
-skip_train = True # whether to skip training and make predictions with pre-fitted models
+skip_train = False # whether to skip training and make predictions with pre-fitted models
 n = 30 # number of top ranked feature importance attributes to consdier
-start = 2 # which step to start from
+start = 5 # which step to start from
 end = 5 # which step to end at
 
 # generate the run range
