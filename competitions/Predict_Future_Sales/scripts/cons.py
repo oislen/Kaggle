@@ -84,14 +84,10 @@ base_agg_totl_fpath = os.path.join(base_data_dir, 'base_totl_data.feather')
 base_agg_shft_fpath = os.path.join(base_data_dir, 'base_shft_data.feather')
 base_agg_supp_fpath = os.path.join(base_data_dir, 'base_supp_data.feather')
 
-# set model data file path
+# set model data file paths
 model_data_fpath = os.path.join(model_data_dir, 'model_data.feather')
-
-# set feature importance paths
 randforest_feat_imp = os.path.join(feat_imp_dir, 'randforest_feat_imp.csv')
 gradboost_feat_imp = os.path.join(feat_imp_dir, 'gradboost_feat_imp.csv')
-
-# set location to save meta level features
 meta_feat_fpath = os.path.join(model_data_dir, 'meta_feats.feather')
 
 # set validation file path
@@ -99,8 +95,9 @@ model_name = '{model_type}'
 preds_vs_true_fpath = os.path.join(valid_preds_vs_true_dir, model_name)
 preds_hist_fpath = os.path.join(valid_preds_hist_dir, model_name)
 preds_metrics_fpath = os.path.join(valid_metrics_dir, model_name)
+mod_preds_fpath = os.path.join(pred_data_dir, model_name)
 
-# set the validation output paths
+# set the validation output paths and set the prediction output paths
 preds_valid_rmse = '{preds_metrics_fpath}_valid_rmse.csv'.format(preds_metrics_fpath = preds_metrics_fpath)
 preds_test_rmse = '{preds_metrics_fpath}_test_rmse.csv'.format(preds_metrics_fpath = preds_metrics_fpath)
 preds_vs_true_valid = '{preds_vs_true_fpath}_preds_vs_true_valid.png'.format(preds_vs_true_fpath = preds_vs_true_fpath)
@@ -110,9 +107,14 @@ true_hist_test = '{preds_hist_fpath}_true_test.png'.format(preds_hist_fpath = pr
 preds_hist_valid = '{preds_hist_fpath}_preds_valid.png'.format(preds_hist_fpath = preds_hist_fpath)
 preds_hist_test = '{preds_hist_fpath}_preds_test.png'.format(preds_hist_fpath = preds_hist_fpath)
 preds_hist_holdout = '{preds_hist_fpath}_preds_holdout.png'.format(preds_hist_fpath = preds_hist_fpath)
+y_valid_preds_path = '{mod_preds_fpath}_valid.feather'.format(mod_preds_fpath = mod_preds_fpath)
+y_test_preds_path = '{mod_preds_fpath}_test.feather'.format(mod_preds_fpath = mod_preds_fpath)
+y_holdout_preds_path = '{mod_preds_fpath}_holdout.feather'.format(mod_preds_fpath = mod_preds_fpath)
+meta_lvl_II_feats_path = '{mod_preds_fpath}_meta_lvl_II_feats.feather'.format(mod_preds_fpath = mod_preds_fpath)
+kaggle_preds = '{mod_preds_fpath}.csv'.format(mod_preds_fpath = mod_preds_fpath)
 
 # create a dictionary for the validation output file paths
-valid_output_paths = {'preds_valid_rmse':preds_valid_rmse,
+result_output_paths = {'preds_valid_rmse':preds_valid_rmse,
                       'preds_test_rmse':preds_test_rmse,
                       'preds_vs_true_valid':preds_vs_true_valid,
                       'preds_vs_true_test':preds_vs_true_test,
@@ -120,8 +122,17 @@ valid_output_paths = {'preds_valid_rmse':preds_valid_rmse,
                       'true_hist_test':true_hist_test,
                       'preds_hist_valid':preds_hist_valid,
                       'preds_hist_test':preds_hist_test,
-                      'preds_hist_holdout':preds_hist_holdout
+                      'preds_hist_holdout':preds_hist_holdout,
+                      'y_valid_preds_path':y_valid_preds_path,
+                      'y_test_preds_path':y_test_preds_path,
+                      'y_holdout_preds_path':y_holdout_preds_path,
+                      'meta_lvl_II_feats_path':meta_lvl_II_feats_path,
+                      'kaggle_preds':kaggle_preds
                       }
+    
+# set model pk output file path
+model_pk_fpath = '{models_dir}/{model_name}_model.pkl'
+cv_sum_fpath = '{cv_results_dir}/{model_name}_cv_summary.csv'
 
 # set directory to pickled test shop item id combinations
 holdout_shop_item_id_comb = os.path.join(ref_data_dir, 'holdout_shop_item_id_comb.pickle')
@@ -165,16 +176,10 @@ n_cpu = -1
 verbose = 3
 refit_bool = True
 max_dept = 10
-date = '20200523' # set the date to output the files with
-#date = dt.datetime.today().strftime('%Y%m%d') # alternatively use todays date
 
 # set ransom seed
 rand_seed = 1234
 np.random.seed(rand_seed)
-
-# set model pk output file path
-model_pk_fpath = '{models_dir}/{model_name}_model.pkl'
-cv_sum_fpath = '{cv_results_dir}/{model_name}_cv_summary.csv'
 
 # assign decision tree regressor
 model_dict={'dtree':DecisionTreeRegressor(),
@@ -222,6 +227,3 @@ train_cv_split_dict = [{'train_sub':28, 'valid_sub':29}]
 
 # set the train, valid and test sub limits
 test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
-
-# set predictions
-mod_preds = '{pred_data_dir}/{model_name}_{date}'
