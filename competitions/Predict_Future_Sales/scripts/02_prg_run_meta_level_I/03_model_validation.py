@@ -5,17 +5,13 @@ Created on Sun May 17 12:27:58 2020
 @author: oislen
 """
 
-import os
 import cons
 import pandas as pd
 from calc_rmse import calc_rmse
 from plot_preds_vs_true import plot_preds_vs_true
-from hist import hist
+from plot_preds_hist import plot_preds_hist
 
-def model_validation(pred_paths, 
-                     valid_output_paths,
-                     model_name
-                     ):
+def model_validation(model_name):
     
     """
     
@@ -27,15 +23,13 @@ def model_validation(pred_paths,
     
     Defaults
     
-    model_validation(pred_paths, 
-                     valid_output_paths,
+    model_validation(mod_preds, 
                      model_name
                      )
 
     Parameters
     
-    pred_paths - Dictionary, the input file paths for the validation, test set, hold out set predictions
-    valid_output_paths - Dictionary, the output file paths for the validation, test set and holdout set validation results
+    mod_preds - String, the input file paths for the validation, test set, hold out set predictions
     model_name - String, the name of the model to use when output the validation results
     
     Returns
@@ -44,30 +38,27 @@ def model_validation(pred_paths,
     
     Example
     
-    model_validation(pred_paths = pred_paths, 
-                     valid_output_paths = valid_output_paths,
+    model_validation(mod_preds = mod_preds, 
                      model_name = model_name
                      )
 
     """
     
-    # extract out the validation output paths
-    preds_valid_rmse = valid_output_paths['preds_valid_rmse'].format(model_type = model_name)
-    preds_test_rmse = valid_output_paths['preds_test_rmse'].format(model_type = model_name)
-    preds_vs_true_valid = valid_output_paths['preds_vs_true_valid'].format(model_type = model_name)
-    preds_vs_true_test = valid_output_paths['preds_vs_true_test'].format(model_type = model_name)
-    true_hist_valid = valid_output_paths['true_hist_valid'].format(model_type = model_name)
-    true_hist_test = valid_output_paths['true_hist_test'].format(model_type = model_name)
-    preds_hist_valid = valid_output_paths['preds_hist_valid'].format(model_type = model_name)
-    preds_hist_test = valid_output_paths['preds_hist_test'].format(model_type = model_name)
-    preds_hist_holdout = valid_output_paths['preds_hist_holdout'].format(model_type = model_name)
+    # extract out the validation output paths and the prediciton paths
+    preds_valid_rmse = cons.result_output_paths['preds_valid_rmse'].format(model_type = model_name)
+    preds_test_rmse = cons.result_output_paths['preds_test_rmse'].format(model_type = model_name)
+    preds_vs_true_valid = cons.result_output_paths['preds_vs_true_valid'].format(model_type = model_name)
+    preds_vs_true_test = cons.result_output_paths['preds_vs_true_test'].format(model_type = model_name)
+    true_hist_valid = cons.result_output_paths['true_hist_valid'].format(model_type = model_name)
+    true_hist_test = cons.result_output_paths['true_hist_test'].format(model_type = model_name)
+    preds_hist_valid = cons.result_output_paths['preds_hist_valid'].format(model_type = model_name)
+    preds_hist_test = cons.result_output_paths['preds_hist_test'].format(model_type = model_name)
+    preds_hist_holdout = cons.result_output_paths['preds_hist_holdout'].format(model_type = model_name)
+    y_valid_preds_path = cons.result_output_paths['y_valid_preds_path'].format(model_type = model_name)
+    y_test_preds_path = cons.result_output_paths['y_test_preds_path'].format(model_type = model_name)
+    y_holdout_preds_path = cons.result_output_paths['y_holdout_preds_path'].format(model_type = model_name)
 
     print('Loading model predictions ...')
-    
-    # extract out the prediciton paths
-    y_valid_preds_path = pred_paths['y_valid_preds_path']
-    y_test_preds_path = pred_paths['y_test_preds_path']
-    y_holdout_preds_path = pred_paths['y_holdout_preds_path']
     
     # load in the predictions
     y_valid = pd.read_feather(y_valid_preds_path)
@@ -106,10 +97,10 @@ def model_validation(pred_paths,
     print('Plotting predictions histograms ...')
     
     # create a hist of pred distribution
-    hist(dataset = y_valid, num_var = ['item_cnt_day'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(true_hist_valid), output_fname = os.path.basename(true_hist_valid))
-    hist(dataset = y_test, num_var = ['item_cnt_day'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(true_hist_test), output_fname = os.path.basename(true_hist_test))
-    hist(dataset = y_valid, num_var = ['y_valid_pred'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(preds_hist_valid), output_fname = os.path.basename(preds_hist_valid))
-    hist(dataset = y_test, num_var = ['y_test_pred'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(preds_hist_test), output_fname = os.path.basename(preds_hist_test))
-    hist(dataset = y_holdout, num_var = ['y_holdout_pred'], bins = cons.bins, kde = cons.kde, title = model_name, output_dir = os.path.dirname(preds_hist_holdout), output_fname = os.path.basename(preds_hist_holdout))
+    plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', bins = cons.bins, kde = cons.kde, model_name = model_name, out_fpath = true_hist_valid)
+    plot_preds_hist(dataset = y_test, pred = 'item_cnt_day', bins = cons.bins, kde = cons.kde, model_name = model_name, out_fpath = true_hist_test)
+    plot_preds_hist(dataset = y_valid, pred = 'y_valid_pred', bins = cons.bins, kde = cons.kde, model_name = model_name, out_fpath = preds_hist_valid)
+    plot_preds_hist(dataset = y_test, pred = 'y_test_pred', bins = cons.bins, kde = cons.kde, model_name = model_name, out_fpath = preds_hist_test)
+    plot_preds_hist(dataset = y_holdout, pred = 'y_holdout_pred', bins = cons.bins, kde = cons.kde, model_name = model_name, out_fpath = preds_hist_holdout)
     
     return 0

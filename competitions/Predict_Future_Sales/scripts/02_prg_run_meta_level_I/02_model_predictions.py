@@ -5,6 +5,7 @@ Created on Sun May 17 16:00:32 2020
 @author: oislen
 """
 
+import cons
 import pandas as pd
 import joblib as jl
 from reference.extract_data_splits import extract_data_splits
@@ -16,7 +17,7 @@ def model_preds(data_fpath,
                 tar_cols,
                 pred_cols,
                 test_split_dict,
-                pred_paths
+                model_name
                 ):
     
     """
@@ -36,7 +37,8 @@ def model_preds(data_fpath,
                 tar_cols,
                 pred_cols,
                 test_split_dict,
-                pred_paths
+                pred_paths,
+                model_name
                 )
     
     Parameters
@@ -48,7 +50,7 @@ def model_preds(data_fpath,
     tar_cols - List of Strings, the target columns of the base data
     pred_cosl - List of Strings, the predictor columns of the base data
     test_split_dict - Dictionary, the train, validation and test splitting configurations for the modelling data
-    pred_paths - Dictionary, the output file paths for the validation, test set, hold out set and meta level II set predictions
+    model_name - String, the name of the model
     
     Returns
     
@@ -62,8 +64,7 @@ def model_preds(data_fpath,
                 req_cols = req_cols,
                 tar_cols = tar_cols,
                 pred_cols = pred_cols,
-                test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33},
-                pred_paths = pred_paths
+                test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
                 )
     
     """
@@ -115,10 +116,10 @@ def model_preds(data_fpath,
     print('outputting predctions ..')
     
     # extract out the prediciton paths
-    y_valid_preds_path = pred_paths['y_valid_preds_path']
-    y_test_preds_path = pred_paths['y_test_preds_path']
-    y_holdout_preds_path = pred_paths['y_holdout_preds_path']
-    meta_lvl_II_feats_path = pred_paths['meta_lvl_II_feats_path']
+    y_valid_preds_path = cons.result_output_paths['y_valid_preds_path'].format(model_type = model_name)
+    y_test_preds_path = cons.result_output_paths['y_test_preds_path'].format(model_type = model_name)
+    y_holdout_preds_path = cons.result_output_paths['y_holdout_preds_path'].format(model_type = model_name)
+    meta_lvl_II_feats_path = cons.result_output_paths['meta_lvl_II_feats_path'].format(model_type = model_name)
     
     # output predictions
     y_valid.reset_index(drop = True).to_feather(y_valid_preds_path)

@@ -17,8 +17,7 @@ kaggl_pred = import_module(name = '04_format_kaggle_preds')
 def exe_model(feat_imp,
               n,
               skip_train,
-              model_type,
-              date
+              model_type
               ):
     
     """
@@ -39,9 +38,7 @@ def exe_model(feat_imp,
               n,
               skip_train,
               model_type,
-              max_dept,
-              date,
-              rand_state
+              max_dept
               )
     
     Parameters
@@ -50,7 +47,6 @@ def exe_model(feat_imp,
     n - Integer, the number of top ranked features to extract from the feature importance results
     skip_train - Boolean, whether to skip the model training set, if models are already trained from previous iteration
     model_type - String, the type of model being used to generate model predictions
-    date - String, the date to use when outputing model results
     
     Returns
     
@@ -61,15 +57,13 @@ def exe_model(feat_imp,
     exe_model(feat_imp = 'randforest', 
               model_type = 'dtree', 
               n = 30, 
-              skip_train = False, 
-              date = '20200502'
+              skip_train = False
               )
         
     
     """
     
     model_name = cons.model_name.format(model_type = model_type)
-    mod_preds = cons.mod_preds.format(pred_data_dir = cons.pred_data_dir, model_name = model_name, date = date)
     model_pk_fpath = cons.model_pk_fpath.format(models_dir = cons.models_dir, model_name = model_name)
     cv_sum_fpath = cons.cv_sum_fpath.format(cv_results_dir = cons.cv_results_dir, model_name = model_name)
     model = cons.model_dict[model_type]
@@ -81,25 +75,7 @@ def exe_model(feat_imp,
     # assign additional model parameters
     if model_type == 'randforest':
         model_params['n_jobs'] = [cons.n_cpu]
-        
     
-    # TODO functionise this 
-    # set the prediction output paths
-    y_valid_preds_path = '{}_valid.feather'.format(mod_preds)
-    y_test_preds_path = '{}_test.feather'.format(mod_preds)
-    y_holdout_preds_path = '{}_holdout.feather'.format(mod_preds)
-    meta_lvl_II_feats_path = '{}_meta_lvl_II_feats.feather'.format(mod_preds)
-    kaggle_preds = '{}.csv'.format(mod_preds)
-    
-    # set final predictions
-    pred_paths = {'y_valid_preds_path':y_valid_preds_path,
-                  'y_test_preds_path':y_test_preds_path,
-                  'y_holdout_preds_path':y_holdout_preds_path,
-                  'meta_lvl_II_feats_path':meta_lvl_II_feats_path,
-                  'kaggle_preds':kaggle_preds
-                  }
-    
-  
     # load in feature importance cols
     extract_feat_imp_df = extract_feat_imp(cons = cons, 
                                            feat_imp = feat_imp,
@@ -134,16 +110,13 @@ def exe_model(feat_imp,
                            tar_cols = tar_cols,
                            pred_cols = pred_cols,
                            test_split_dict = test_split_dict,
-                           pred_paths = pred_paths
+                           model_name = model_name
                            )
     
     # call model validation
-    model_valid.model_validation(pred_paths = pred_paths,
-                                 valid_output_paths = cons.valid_output_paths,
-                                 model_name = model_name
-                                 )
+    model_valid.model_validation(model_name = model_name)
     
     # call the kaggle format predictions
-    kaggl_pred.format_kaggle_preds(pred_paths = pred_paths)
+    kaggl_pred.format_kaggle_preds(model_name = model_name)
 
     return 0

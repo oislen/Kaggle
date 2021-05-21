@@ -5,9 +5,10 @@ Created on Sun May 17 12:29:39 2020
 @author: oislen
 """
 
+import cons
 import pandas as pd
 
-def format_kaggle_preds(pred_paths):
+def format_kaggle_preds(model_name):
     
     """
     
@@ -19,11 +20,11 @@ def format_kaggle_preds(pred_paths):
     
     Defaults
     
-    format_kaggle_preds(pred_paths)
+    format_kaggle_preds(model_name)
     
     Paraemeters
     
-    pred_paths - String, the full file path to the hold out predictions
+    model_name - String, the name of the model
     
     Returns
     
@@ -31,13 +32,13 @@ def format_kaggle_preds(pred_paths):
     
     Example
     
-    format_kaggle_preds(pred_paths = pred_paths)
+    format_kaggle_preds(model_name = model_name)
     
     """
     
     # extract out the prediciton paths
-    y_holdout_preds_path = pred_paths['y_holdout_preds_path']
-    kaggle_preds = pred_paths['kaggle_preds']
+    y_holdout_preds_path = cons.result_output_paths['y_holdout_preds_path'].format(model_type = model_name)
+    kaggle_preds = cons.result_output_paths['kaggle_preds'].format(model_type = model_name)
     
     # load in holdout predictions
     y_holdout = pd.read_feather(y_holdout_preds_path)
