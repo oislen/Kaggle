@@ -5,84 +5,57 @@ Created on Sun May 24 16:21:45 2020
 @author: oislen
 """
 
+# load in relevant libraries
 import cons
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import numpy as np
 import statsmodels.api as sm
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.linear_model import RidgeCV, Ridge, ElasticNet, Lasso, LassoCV, LassoLarsCV
-from sklearn.model_selection import cross_val_score
 from consolidate_meta_features import consolidate_meta_features
+from plot_preds_hist import plot_preds_hist
 
-def rmse_cv(model, X_train, y):
-    rmse= np.sqrt(-cross_val_score(model, X_train, y, scoring="neg_mean_squared_error", cv = 5))
-    return(rmse)
-
+#################################
 #-- Consolidate Meta Features --#
+#################################
 
 # set models to load in 
-models = ['dtree', 'gradboost', 'randforest']
+models = ['gradboost', 'randforest']
 
 # create the input file names
-file = ['{model}_meta_lvl_II_feats.feather'.format(model = model) for model in models]
+preds_fnames = ['{model}_meta_lvl_II_feats.feather'.format(model = model) for model in models]
 
-join_data = consolidate_meta_features(file, preds_dir = cons.pred_data_dir, meta_feat_fpath = cons.meta_feat_fpath)
-#meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
-#join_data = pd.read_feather(meta_feat_fpath)
+# generate the consolidated features from the meta-level I prediction models
+join_data = consolidate_meta_features(preds_fnames = preds_fnames, 
+                                      preds_dir = cons.pred_data_dir, 
+                                      meta_feat_fpath = cons.meta_feat_fpath
+                                      )
 
 
-sns.scatterplot(x = 'gradboost_20200523_meta', y = 'randforest_20200523_meta', data = join_data)
-
-
+##################################
 #-- Prepare modelling features --#
+##################################
 
 # extract out columns
 meta_cols = join_data.columns
 
-
-index_cols = ['primary_key', 'ID', 'data_split', 'meta_level', 'holdout_subset_ind',
-              'no_sales_hist_ind', 'year', 'month', 'date_block_num', 'item_id',
-              'shop_id']
-
-pred_cols = meta_cols[meta_cols.str.contains('_dept')].tolist()
-pred_cols = ['gradboost_20200523_meta', 'randforest_20200523_meta']
-
+# generate the relevant groups of columns / attributes
 tar_col = ['item_cnt_day']
+index_cols = [col for col in cons.meta_level_II_base_cols if col not in tar_col]
+pred_cols = [col for col in meta_cols if col not in tar_col + index_cols]
 
-# transform columns
-trans_cols = pred_cols + tar_col
-
-# generate histograms
-for pred in pred_cols:
-    sns.distplot(a = join_data[pred], bins = 100, kde = False)
-    plt.show()
-
-# apply log transformation
-prep_data = join_data.copy(True)
-prep_data[pred_cols] = (prep_data[pred_cols] + 1) ** (1/10000)
-
-# normalise to mean 0 and standard deviation 1
-prep_data[pred_cols] = (prep_data[pred_cols] - prep_data[pred_cols].mean()) / prep_data[pred_cols].std()
-
-# generate histograms
-for pred in pred_cols:
-    sns.distplot(a = prep_data[pred], bins = 100, kde = False)
-    plt.show()
-
+##################
 #-- Split Data --#
+##################
+
+# create filter conditions to split out data
+filt_train = join_data['date_block_num'].isin([30, 31])
+filt_valid = join_data['date_block_num'].isin([32])
+filt_test = join_data['date_block_num'].isin([33])
+filt_holdout = join_data['date_block_num'].isin([34])
 
 # split into train, valid, test and holdout
-filt_train = prep_data['date_block_num'].isin([30, 31])
-filt_valid = prep_data['date_block_num'].isin([32])
-filt_test = prep_data['date_block_num'].isin([33])
-filt_holdout = prep_data['date_block_num'].isin([34])
-
-train = prep_data[filt_train]
-valid = prep_data[filt_valid]
-test = prep_data[filt_test]
-holdout = prep_data[filt_holdout]
+train = join_data[filt_train]
+valid = join_data[filt_valid]
+test = join_data[filt_test]
+holdout = join_data[filt_holdout]
 
 # split up train, valid, test and holdout into X and y
 X_train = train[index_cols + pred_cols]
@@ -94,27 +67,9 @@ y_test = test[index_cols + tar_col]
 X_holdout = holdout[index_cols + pred_cols]
 y_holdout = holdout[index_cols + tar_col]
 
+#############################
 #-- Create Level II Model --#
-
-# ridge regression
-# tune alphas
-model_ridge = Ridge()
-model_lasso = LassoCV(alphas = [1, 0.1, 0.001, 0.0005]).fit(X_train[pred_cols], y_train['item_cnt_day'])
-alphas_ridge = list(np.arange(0,20000, 500))
-#alphas_lasso = list(np.arange(0.001, 1, 0.01))
-cv_ridge = [rmse_cv(Ridge(alpha = alpha), X_train[pred_cols], y_train['item_cnt_day']).mean() for alpha in alphas_ridge]
-#cv_lasso = [rmse_cv(Lasso(alpha = alpha), X_train[pred_cols], y_train['item_cnt_day']).mean() for alpha in alphas_lasso]
-#rmse_cv(model_lasso, X_train[pred_cols], y_train['item_cnt_day']).mean()
-# plot results
-cv_ridge = pd.Series(cv_ridge, index = alphas_ridge)
-#cv_lasso = pd.Series(cv_lasso, index = alphas_lasso)
-cv_ridge.plot(title = "Validation - Just Do It")
-plt.xlabel("alpha")
-plt.ylabel("rmse")
-cv_ridge.min()
-#cv_lasso.min()
-model = Ridge(alpha = cv_ridge.idxmin())
-model.fit(X_train[pred_cols], y_train['item_cnt_day'])
+#############################
 
 # poisson model
 pois_fam =sm.families.Poisson()
@@ -122,10 +77,6 @@ model = sm.GLM(endog = y_train['item_cnt_day'], exog = X_train[pred_cols], famil
 model = model.fit()
 model.params
 model.summary()
-
-# dtree model
-model = DecisionTreeRegressor(criterion = 'mse',splitter = 'best')
-model.fit(X = X_train[pred_cols], y = y_train['item_cnt_day'])
 
 # make predictions
 y_valid['meta_lvl_II_preds'] = model.predict(X_valid[pred_cols])
@@ -138,20 +89,18 @@ y_test['meta_lvl_II_preds'] = y_test['meta_lvl_II_preds'].apply(lambda x: 0 if x
 y_holdout['meta_lvl_II_preds'] = y_holdout['meta_lvl_II_preds'].apply(lambda x: 0 if x < 0 else (20 if x > 20 else x))
 
 # plot histgrams
-sns.distplot(a = y_valid['item_cnt_day'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_valid['meta_lvl_II_preds'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_valid['item_cnt_day'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_test['meta_lvl_II_preds'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_holdout['meta_lvl_II_preds'], bins = 100, kde = False)
-plt.show()
+plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', model_name = 'poisson')
+plot_preds_hist(dataset = y_valid, pred = 'meta_lvl_II_preds', model_name = 'poisson')
+plot_preds_hist(dataset = y_test, pred = 'meta_lvl_II_preds', model_name = 'poisson')
+plot_preds_hist(dataset = y_holdout, pred = 'meta_lvl_II_preds', model_name = 'poisson')
 
-# output results
-submission = pd.DataFrame({"ID": y_holdout['ID'].astype(int), "item_cnt_month": y_holdout['meta_lvl_II_preds'].rename({'meta_lvl_II_preds':'item_cnt_month'})})
-submission = submission.sort_values(by = ['ID']).round()
+# create the output results dictionary
+sub_dict = {"ID": y_holdout['ID'].astype(int), 
+            "item_cnt_month": y_holdout['meta_lvl_II_preds'].rename({'meta_lvl_II_preds':'item_cnt_month'})
+            }
 
-submission.to_csv('C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/pred/stackmodel20200524.csv', index=False)
+# convert dictionary to dataframe
+submission = pd.DataFrame(sub_dict).sort_values(by = ['ID'])
 
+# write output predictions to a .csv file
+submission.to_csv(cons.meta_level_II_preds_fpath, index = False)
