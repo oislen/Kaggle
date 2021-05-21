@@ -22,7 +22,12 @@ def rmse_cv(model, X_train, y):
 
 #-- Consolidate Meta Features --#
 
-file = ['dtree_20200523_meta_lvl_II_feats.feather', 'gradboost_20200523_meta_lvl_II_feats.feather', 'randforest_20200523_meta_lvl_II_feats.feather']
+# set models to load in 
+models = ['dtree', 'gradboost', 'randforest']
+
+# create the input file names
+file = ['{model}_meta_lvl_II_feats.feather'.format(model = model) for model in models]
+
 join_data = consolidate_meta_features(file, preds_dir = cons.pred_data_dir, meta_feat_fpath = cons.meta_feat_fpath)
 #meta_feat_fpath = 'C:/Users/User/Documents/GitHub/Kaggle/Predict_Future_Sales/data/model/meta_feats.feather'
 #join_data = pd.read_feather(meta_feat_fpath)
