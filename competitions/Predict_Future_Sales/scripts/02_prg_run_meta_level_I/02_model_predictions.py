@@ -104,14 +104,13 @@ def model_preds(data_fpath,
 
     print(X_valid[pred_cols].head())
     print(y_test.head())
-
     print(pred_cols)
     
     # make predictions for valid, test, holdout and meta lvl II
-    y_valid['y_valid_pred'] = mod.predict(X_valid[pred_cols])
-    y_test['y_test_pred'] = mod.predict(X_test[pred_cols])
-    y_holdout['y_holdout_pred'] = mod.predict(X_holdout[pred_cols])
-    y_meta_lvl_II['y_meta_lvl_I_pred'] = mod.predict(X_meta_lvl_II[pred_cols])
+    y_valid['y_valid_pred'] = mod.predict(X_valid[pred_cols]).clip(cons.lower_bound, cons.upper_bound)
+    y_test['y_test_pred'] = mod.predict(X_test[pred_cols]).clip(cons.lower_bound, cons.upper_bound)
+    y_holdout['y_holdout_pred'] = mod.predict(X_holdout[pred_cols]).clip(cons.lower_bound, cons.upper_bound)
+    y_meta_lvl_II['y_meta_lvl_I_pred'] = mod.predict(X_meta_lvl_II[pred_cols]).clip(cons.lower_bound, cons.upper_bound)
     
     print('outputting predctions ..')
     
