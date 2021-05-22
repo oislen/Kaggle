@@ -16,6 +16,7 @@ from sklearn.linear_model import RidgeCV, Ridge, ElasticNet, Lasso, LassoCV, Las
 from sklearn.model_selection import cross_val_score
 from consolidate_meta_features import consolidate_meta_features
 from rmse_cv import rmse_cv
+from plot_preds_hist import plot_preds_hist
 
 # generate the consolidated features from the meta-level I prediction models
 join_data = pd.read_feather(cons.meta_feat_fpath)
@@ -44,7 +45,7 @@ trans_cols = pred_cols + tar_col
 
 # apply log transformation
 prep_data = join_data.copy(True)
-prep_data['gradboost'] = prep_data['gradboost'].apply(lambda x: 0 if x < 0 else x)
+prep_data['gradboost'] = prep_data['gradboost'].clip(cons.lower_bound, cons.upper_bound)
 prep_data[pred_cols] = np.log1p(prep_data[pred_cols])
 
 # check for null values
@@ -123,18 +124,12 @@ y_test['meta_lvl_II_preds'] = model.predict(X_test[pred_cols])
 y_holdout['meta_lvl_II_preds'] = model.predict(X_holdout[pred_cols])
 
 # clip predictions
-y_valid['meta_lvl_II_preds'] = y_valid['meta_lvl_II_preds'].apply(lambda x: 0 if x < 0 else (20 if x > 20 else x))
-y_test['meta_lvl_II_preds'] = y_test['meta_lvl_II_preds'].apply(lambda x: 0 if x < 0 else (20 if x > 20 else x))
-y_holdout['meta_lvl_II_preds'] = y_holdout['meta_lvl_II_preds'].apply(lambda x: 0 if x < 0 else (20 if x > 20 else x))
+y_valid['meta_lvl_II_preds'] = y_valid['meta_lvl_II_preds'].clip(cons.lower_bound, cons.upper_bound)
+y_test['meta_lvl_II_preds'] = y_test['meta_lvl_II_preds'].clip(cons.lower_bound, cons.upper_bound)
+y_holdout['meta_lvl_II_preds'] = y_holdout['meta_lvl_II_preds'].clip(cons.lower_bound, cons.upper_bound)
 
 # plot histgrams
-sns.distplot(a = y_valid['item_cnt_day'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_valid['meta_lvl_II_preds'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_valid['item_cnt_day'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_test['meta_lvl_II_preds'], bins = 100, kde = False)
-plt.show()
-sns.distplot(a = y_holdout['meta_lvl_II_preds'], bins = 100, kde = False)
-plt.show()
+plot_preds_hist(dataset = y_valid, pred = 'item_cnt_day', model_name = 'poisson')
+plot_preds_hist(dataset = y_valid, pred = 'meta_lvl_II_preds', model_name = 'poisson')
+plot_preds_hist(dataset = y_test, pred = 'meta_lvl_II_preds', model_name = 'poisson')
+plot_preds_hist(dataset = y_holdout, pred = 'meta_lvl_II_preds', model_name = 'poisson')
