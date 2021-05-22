@@ -131,8 +131,8 @@ result_output_paths = {'preds_valid_rmse':preds_valid_rmse,
                       }
     
 # set model pk output file path
-model_pk_fpath = '{models_dir}/{model_name}_model.pkl'
-cv_sum_fpath = '{cv_results_dir}/{model_name}_cv_summary.csv'
+model_pk_fpath = os.path.join('{models_dir}', '{model_name}_model.pkl')
+cv_sum_fpath = os.path.join('{cv_results_dir}', '{model_name}_cv_summary.csv')
 
 # set output path for meta-level II predictions
 meta_level_II_preds_fpath = os.path.join(pred_data_dir, 'stackmodel.csv')
@@ -170,15 +170,17 @@ feat_imp_n_estimators = 20
 feat_imp_criterion = 'mse'
 feat_imp_max_features = 'auto'
 
-################
-#-- Ensemble --#
-################
+####################
+#-- Meta-Level I --#
+####################
 
 # execution constants
 n_cpu = -1
 verbose = 3
 refit_bool = True
 max_dept = 10
+lower_bound = 0
+upper_bound = 20
 
 # set ransom seed
 rand_seed = 1234
@@ -209,12 +211,6 @@ params_dict = {'dtree':{'criterion':['mse'],
                             'random_state':[rand_seed],
                             'max_depth':[7]
                             },
-               'knn':{'n_neighbors':[3, 4, 5, 6, 7],
-                      'weights':['uniform', 'distance'],
-                      'algorithm':['auto'],
-                      'p':[1, 2, 3, 4],
-                      'random_state':[rand_seed]
-                      },
                'randforest':{'criterion':['mse'],
                              'n_estimators':[25],
                              #'max_features':[np.float8(np.floor(n / i)) for i in [1, 2, 3, 4]],
@@ -231,10 +227,15 @@ train_cv_split_dict = [{'train_sub':28, 'valid_sub':29}]
 # set the train, valid and test sub limits
 test_split_dict = {'train_sub':29, 'valid_sub':32, 'test_sub':33}
 
+#####################
+#-- Meta-Level II --#
+#####################
+
 # set base columns for reading meta level II features
 meta_level_II_base_cols = ['primary_key', 'ID', 'data_split', 'meta_level', 'holdout_subset_ind',
                            'no_sales_hist_ind', 'year', 'month', 'date_block_num', 'item_id',
                            'shop_id', 'item_cnt_day']
 
 # set pred columns when reading meta level II
+meta_level_II_resp_col = ['item_cnt_day']
 meta_level_II_tar_cols = ['primary_key', 'y_meta_lvl_I_pred']
