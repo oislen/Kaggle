@@ -12,7 +12,7 @@ from get_comp_subs import get_comp_subs
 
 # submit model predictions
 sub_comp_preds(comp_name = cons.comp_name,
-               pred_data_fpath = cons.preds_data_fpath,
+               pred_data_fpath = cons.meta_level_II_preds_fpath,
                sub_mess = "testing kaggle api"
                )
 
