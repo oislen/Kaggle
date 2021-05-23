@@ -28,7 +28,14 @@ The data is initially cleaned by filling in zeros, modes and medians where appro
 
 ### Predict Future Sales <a name="competitive-data-science"></a>
 
+#### Description
+
 The code contained within this folder is responable for the [Predict Future Sales competition](https://www.kaggle.com/c/competitive-data-science-predict-future-sales). This challenge serves as the final project for the Coursera course, ["How to win a data science competition"](https://www.coursera.org/learn/competitive-data-science). The competition uses a challenging time-series dataset of daily sales data proved by [1C Company](https://1c.ru/eng/title.htm), one of the largest Russian software firms. The goal of the competition is to predict the total sales for every product and store in the next month.
+
+#### Methodology
+
+The raw data is first processed for modelling. This initially involves cleaning messy string data and down casting data types. Afterwards, the data is aggregated to shop and item level, and missing item values are back filled. Next, mean and totla shift attributes are generated for each of the past four months, and categories are mean encoded using the target column.
+Once the data has been cleaned, a random forest model and a gradient boosting model were fitted, validated and trainined using cross-validation and hyper parameter tuning. The performance of these predictions was accessed using rmse and prediction vs observed plots. The predictions of these two models were then passed to a second layer poisson model for generating the final submission kaggle file.
 
 ### Titanic <a name="titanic"></a>
 
