@@ -36,7 +36,14 @@ utilties_preproc = os.path.join(utilities_dir, 'preproc')
 
 # set data directories
 raw_data_dir = os.path.join(data_dir, 'raw')
-
+# set raw data file names
+raw_train_fname = 'train.csv'
+raw_test_fname = 'test.csv'
+raw_sampe_submissoin_fname = 'sample_submission.csv'
+# set raw file paths
+raw_train_fpath = os.path.join(raw_data_dir, raw_train_fname)
+raw_test_fpath = os.path.join(raw_data_dir, raw_test_fname)
+raw_sample_submission_fpath = os.path.join(raw_data_dir, raw_sampe_submissoin_fname)
 
 # append utilities directory to path
 for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
