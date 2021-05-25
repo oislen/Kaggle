@@ -36,4 +36,16 @@ test.isnull().sum()
 sample_submission.isnull().sum()
 
 # distinct values
-train.keyword.unique()
+train.keyword.value_counts()
+train.target.value_counts()
+train.location.value_counts()
+train.text.value_counts()
+
+# crosstabs
+crosstab_keywords_target = pd.crosstab(index = train.keyword, columns = train.target)
+crosstab_location_target = pd.crosstab(index = train.location, columns = train.target)
+crosstab_text_target = pd.crosstab(index = train.text, columns = train.target)
+
+# create custom word embeddings with word2vec (gensim)
+# GloVe (word vector embeddings)
+# lots of text cleaning (nltk?)
