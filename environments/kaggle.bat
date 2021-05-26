@@ -22,9 +22,13 @@ call conda install -c conda-forge pyarrow --yes
 call conda install -c conda-forge pygam --yes
 ::call conda install -c conda-forge mysqlalchemy --yes
 ::call conda install -c conda-forge scrapy --yes
+call conda install -c conda-forge spacy --yes
+call python -m spacy download en_core_web_sm
 
 :: pip install additional libraries
 call pip install kaggle
+call pip install nltk
+call pip install --upgrade gensim
 
 :: list all installed libraries
 call conda list
