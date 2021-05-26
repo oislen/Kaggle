@@ -28,6 +28,7 @@ data_dir = os.path.join(comp_dir, 'data')
 scripts_dir = os.path.join(comp_dir, 'scripts')
 reports_dir = os.path.join(comp_dir, 'report')
 models_dir = os.path.join(comp_dir, 'models')
+utilities_nlp = os.path.join(scripts_dir, 'utilities')
 utilities_dir = os.path.join(root_dir, 'utilities')
 utilities_comp = os.path.join(utilities_dir, 'comp')
 utilities_graph = os.path.join(utilities_dir, 'graph')
@@ -46,7 +47,7 @@ raw_test_fpath = os.path.join(raw_data_dir, raw_test_fname)
 raw_sample_submission_fpath = os.path.join(raw_data_dir, raw_sampe_submissoin_fname)
 
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, utilities_nlp]:
     sys.path.append(p)
 
 ######################
