@@ -50,6 +50,23 @@ raw_sample_submission_fpath = os.path.join(raw_data_dir, raw_sampe_submissoin_fn
 for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, utilities_nlp]:
     sys.path.append(p)
 
+##########################
+#-- Cleaning Constants --#
+##########################
+
+# set normalisation constants
+norm_configs = {'remove_bracket':True,
+                'remove_currency':True,
+                'remove_digit':True,
+                'remove_email':True,
+                'remove_num':True,
+                'remove_punct':True,
+                'remove_quote':True,
+                'remove_stop':True,
+                'remove_space':True,
+                'remove_url':True
+                }
+
 ######################
 #-- Plot Constants --#
 ######################
