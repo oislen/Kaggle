@@ -56,6 +56,6 @@ def lda_topic_prob(string_input,
     preds = lda_model[string_input_corpus]
     
     # extract out the probabilities associate with each topic
-    preds_out = [tup[1] for tup in preds]
+    #preds_out = [tup[1] for tup in preds]
     
-    return preds_out
+    return preds

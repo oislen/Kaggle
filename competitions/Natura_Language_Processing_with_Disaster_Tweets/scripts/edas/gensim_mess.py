@@ -83,13 +83,7 @@ string_input = data['text_clean_bigram'][1]
 lda_topic_prob(string_input, input_data, lda_model)
 
 # predict for all strings
-string_preds_list = {val:lda_topic_prob(val, input_data, lda_model) for idx, val in enumerate(data['text_clean_bigram'])}
-
-# convert output to df
-string_preds_df = pd.DataFrame.from_dict(string_preds_list, orient = 'index')
-
-# reset index and assign text as additional column
-string_preds_df.reset_index().rename(columns = {'index':'text'})
+data['lda_topic_prob'] = data['text_clean_bigram'].apply(lambda x: lda_topic_prob(x, input_data, lda_model))
 
 #-- Word2Vec Embeddings --#
 
