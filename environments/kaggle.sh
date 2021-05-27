@@ -15,7 +15,7 @@ conda install -c conda-forge statsmodels --yes
 conda install -c conda-forge scikit-learn --yes
 conda install -c conda-forge matplotlib --yes
 conda install -c conda-forge seaborn --yes
-#conda install -c conda-forge keras --yes
+conda install -c conda-forge keras --yes
 conda install -c conda-forge spyder --yes
 conda install -c conda-forge notebook --yes
 conda install -c conda-forge pyarrow --yes
