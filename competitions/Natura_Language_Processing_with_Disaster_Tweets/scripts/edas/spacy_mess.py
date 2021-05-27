@@ -13,6 +13,7 @@ import spacy
 import cons
 import pandas as pd
 import numpy as np
+from normalise_tweet import normalise_tweet
 
 # load in the raw data files
 train = pd.read_csv(cons.raw_train_fpath)
@@ -54,3 +55,21 @@ token_attributes = [(token.orth_, token.prob, token.is_stop, token.is_punct, tok
 df = pd.DataFrame(token_attributes, columns = ['text', 'log_probability', 'stop?', 'punctuation?', 'whitespace?', 'number?', 'out of vocab.?'])
 df.loc[:, 'stop?':'out of vocab.?'] = (df.loc[:, 'stop?':'out of vocab.?'].applymap(lambda x: u'Yes' if x else u''))                                               
 df
+
+# configure spacy text processing
+text = 'What if?!'
+# set normalisation constants
+norm_configs = {'remove_bracket':True,
+                'remove_currency':True,
+                'remove_digit':True,
+                'remove_email':True,
+                'remove_num':True,
+                'remove_punct':True,
+                'remove_quote':True,
+                'remove_stop':False,
+                'remove_space':True,
+                'remove_url':True,
+                'to_lower':True
+                }
+# run cleaning
+normalise_tweet(tweet = text, norm_configs = norm_configs)
