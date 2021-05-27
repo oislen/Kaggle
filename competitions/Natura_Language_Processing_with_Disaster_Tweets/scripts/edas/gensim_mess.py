@@ -9,8 +9,9 @@ Created on Wed May 26 20:09:50 2021
 import os
 import sys
 sys.path.append(os.path.dirname(os.getcwd()))
-import spacy
 import cons
+import re
+import spacy
 import pandas as pd
 import numpy as np
 from gensim.models import Phrases
@@ -20,8 +21,11 @@ from gensim.models import Word2Vec
 from sklearn.manifold import TSNE
 from normalise_tweet import normalise_tweet
 from lda_topic_prob import lda_topic_prob
+from topic_df import topic_df
 
+#################
 #-- Data Prep --#
+#################
 
 # load in the raw data files
 train = pd.read_csv(cons.raw_train_fpath)
@@ -34,24 +38,29 @@ test['target'] = np.nan
 test['dataset'] = 'test'
 data = pd.concat(objs = [train, test], ignore_index = True)
 
+# create spacy instance 
+nlp = spacy.load('en_core_web_sm')
+
+# run text normalisation function
+data['text_norm'] = data['text'].apply(lambda x: normalise_tweet(tweet = x, nlp = nlp, norm_configs = cons.norm_configs))
+
+# remove special @ characters
+data['text_norm_clean'] = data['text_norm'].apply(lambda x: re.sub('@', '', x))
+
 #-- Bi-gram Phrase Modelling --#
 
-# create spacy instance
-nlp = spacy.load("en_core_web_sm")
-
-# apply text normalisation function to tweets
-data['text_clean'] = data['text'].apply(lambda x: normalise_tweet(tweet = x, nlp = nlp, norm_configs = cons.norm_configs))
-
 # create a stram of sentances for input into bi-gram model
-sent_stream = [sent.split(' ') for sent in data['text_clean'].tolist()]
+sent_stream = [sent.split(' ') for sent in data['text_norm_clean'].tolist()]
 
 # train bigram model
 bigram_model = Phrases(sent_stream)
 
 # apply trained bi-gram model to formatted text
-data['text_clean_bigram'] = data['text_clean'].apply(lambda x: ' '.join(bigram_model[x.split(' ')]))
+data['text_clean_bigram'] = data['text_norm_clean'].apply(lambda x: ' '.join(bigram_model[x.split(' ')]))
 
+###########################
 #-- LDA Topic Modelling --#
+###########################
 
 # create a stram of sentances for corpus dict
 input_data = [sent.split(' ') for sent in data['text_clean_bigram'].tolist()]
@@ -66,11 +75,7 @@ corpus = [id2word.doc2bow(text) for text in input_data]
 num_topics = 10
 
 # Build LDA model
-lda_model = LdaMulticore(corpus = corpus,
-                         id2word = id2word,
-                         num_topics = num_topics,
-                         workers = 2
-                         ) 
+lda_model = LdaMulticore(corpus = corpus, id2word = id2word, num_topics = num_topics, workers = 2) 
 
 # topics don't work well as tweets all relate to disasters
 lda_model.show_topic(topicid = 0, topn = 25)
@@ -83,9 +88,15 @@ string_input = data['text_clean_bigram'][1]
 lda_topic_prob(string_input, input_data, lda_model)
 
 # predict for all strings
+# takes ~20 minutes to run
 data['lda_topic_prob'] = data['text_clean_bigram'].apply(lambda x: lda_topic_prob(x, input_data, lda_model))
 
+# transform the lda topic probabilities into a dataframe representation
+lda_topic_df = topic_df(data = data, prob_col = 'lda_topic_prob', text_col = 'text_clean_bigram', lda_model = lda_model)
+
+###########################
 #-- Word2Vec Embeddings --#
+###########################
 
 # playing with word2vec
 # create a stram of sentances for word 2 vec
