@@ -5,9 +5,6 @@ Created on Wed May 26 22:41:30 2021
 @author: oislen
 """
 
-# load in relevant libraries
-from gensim.corpora import Dictionary
-
 # define helper function to predict topics
 def lda_topic_prob(string_input, 
                    input_data, 
@@ -41,7 +38,7 @@ def lda_topic_prob(string_input,
     """
     
     # create the id2word dictionary using the input data
-    id2word = Dictionary(input_data)
+    id2word = lda_model.id2word
     
     # recreate corpus using sent_stream
     corpus = [id2word.doc2bow(text) for text in input_data]
