@@ -64,7 +64,8 @@ norm_configs = {'remove_bracket':True,
                 'remove_quote':True,
                 'remove_stop':True,
                 'remove_space':True,
-                'remove_url':True
+                'remove_url':True,
+                'to_lower':True
                 }
 
 ######################
