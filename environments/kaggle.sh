@@ -27,6 +27,8 @@ python -m spacy download en_core_web_sm
 
 # pip install additional libraries
 pip install kaggle
+pip install langdetect
+pip install pyspellchecker
 pip install nltk
 pip install --upgrade gensim
 
