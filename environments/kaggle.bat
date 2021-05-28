@@ -4,7 +4,7 @@ call conda env list
 :: create and activate new environment
 call conda env remove --name kaggle
 call conda env list
-#call conda create --name kaggle python=3.6 --yes
+::call conda create --name kaggle python=3.6 --yes
 call conda create --name kaggle python --yes
 call conda activate kaggle
 call conda list
