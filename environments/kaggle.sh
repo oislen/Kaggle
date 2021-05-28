@@ -3,7 +3,9 @@ conda env list
 
 # create and activate new environment
 conda env remove --name kaggle
-conda create --name kaggle python=3.6 --yes
+conda env list
+#conda create --name kaggle python=3.6 --yes
+conda create --name kaggle --yes
 conda activate kaggle
 conda list
 
@@ -26,11 +28,15 @@ conda install -c conda-forge spacy --yes
 python -m spacy download en_core_web_sm
 
 # pip install additional libraries
+pip install --upgrade pip
 pip install kaggle
 pip install langdetect
 pip install pyspellchecker
 pip install nltk
 pip install --upgrade gensim
+pip install sentencepiece
+#pip install tensorflow
+#pip install tensorflow_hub
 
 # list all installed libraries
 conda list

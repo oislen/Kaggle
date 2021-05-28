@@ -3,7 +3,9 @@ call conda env list
 
 :: create and activate new environment
 call conda env remove --name kaggle
-call conda create --name kaggle python=3.6 --yes
+call conda env list
+#call conda create --name kaggle python=3.6 --yes
+call conda create --name kaggle python --yes
 call conda activate kaggle
 call conda list
 
@@ -26,11 +28,15 @@ call conda install -c conda-forge spacy --yes
 call python -m spacy download en_core_web_sm
 
 :: pip install additional libraries
+call pip install --upgrade pip
 call pip install kaggle
 call pip install langdetect
 call pip install pyspellchecker
 call pip install nltk
 call pip install --upgrade gensim
+call pip install sentencepiece
+#call pip install tensorflow
+#call pip install tensorflow_hub
 
 :: list all installed libraries
 call conda list
