@@ -9,7 +9,7 @@ Created on Sun Jan 31 15:31:42 2021
 import os
 from keras.callbacks import ModelCheckpoint
 from keras.models import load_model
-from graph import plot_model_fit
+from plot_model_fit import plot_model_fit
 
 def fit_model(model,
               X_train, 
@@ -18,6 +18,7 @@ def fit_model(model,
               Y_val, 
               optimizer,
               batch_size = 32,
+              valid_batch_size = 8,
               datagen = None, 
               lrate_red = None,
               output_dir = "checkpoints",
@@ -59,6 +60,7 @@ def fit_model(model,
     # otherwise compile
     else:
         # compile model (can use another optimizer)
+        starting_epoch = 0
         model.compile(optimizer = optimizer,
                       loss = loss,
                       metrics = [metric]
@@ -87,7 +89,12 @@ def fit_model(model,
         lrate_red = [lrate_red]
         
     # calculate steps per epoch
-    steps_per_epoch = len(X_train) // batch_size
+    if (batch_size is not None) and (valid_batch_size is not None):
+        steps_per_epoch = len(X_train) // batch_size
+        validation_steps = len(X_val) // valid_batch_size
+    else:
+        steps_per_epoch = None
+        validation_steps = None
     
     # create the output path
     check_out_fname = model_name + "{epoch:02d}.hdf5"
@@ -109,9 +116,10 @@ def fit_model(model,
                           shuffle = shuffle,
                           verbose = verbose_int,
                           validation_data = validation_data,
-                          initial_epoch = starting_epoch or 0
+                          initial_epoch = starting_epoch,
+                          validation_steps = validation_steps
                           )  
     
-    plot_model_fit.plot_model_fit(model_fit = model_fit)
+    plot_model_fit(model_fit = model_fit)
     
     return 0
