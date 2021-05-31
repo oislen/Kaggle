@@ -18,12 +18,12 @@ from keras.callbacks import ReduceLROnPlateau
 import cons
 from utilities.process_data import process_data
 from utilities.gen_sub_file import gen_sub_file
+from fit_model import fit_model
 
 # load CNN modules
 from CNN.LeNet_Model import LeNet_Model
 from CNN.FCNN_Model import FCNN_Model
 from CNN.copy_weights import copy_weights
-from CNN.fit_model import fit_model
 
 # load graphing modules
 from graph.plot_images import plot_images
