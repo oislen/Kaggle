@@ -72,7 +72,7 @@ def plot_images(data,
         plt.axis('off')
         
         # plot image
-        plt.imshow(data[val])
+        plt.imshow(data[val][:, :, 0])
     
     # show plot
     plt.show()
