@@ -29,6 +29,7 @@ utilities_comp = os.path.join(utilities_dir, 'comp')
 utilities_graph = os.path.join(utilities_dir, 'graph')
 utilities_model = os.path.join(utilities_dir, 'model')
 utilties_preproc = os.path.join(utilities_dir, 'preproc')
+utilities_ai = os.path.join(utilities_dir, 'ai')
 
 # define filenames
 zip_data_fname = '{}.zip'.format(comp_name)
@@ -45,5 +46,5 @@ train_data_fpath = os.path.join(data_dir, train_data_fname)
 pred_data_fpath = os.path.join(data_dir, pred_data_fname)
 
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, utilities_ai]:
     sys.path.append(p)
