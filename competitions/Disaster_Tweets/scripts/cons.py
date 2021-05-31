@@ -30,11 +30,13 @@ reports_dir = os.path.join(comp_dir, 'report')
 models_dir = os.path.join(comp_dir, 'models')
 utilities_nlp = os.path.join(scripts_dir, 'utilities')
 arch_dir = os.path.join(scripts_dir, 'arch')
+rnn_dir = os.path.join(scripts_dir, 'RNN')
 utilities_dir = os.path.join(root_dir, 'utilities')
 utilities_comp = os.path.join(utilities_dir, 'comp')
 utilities_graph = os.path.join(utilities_dir, 'graph')
 utilities_model = os.path.join(utilities_dir, 'model')
 utilties_preproc = os.path.join(utilities_dir, 'preproc')
+utilities_ai = os.path.join(utilities_dir, 'ai')
 
 # set data directories
 raw_data_dir = os.path.join(data_dir, 'raw')
@@ -53,8 +55,11 @@ pred_data_dir = os.path.join(data_dir, 'pred')
 pred_fname = 'keras_rnn_preds.csv'
 pred_fpath = os.path.join(pred_data_dir, pred_fname)
 
+# set location to output model checkpoints
+checkpoints_dir = os.path.join(data_dir, 'checkpoints')
+
 # append utilities directory to path
-for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, utilities_nlp]:
+for p in [utilities_comp, utilities_graph, utilities_model, utilties_preproc, utilities_nlp, utilities_ai, rnn_dir]:
     sys.path.append(p)
 
 # set url for glove wikipedia pretrained word vectors
