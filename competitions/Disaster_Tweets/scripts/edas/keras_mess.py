@@ -9,7 +9,6 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.getcwd()))
 import cons
-import re
 import pandas as pd
 import numpy as np
 import spacy
@@ -20,12 +19,14 @@ from normalise_tweet import normalise_tweet
 
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-from keras.models import Sequential
-from keras.layers import Embedding,LSTM,Dense,SpatialDropout1D
-from keras.initializers import Constant
 from sklearn.model_selection import train_test_split
 from keras.optimizers import Adam
 #from nltk.tokenize import spacy
+
+
+from rnn_model import rnn_model
+from fit_model import fit_model
+from keras.callbacks import ReduceLROnPlateau
 
 #################
 #-- Data Prep --#
@@ -76,18 +77,19 @@ else:
 
 # load in glove word vectors
 # create embedding dictionary
+glove_dims = 100
 embedding_dict = load_glove_word_vecs(cons.glove_100d_fpath)
 
 # create training data
 # note bi-grams negatively affected in word2vec
-MAX_LEN = 50
+max_len = 50
 tokenizer_obj = Tokenizer()
 tokenizer_obj.fit_on_texts(corpus_v2)
 sequences = tokenizer_obj.texts_to_sequences(corpus_v2)
-tweet_pad = pad_sequences(sequences, maxlen = MAX_LEN, truncating = 'post', padding = 'post')
+tweet_pad = pad_sequences(sequences, maxlen = max_len, truncating = 'post', padding = 'post')
 word_index = tokenizer_obj.word_index
 num_words=len(word_index)+1
-embedding_matrix=np.zeros((num_words,100))
+embedding_matrix=np.zeros((num_words,glove_dims))
 for word,i in word_index.items():
     if i > num_words:
         continue
@@ -95,19 +97,49 @@ for word,i in word_index.items():
     if emb_vec is not None:
         embedding_matrix[i]=emb_vec
 
-# fit model
-model=Sequential()
-embedding=Embedding(num_words,100,embeddings_initializer=Constant(embedding_matrix),input_length=MAX_LEN,trainable=False)
-model.add(embedding)
-model.add(SpatialDropout1D(0.2))
-model.add(LSTM(64, dropout=0.2, recurrent_dropout=0.2))
-model.add(Dense(1, activation='sigmoid'))
-optimzer=Adam(learning_rate=1e-5)
-model.compile(loss='binary_crossentropy',optimizer=optimzer,metrics=['accuracy'])
-model.summary()
-train_df=tweet_pad[:train.shape[0]]
-X_train,X_test,y_train,y_test=train_test_split(train_df,train['target'].values,test_size=0.15)
-history=model.fit(X_train,y_train,batch_size=4,epochs=15,validation_data=(X_test,y_test),verbose=2)
+# generate the training data
+train_df = tweet_pad[:train.shape[0]]
+
+# split training data into training and vlaidation sets
+X_train, X_valid, y_train, y_valid = train_test_split(train_df,
+                                                      train['target'].values,
+                                                      test_size = 0.15
+                                                      )
+
+
+
+# generate rnn model architecture
+model = rnn_model(embedding_matrix = embedding_matrix,
+                  input_length = max_len
+                  )
+
+# define optimiser and compile
+optimizer = Adam(learning_rate = 1e-5)
+
+# set a learning rate annealer
+learning_rate_reduction = ReduceLROnPlateau(monitor = 'val_accuracy', 
+                                            patience = 3, 
+                                            verbose = 1, 
+                                            factor = 0.5, 
+                                            min_lr = 0.00001
+                                            )
+
+# Attention: Windows implementation may cause an error here. In that case use model_name=None.
+fit_model(model = model, 
+          epochs = 5,
+          starting_epoch = None,
+          batch_size = None,
+          valid_batch_size = None,
+          output_dir = cons.checkpoints_dir,
+          optimizer = optimizer,
+          metric = 'accuracy',
+          loss = 'binary_crossentropy',
+          lrate_red = learning_rate_reduction,
+          X_train = X_train,
+          X_val = X_valid, 
+          Y_train = y_train, 
+          Y_val = y_valid
+          )
 
 # make test predictions
 test_df=tweet_pad[train.shape[0]:]
@@ -115,3 +147,4 @@ y_pre=model.predict(test_df)
 y_pre = np.round(y_pre).astype(int).reshape(3263)
 sub=pd.DataFrame({'id':sample_submission['id'].values.tolist(),'target':y_pre})
 sub.to_csv(cons.pred_fpath, index=False)
+
