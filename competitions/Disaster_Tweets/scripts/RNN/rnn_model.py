@@ -41,8 +41,7 @@ def rnn_model(embedding_matrix,
     # create an LSTM stage
     lstm = LSTM(units = 64, 
                 dropout = dropout_rate, 
-                recurrent_dropout = 
-                dropout_rate
+                recurrent_dropout = dropout_rate
                 )
     # add lstm to sequence model
     model.add(lstm)
