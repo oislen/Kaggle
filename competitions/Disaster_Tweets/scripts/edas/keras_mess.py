@@ -4,6 +4,7 @@ Created on Fri May 28 10:29:23 2021
 
 @author: oislen
 """
+
 # load in relevant libraries
 import os
 import sys
@@ -16,9 +17,9 @@ import spacy
 import shahules_utils as shutils
 from load_glove_word_vecs import load_glove_word_vecs
 from normalise_tweet import normalise_tweet
+from prep_model_corpus import prep_model_corpus
 
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
+
 from sklearn.model_selection import train_test_split
 from keras.optimizers import Adam
 #from nltk.tokenize import spacy
@@ -44,7 +45,7 @@ test['dataset'] = 'test'
 data = pd.concat(objs = [train, test], ignore_index = True)
 
 # if running shahules data prep steps
-if False:
+if True:
     
     # apply data cleaning
     data['text'] = data['text'].apply(lambda x : shutils.remove_URL(x))
@@ -69,33 +70,20 @@ else:
     #data['text_norm_clean'] = data['text_norm'].apply(lambda x: re.sub('@', '', x))
 
     # create a corpus to feed into the model
-    corpus_v2 = [sent.split() for sent in data['text_norm'].to_list()]
+    corpus = [sent.split() for sent in data['text_norm'].to_list()]
+
+# load in glove word vectors
+# create embedding dictionary
+embedding_dict = load_glove_word_vecs(cons.glove_100d_fpath)
 
 ###################
 #-- Keras Model --#
 ###################
 
-# load in glove word vectors
-# create embedding dictionary
-glove_dims = 100
-embedding_dict = load_glove_word_vecs(cons.glove_100d_fpath)
-
-# create training data
-# note bi-grams negatively affected in word2vec
-max_len = 50
-tokenizer_obj = Tokenizer()
-tokenizer_obj.fit_on_texts(corpus_v2)
-sequences = tokenizer_obj.texts_to_sequences(corpus_v2)
-tweet_pad = pad_sequences(sequences, maxlen = max_len, truncating = 'post', padding = 'post')
-word_index = tokenizer_obj.word_index
-num_words=len(word_index)+1
-embedding_matrix=np.zeros((num_words,glove_dims))
-for word,i in word_index.items():
-    if i > num_words:
-        continue
-    emb_vec=embedding_dict.get(word)
-    if emb_vec is not None:
-        embedding_matrix[i]=emb_vec
+# run prep model corpus
+tweet_pad, embedding_matrix, max_len = prep_model_corpus(corpus = corpus, 
+                                                         embedding_dict = embedding_dict
+                                                         )
 
 # generate the training data
 train_df = tweet_pad[:train.shape[0]]
@@ -103,7 +91,8 @@ train_df = tweet_pad[:train.shape[0]]
 # split training data into training and vlaidation sets
 X_train, X_valid, y_train, y_valid = train_test_split(train_df,
                                                       train['target'].values,
-                                                      test_size = 0.15
+                                                      test_size = 0.15,
+                                                      random_state = 1
                                                       )
 
 
@@ -126,15 +115,15 @@ learning_rate_reduction = ReduceLROnPlateau(monitor = 'val_accuracy',
 
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model = model, 
-          epochs = 5,
+          epochs = 15,
           starting_epoch = None,
-          batch_size = None,
+          batch_size = 4,
           valid_batch_size = None,
           output_dir = cons.checkpoints_dir,
           optimizer = optimizer,
           metric = 'accuracy',
           loss = 'binary_crossentropy',
-          lrate_red = learning_rate_reduction,
+          #lrate_red = learning_rate_reduction,
           X_train = X_train,
           X_val = X_valid, 
           Y_train = y_train, 
@@ -147,4 +136,3 @@ y_pre=model.predict(test_df)
 y_pre = np.round(y_pre).astype(int).reshape(3263)
 sub=pd.DataFrame({'id':sample_submission['id'].values.tolist(),'target':y_pre})
 sub.to_csv(cons.pred_fpath, index=False)
-
