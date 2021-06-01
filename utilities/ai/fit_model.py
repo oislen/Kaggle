@@ -109,6 +109,7 @@ def fit_model(model,
     # starts training
     model_fit = model.fit(x = x,
                           y = y,
+                          batch_size = batch_size,
                           epochs = epochs, 
                           steps_per_epoch = steps_per_epoch,
                           callbacks = callbacks,
