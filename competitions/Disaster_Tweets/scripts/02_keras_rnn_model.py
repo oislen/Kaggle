@@ -26,7 +26,7 @@ corpus, data = process_data(shahules = True)
 
 # load in glove word vectors
 # create embedding dictionary
-embedding_dict, data = load_glove_word_vecs(cons.glove_100d_fpath)
+embedding_dict = load_glove_word_vecs(cons.glove_100d_fpath)
 
 # split data into train and test sets
 train_filter = data['dataset'] == 'train'
