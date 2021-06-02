@@ -11,6 +11,7 @@ sys.path.append(os.path.dirname(os.getcwd()))
 import cons
 from sklearn.model_selection import train_test_split
 from keras.optimizers import Adam
+from keras.callbacks import ReduceLROnPlateau
 
 # custom functions
 from load_glove_word_vecs import load_glove_word_vecs
@@ -54,14 +55,23 @@ model = rnn_model(embedding_matrix = embedding_matrix,
 # define optimiser and compile
 optimizer = Adam(learning_rate = 1e-5)
 
+# set a learning rate annealer
+learning_rate_reduction = ReduceLROnPlateau(monitor = 'val_accuracy', 
+                                            patience = 3, 
+                                            verbose = 1, 
+                                            factor = 0.5, 
+                                            min_lr = 0.00001
+                                            )
+
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model = model, 
-          epochs = 2,
+          epochs = 15,
           starting_epoch = None,
           batch_size = 4,
           valid_batch_size = None,
           output_dir = cons.checkpoints_dir,
           optimizer = optimizer,
+          lrate_red = learning_rate_reduction,
           metric = 'accuracy',
           loss = 'binary_crossentropy',
           X_train = X_train,
