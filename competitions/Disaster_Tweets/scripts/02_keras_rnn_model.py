@@ -9,8 +9,6 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.getcwd()))
 import cons
-import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 from keras.optimizers import Adam
 
@@ -20,6 +18,7 @@ from prep_model_corpus import prep_model_corpus
 from process_data import process_data
 from rnn_model import rnn_model
 from fit_model import fit_model
+from gen_model_preds import gen_model_preds
 
 # run data procressing
 corpus, data = process_data(shahules = True)
@@ -47,8 +46,6 @@ X_train, X_valid, y_train, y_valid = train_test_split(train_df,
                                                       random_state = 1
                                                       )
 
-
-
 # generate rnn model architecture
 model = rnn_model(embedding_matrix = embedding_matrix,
                   input_length = max_len
@@ -59,7 +56,7 @@ optimizer = Adam(learning_rate = 1e-5)
 
 # Attention: Windows implementation may cause an error here. In that case use model_name=None.
 fit_model(model = model, 
-          epochs = 15,
+          epochs = 2,
           starting_epoch = None,
           batch_size = 4,
           valid_batch_size = None,
@@ -73,10 +70,11 @@ fit_model(model = model,
           Y_val = y_valid
           )
 
-# make test predictions
-sample_submission = pd.read_csv(cons.raw_sample_submission_fpath)
-test_df=tweet_pad[train.shape[0]:]
-y_pre=model.predict(test_df)
-y_pre = np.round(y_pre).astype(int).reshape(3263)
-sub=pd.DataFrame({'id':sample_submission['id'].values.tolist(),'target':y_pre})
-sub.to_csv(cons.pred_fpath, index=False)
+# extract out the test data for model predictions
+test_df = tweet_pad[train.shape[0]:]
+
+# make the model predictions
+sub_df = gen_model_preds(test_df = test_df, model = model)
+
+# view head of submission file
+sub_df.head()
