@@ -4,15 +4,49 @@ Created on Tue Jun  1 20:09:04 2021
 
 @author: oislen
 """
+
+# load relevant libraries
 from tqdm import tqdm
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import numpy as np
 
-def prep_model_corpus(corpus, embedding_dict):
+def prep_model_corpus(corpus, 
+                      embedding_dict
+                      ):
     
     """
-    Prepare Model Corpus
+    
+    Prepare Model Corpus Documentation
+    
+    Function Overview
+    
+    This function prepares the corpus for modelling using the word vector embeddings.
+    This involves translating the corpus of tweets to word vector space.
+    
+    Defaults
+    
+    prep_model_corpus(corpus, 
+                      embedding_dict
+                      )
+    
+    Parameters
+    
+    corpus - Lists of Lists, the tweets represent as list contain each tweet word in sequence
+    embedding_dict - Dictionary of arrays, the word vector embeddings to use for translating the corpus to vector space
+    
+    Returns
+    
+    tweet_pad - Numpy Array, the tweets represented as matrix of word indices
+    embedding_matrix - Numpy Array, the input corpus represent in word vector space
+    max_len - Integer, the maximum tweet length in the corpus
+    
+    Example
+    
+    prep_model_corpus(corpus = corpus, 
+                      embedding_dict = embedding_dict
+                      )
+    
     """
     
     # calculate the maximum corpus length

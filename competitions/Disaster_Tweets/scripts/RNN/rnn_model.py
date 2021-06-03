@@ -11,10 +11,38 @@ from keras.layers import Embedding, Dense, LSTM,SpatialDropout1D
 from keras.initializers import Constant
 
 def rnn_model(embedding_matrix,
-              input_length):
+              input_length
+              ):
     
     """
-        
+       
+    Recurrent Neural Netwrok Model Documentation
+    
+    Function OVerview
+    
+    This function generates the RNN model archecture for the training data.
+    
+    Defaults
+    
+    rnn_model(embedding_matrix,
+              input_length
+              )
+    
+    Parameters
+    
+    embedding_matrix - Numpy Array, the embedding matrix of the input corpus contain word vector embeddings
+    input_length - Integer, the maximum length of an input tweet
+    
+    Returns
+    
+    model - Keras Model, the RNN model archecture
+    
+    Example
+    
+    rnn_model(embedding_matrix = embedding_matrix,
+              input_length = 30
+              )
+    
     """
     
     # set the dropout rate

@@ -9,9 +9,40 @@ import cons
 import pandas as pd
 import numpy as np
 
-def gen_model_preds(test_df, model):
+def gen_model_preds(test_df, 
+                    model
+                    ):
     
     """
+    
+    Generate Model Predictions Documentation
+    
+    Function Overview
+    
+    This model creates the model prediction submission file given a test set and trained RNN model.
+    The results are written to disk as .csv file using the output file path defined in the cons.py module.
+    
+    Defaults
+    
+    gen_model_preds(test_df, 
+                    model
+                    )
+    
+    Parameters
+    
+    test_df - DataFrame, the test data to generate predictions with
+    model - Keras Model, the trained RNN model
+    
+    Returns
+    
+    sub - DataFrame, the prediction submission dataframe
+    
+    Example
+    
+    gen_model_preds(test_df = test_df, 
+                    model = rnn_model
+                    )
+    
     """
     
     # make test predictions
