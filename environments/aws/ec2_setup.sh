@@ -36,7 +36,8 @@ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 cp /dev/Kaggle/environments/aws/.vimrc ~/.
 vim -c ':PluginInstall' -c ':q' -c ':q'
 sudo yum install curl vim exuberant-ctags git ack-grep
-#sudo pip install pep8 flake8 pyflakes isort yapf
+sudo easy_install pip
+sudo pip install pep8 flake8 pyflakes isort yapf
 #touch ~/.vimrc
 # configure .bashrc file
 cp /dev/Kaggle/environments/aws/.bashrc ~/.
@@ -85,40 +86,23 @@ exit
 # STEP 4: Create Conda Environement
 # configure conda
 # auto create aws environment
-export PATH=/dev/anaconda3/bin:$PATH
+#export PATH=/dev/anaconda3/bin:$PATH
 conda init bash
 source /dev/anaconda3/etc/profile.d/conda.sh
 conda config --set auto_activate_base false
-sudo easy_install pip
 # install encoding editing for windows scripts
 sudo yum install dos2unix -y
-dos2unix /run/Kaggle/environments/kaggle.sh
-bash /run/Kaggle/environments/kaggle.sh
+dos2unix /dev/Kaggle/environments/kaggle.sh
+bash /dev/Kaggle/environments/kaggle.sh
 
 # STEP 5: Create Kaggle Repo
 # create kaggle scripts & data
-# upload raw data to ec2
-cd /run
-sudo git clone https://github.com/oislen/Kaggle.git 
-# cretae data sub folders
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/raw
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/clean
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/base
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/model
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/pred
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/data/ref
-# create report sub-folders
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/feat_imp
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/cv_results
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/valid_metrics
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/valid_plots/preds_vs_true
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/report/valid_plots/preds_hist
-# create models sub-filder
-sudo mkdir -p /run/Kaggle/Predict_Future_Sales/models
-cd /
-sudo chmod 777 -R /run/Kaggle
+sudo chmod 777 -R /dev/Kaggle
+cd /dev/Kaggle/utilities/comp
+python gen_kaggle_dirs.py
 
 # STEP 6: UPLOAD Data
 # via winscp
-#sudo cp -rf /home/ec2-user/raw/ /opt/Kaggle/Predict_Future_Sales/data/
+# /home/ec2-user/.kaggle/kaggle.json (possibly automate with scp / sftp)
+# chmod 600 /home/ec2-user/.kaggle/kaggle.json
 
