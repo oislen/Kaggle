@@ -16,8 +16,8 @@ pip install kaggle
 conda install -c conda-forge numpy --yes
 conda install -c conda-forge scipy --yes
 conda install -c conda-forge pandas --yes
-conda install -c conda-forge spyder --yes
-conda install -c conda-forge notebook --yes
+#conda install -c conda-forge spyder --yes
+#conda install -c conda-forge notebook --yes
 conda install -c conda-forge pyarrow --yes
 
 # visualisation libraries
