@@ -45,6 +45,7 @@ def gen_kaggle_dirs():
     
     # define a dictionary of competitions and subdirectories to  generate
     comp_dirs = {'Digit_Recognizer':['data'],
+                 'Disaster_Tweets':['data\\raw', 'data\\checkpoints', 'data\\pred', 'data\\ref'],
                  'HousePrices':['data'],
                  'Titanic':['data\\models', 'data\\preds', 'report\\arch', 'report\\model_results'],
                  'Predict_Future_Sales':['data\\raw', 'data\\clean', 'data\\base', 'data\\model', 'data\\pred', 'data\\ref',
