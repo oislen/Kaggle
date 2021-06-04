@@ -27,80 +27,74 @@ ls -larth /.
 # install git
 sudo yum update -y
 sudo yum install git-all -y
-# git clone aws setup repo
-git clone https://github.com/oislen/AWS.git
+# git clone the kaggle repo
+cd /run
+git clone https://github.com/oislen/Kaggle.git
 # configure vim
+cd ~
 sudo yum install vim
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-cp ~/AWS/.vimrc ~/.
+cp /run/Kaggle/environments/aws/.vimrc ~/.
+vim -c ':PluginInstall' -c ':q' -c ':q'
+sudo yum install curl vim exuberant-ctags git ack-grep
+#sudo pip install pep8 flake8 pyflakes isort yapf
+#touch ~/.vimrc
 # configure .bashrc file
-cp ~/AWS/.bashrc ~/.
+cp /run/Kaggle/environments/aws/.bashrc ~/.
 source .bashrc
 # install htop
 sudo yum install htop -y
 # update overcommit memory setting
 cat /proc/sys/vm/overcommit_memory
 echo 1 | sudo tee /proc/sys/vm/overcommit_memory
-# Note need to install plugins
-#vim AWS/ec2_setup.sh
-#:PluginInstall
-#:q
-#sudo yum install curl vim exuberant-ctags git ack-grep
-#sudo pip install pep8 flake8 pyflakes isort yapf
-#touch ~/.vimrc
+
 
 # STEP 2: Configure GUI
-# install tigervnc
-#screen
-cat /etc/os-release
-sudo amazon-linux-extras install mate-desktop1.x
-sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
-echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
-sudo yum install tigervnc-server
-vncpasswd
-#n
-vncserver :1
-sudo cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service
-sudo sed -i 's/<USER>/ec2-user/' /etc/systemd/system/vncserver@.service
-sudo systemctl daemon-reload
-sudo systemctl enable vncserver@:1
-sudo systemctl start vncserver@:1
-# switch over to gui
+if [ 0 -eq 1 ]
+then
+	# install tigervnc
+	#screen
+	cat /etc/os-release
+	sudo amazon-linux-extras install mate-desktop1.x
+	sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
+	echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
+	sudo yum install tigervnc-server
+	vncpasswd
+	#n
+	vncserver :1
+	sudo cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service
+	sudo sed -i 's/<USER>/ec2-user/' /etc/systemd/system/vncserver@.service
+	sudo systemctl daemon-reload
+	sudo systemctl enable vncserver@:1
+	sudo systemctl start vncserver@:1
+	# switch over to gui
+fi
 
-# STEP 2: Install Conda Environment
+# STEP 3: Install Conda Environment
 # download and install anaconda
 cd ~
-wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
-bash Anaconda3-2020.02-Linux-x86_64.sh
-yes
-<ENTER>  
-/dev/anaconda3
-yes
-# reset terminal
+wget https://repo.anaconda.com/archive/Anaconda3-2021.04-Linux-x86_64.sh
+bash Anaconda3-2021.04-Linux-x86_64.sh
+# required manual inputs for anaconda installation:
+# yes
+# <ENTER>  
+# /dev/anaconda3
+# yes
+# next reset terminal
 exit
 
 # STEP 3: Create Conda Environement
 # configure conda
 # auto create aws environment
-#export PATH=/dev/anaconda3/bin:$PATH
-#conda init bash
+export PATH=/dev/anaconda3/bin:$PATH
+conda init bash
+source /dev/anaconda3/etc/profile.d/conda.sh
 conda config --set auto_activate_base false
-conda deactivate
-conda create --yes --name aws
-conda activate aws
-conda install --yes pandas
-conda install --yes scipy
-conda install --yes scikit-learn
-conda install --yes statsmodels
-conda install --yes seaborn
-conda install --yes spyder
-conda install --yes notebook
-conda install --yes pyarrow
-pip install pygam
-conda list
-#conda env export > aws.yml
-#conda env create -f aws.yml
-
+sudo easy_install pip
+# install encoding editing for windows scripts
+sudo yum install dos2unix -y
+dos2unix /run/Kaggle/environments/kaggle.sh
+bash /run/Kaggle/environments/kaggle.sh
 
 # STEP 4: Create Kaggle Repo
 # create kaggle scripts & data
