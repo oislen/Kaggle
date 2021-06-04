@@ -25,22 +25,21 @@ sudo chmod -R 777 /opt /dev /run /sys/fs/cgroup
 sudo chmod 775 /var/run/screen
 ls -larth /.
 # install git
+cd ~
 sudo yum update -y
 sudo yum install git-all -y
 # git clone the kaggle repo
-cd /run
-git clone https://github.com/oislen/Kaggle.git
+git clone https://github.com/oislen/Kaggle.git /dev/Kaggle
 # configure vim
-cd ~
 sudo yum install vim
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-cp /run/Kaggle/environments/aws/.vimrc ~/.
+cp /dev/Kaggle/environments/aws/.vimrc ~/.
 vim -c ':PluginInstall' -c ':q' -c ':q'
 sudo yum install curl vim exuberant-ctags git ack-grep
 #sudo pip install pep8 flake8 pyflakes isort yapf
 #touch ~/.vimrc
 # configure .bashrc file
-cp /run/Kaggle/environments/aws/.bashrc ~/.
+cp /dev/Kaggle/environments/aws/.bashrc ~/.
 source .bashrc
 # install htop
 sudo yum install htop -y
@@ -49,7 +48,7 @@ cat /proc/sys/vm/overcommit_memory
 echo 1 | sudo tee /proc/sys/vm/overcommit_memory
 
 
-# STEP 2: Configure GUI
+# STEP 2: Configure GUI (optional)
 if [ 0 -eq 1 ]
 then
 	# install tigervnc
@@ -70,7 +69,7 @@ then
 	# switch over to gui
 fi
 
-# STEP 3: Install Conda Environment
+# STEP 3: Install Anaconda
 # download and install anaconda
 cd ~
 wget https://repo.anaconda.com/archive/Anaconda3-2021.04-Linux-x86_64.sh
@@ -83,7 +82,7 @@ bash Anaconda3-2021.04-Linux-x86_64.sh
 # next reset terminal
 exit
 
-# STEP 3: Create Conda Environement
+# STEP 4: Create Conda Environement
 # configure conda
 # auto create aws environment
 export PATH=/dev/anaconda3/bin:$PATH
@@ -96,7 +95,7 @@ sudo yum install dos2unix -y
 dos2unix /run/Kaggle/environments/kaggle.sh
 bash /run/Kaggle/environments/kaggle.sh
 
-# STEP 4: Create Kaggle Repo
+# STEP 5: Create Kaggle Repo
 # create kaggle scripts & data
 # upload raw data to ec2
 cd /run
@@ -119,7 +118,7 @@ sudo mkdir -p /run/Kaggle/Predict_Future_Sales/models
 cd /
 sudo chmod 777 -R /run/Kaggle
 
-# STEP 5: UPLOAD Data
+# STEP 6: UPLOAD Data
 # via winscp
 #sudo cp -rf /home/ec2-user/raw/ /opt/Kaggle/Predict_Future_Sales/data/
 
